@@ -2,7 +2,7 @@ package aock2015
 
 import spock.lang.Specification
 
-import static shared.InputsKt.readFileForDay
+import static shared.InputsKt.readFile
 
 class Day2Specification extends Specification {
 
@@ -18,7 +18,7 @@ class Day2Specification extends Specification {
         "2x3x4"           | 58             | "2*6 + 2*12 + 2*8 = 52 then + 6 square feet of slack"
         "1x1x10"          | 43             | "2*1 + 2*10 + 2*10 = 42 then + 1 square foot of slack"
 
-        readFileForDay(2) | 1588178        | ""
+        readFile(2015, 2) | 1588178        | ""
     }
 
     def "how many total feet of ribbon should they order"() {
@@ -33,7 +33,7 @@ class Day2Specification extends Specification {
         "2x3x4"           | 34             | ""
         "1x1x10"          | 14             | ""
 
-        readFileForDay(2) | 3783758        | ""
+        readFile(2015, 2) | 3783758        | ""
     }
 
 }

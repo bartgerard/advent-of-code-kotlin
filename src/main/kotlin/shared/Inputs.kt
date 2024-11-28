@@ -2,17 +2,19 @@ package shared
 
 import java.nio.charset.Charset.defaultCharset
 
-fun readFileForDay(
+fun readFile(
+    year: Int,
     day: Int
 ): String {
-    return readFileForDay(day, "input")
+    return readFile(year, day, "input")
 }
 
-fun readFileForDay(
+fun readFile(
+    year: Int,
     day: Int,
     filename: String = "input"
 ): String {
-    return readFile("day$day/$filename.txt")
+    return readFile("$year/day$day/$filename.txt")
 }
 
 fun readFile(filename: String = "input"): String {

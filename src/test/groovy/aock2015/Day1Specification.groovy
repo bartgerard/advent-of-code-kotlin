@@ -2,7 +2,7 @@ package aock2015
 
 import spock.lang.Specification
 
-import static shared.InputsKt.readFileForDay
+import static shared.InputsKt.readFile
 
 class Day1Specification extends Specification {
 
@@ -25,7 +25,7 @@ class Day1Specification extends Specification {
         ")))"             | -3             | ""
         ")())())"         | -3             | ""
 
-        readFileForDay(1) | 138            | ""
+        readFile(2015, 1) | 138            | ""
     }
 
     def "what is the position of the character that causes Santa to first enter the basement"() {
@@ -40,7 +40,7 @@ class Day1Specification extends Specification {
         ")"               | 1              | ""
         "()())"           | 5              | ""
 
-        readFileForDay(1) | 1771           | ""
+        readFile(2015, 1) | 1771           | ""
     }
 
 }

@@ -2,7 +2,7 @@ package aock2015
 
 import spock.lang.Specification
 
-import static shared.InputsKt.readFileForDay
+import static shared.InputsKt.readFile
 
 class Day3Specification extends Specification {
 
@@ -19,7 +19,7 @@ class Day3Specification extends Specification {
         "^>v<"            | 4              | ""
         "^v^v^v^v^v"      | 2              | ""
 
-        readFileForDay(3) | 2081           | ""
+        readFile(2015, 3) | 2081           | ""
     }
 
     def "how many houses receive at least one present with Robo-Santa"() {
@@ -35,7 +35,7 @@ class Day3Specification extends Specification {
         "^>v<"            | 3              | ""
         "^v^v^v^v^v"      | 11             | ""
 
-        readFileForDay(3) | 2341           | ""
+        readFile(2015, 3) | 2341           | ""
     }
 
 }

@@ -34,7 +34,7 @@ data class Day3(
     }
 
     fun atLeastOnePresentWithHelp(workers: Int): Set<Point3d> {
-        return splitWork(2)
+        return splitWork(workers)
             .asSequence()
             .map { it.atLeastOnePresent() }
             .flatMap { it }
