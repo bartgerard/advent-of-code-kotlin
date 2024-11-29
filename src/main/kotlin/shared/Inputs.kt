@@ -32,9 +32,9 @@ fun downloadInputFile(
     year: Int,
     day: Int
 ) {
-    val cookie = readFile("cookie.private")
+    val session = readFile("session.private")
     val request = HttpRequest.newBuilder(URI("https://adventofcode.com/$year/day/$day/input"))
-        .header("Cookie", cookie)
+        .header("Cookie", "session=$session")
         .header("accept", "text/plain")
         .GET()
         .build()
@@ -43,7 +43,7 @@ fun downloadInputFile(
     destination.createParentDirectories()
 
     HttpClient.newHttpClient()
-        //.send(request, BodyHandlers.ofString())
+        //.send(request, BodyHandlers.ofString()).body()
         .send(request, BodyHandlers.ofFile(destination))
 }
 
