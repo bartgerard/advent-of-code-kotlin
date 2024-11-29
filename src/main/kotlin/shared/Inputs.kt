@@ -25,7 +25,7 @@ fun readFile(
 
 fun readFile(filename: String = "input"): String {
     val resource = Thread.currentThread().contextClassLoader.getResource(filename)
-    return resource!!.readText(defaultCharset())
+    return resource!!.readText(defaultCharset()).trimEnd()
 }
 
 fun downloadInputFile(
