@@ -1,6 +1,12 @@
 package shared
 
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse.BodyHandlers
 import java.nio.charset.Charset.defaultCharset
+import kotlin.io.path.Path
+import kotlin.io.path.createParentDirectories
 
 fun readFile(
     year: Int,
@@ -20,6 +26,25 @@ fun readFile(
 fun readFile(filename: String = "input"): String {
     val resource = Thread.currentThread().contextClassLoader.getResource(filename)
     return resource!!.readText(defaultCharset())
+}
+
+fun downloadInputFile(
+    year: Int,
+    day: Int
+) {
+    val cookie = readFile("cookie.private")
+    val request = HttpRequest.newBuilder(URI("https://adventofcode.com/$year/day/$day/input"))
+        .header("Cookie", cookie)
+        .header("accept", "text/plain")
+        .GET()
+        .build()
+
+    val destination = Path("src/test/resources/$year/day$day/input.txt")
+    destination.createParentDirectories()
+
+    HttpClient.newHttpClient()
+        //.send(request, BodyHandlers.ofString())
+        .send(request, BodyHandlers.ofFile(destination))
 }
 
 fun String.byLine(): List<String> {
