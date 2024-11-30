@@ -4,11 +4,11 @@ import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
-class Day01Specification extends Specification {
+class Year2015Day01Specification extends Specification {
 
     def "to what floor do the instructions take Santa"() {
         when:
-        final int floor = new Day01(input).floor()
+        final int floor = new Year2015Day01(input).floor()
 
         then:
         floor == expectedResult
@@ -30,7 +30,7 @@ class Day01Specification extends Specification {
 
     def "what is the position of the character that causes Santa to first enter the basement"() {
         when:
-        final int position = new Day01(input).positionTillFirstArrivalAt(-1)
+        final int position = new Year2015Day01(input).positionTillFirstArrivalAt(-1)
 
         then:
         position == expectedResult

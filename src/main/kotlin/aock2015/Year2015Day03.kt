@@ -1,11 +1,11 @@
 package aock2015
 
 import shared.Direction
-import shared.Point3d
+import shared.Point2d
 import shared.groupByIndexRemainder
 import java.util.Collections.unmodifiableSet
 
-data class Day03(
+data class Year2015Day03(
     private val directions: List<Direction>
 ) {
     constructor(text: String) : this(
@@ -14,26 +14,26 @@ data class Day03(
             .toList()
     )
 
-    fun atLeastOnePresent(): Set<Point3d> {
-        var point = Point3d.ZERO
+    fun atLeastOnePresent(): Set<Point2d> {
+        var point = Point2d.ZERO
 
-        val points = mutableSetOf<Point3d>()
-        points.add(Point3d.ZERO)
+        val points = mutableSetOf<Point2d>()
+        points.add(Point2d.ZERO)
 
         for (direction in directions) {
-            point += direction.vector
+            point += direction
             points.add(point)
         }
 
         return unmodifiableSet(points)
     }
 
-    private fun splitWork(workers: Int): List<Day03> {
+    private fun splitWork(workers: Int): List<Year2015Day03> {
         return this.directions.groupByIndexRemainder(workers)
-            .map { Day03(it) }
+            .map { Year2015Day03(it) }
     }
 
-    fun atLeastOnePresentWithHelp(workers: Int): Set<Point3d> {
+    fun atLeastOnePresentWithHelp(workers: Int): Set<Point2d> {
         return splitWork(workers)
             .asSequence()
             .map { it.atLeastOnePresent() }

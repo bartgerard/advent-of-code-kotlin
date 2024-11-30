@@ -1,39 +1,37 @@
-package aock2015
+package aock2024
 
 import spock.lang.Specification
 
-import static shared.InputsKt.downloadInputFile
 import static shared.InputsKt.readFile
 
-class Day04Specification extends Specification {
+class Year2024Day01Specification extends Specification {
 
     def "partOne"() {
         when:
-
-        final long area = new Day03(input).atLeastOnePresent().size()
+        final long result = new Year2024Day01(input).partOne()
 
         then:
-        area == expectedResult
+        result == expectedResult
 
         where:
         input             | expectedResult | comment
         ""                | 0              | ""
 
-        readFile(2015, 4) | 0              | ""
+        readFile(2024, 1) | 0              | ""
     }
 
     def "partTwo"() {
         when:
-        final long length = new Day03(input).atLeastOnePresentWithHelp(2).size()
+        final long result = new Year2024Day01(input).partTwo()
 
         then:
-        length == expectedResult
+        result == expectedResult
 
         where:
         input             | expectedResult | comment
         ""                | 0              | ""
 
-        readFile(2015, 4) | 0              | ""
+        readFile(2024, 1) | 0              | ""
     }
 
 }

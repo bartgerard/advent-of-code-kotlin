@@ -2,14 +2,14 @@ import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
-class Day0xSpecification extends Specification {
+class Year20xxDay0xSpecification extends Specification {
 
     def "partOne"() {
         when:
-        final long area = 0
+        final long result = new Year20xxDayXx(input).partOne()
 
         then:
-        area == expectedResult
+        result == expectedResult
 
         where:
         input             | expectedResult | comment
@@ -20,10 +20,10 @@ class Day0xSpecification extends Specification {
 
     def "partTwo"() {
         when:
-        final long length = 0
+        final long result = new Year20xxDayXx(input).partTwo()
 
         then:
-        length == expectedResult
+        result == expectedResult
 
         where:
         input             | expectedResult | comment

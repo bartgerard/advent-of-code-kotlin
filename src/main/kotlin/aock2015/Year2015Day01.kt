@@ -1,12 +1,12 @@
 package aock2015
 
-data class Day01(
+data class Year2015Day01(
     private val text: String
 ) {
 
     companion object {
-        fun parse(text: String): Day01 {
-            return Day01(text)
+        fun parse(text: String): Year2015Day01 {
+            return Year2015Day01(text)
         }
     }
 

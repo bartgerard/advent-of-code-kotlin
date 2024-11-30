@@ -1,12 +1,12 @@
 package aock2015
 
-import shared.Box3d
+import shared.Box
 import shared.asBox
 import shared.asLongs
 import shared.byLine
 
-data class Day02(
-    private val boxes: List<Box3d>
+data class Year2015Day02(
+    private val boxes: List<Box>
 ) {
     constructor(text: String) : this(text.byLine().map { it.asLongs().asBox() })
 

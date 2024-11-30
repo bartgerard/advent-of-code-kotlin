@@ -4,11 +4,11 @@ import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
-class Day03Specification extends Specification {
+class Year2015Day03Specification extends Specification {
 
     def "how many houses receive at least one present"() {
         when:
-        final long area = new Day03(input).atLeastOnePresent().size()
+        final long area = new Year2015Day03(input).atLeastOnePresent().size()
 
         then:
         area == expectedResult
@@ -24,7 +24,7 @@ class Day03Specification extends Specification {
 
     def "how many houses receive at least one present with Robo-Santa"() {
         when:
-        final long length = new Day03(input).atLeastOnePresentWithHelp(2).size()
+        final long length = new Year2015Day03(input).atLeastOnePresentWithHelp(2).size()
 
         then:
         length == expectedResult

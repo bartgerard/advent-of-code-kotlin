@@ -4,11 +4,11 @@ import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
-class Day02Specification extends Specification {
+class Year2015Day02Specification extends Specification {
 
     def "how many total square feet of wrapping paper should they order"() {
         when:
-        final long area = new Day02(input).requiredAreaOfWrappingPaper()
+        final long area = new Year2015Day02(input).requiredAreaOfWrappingPaper()
 
         then:
         area == expectedResult
@@ -23,7 +23,7 @@ class Day02Specification extends Specification {
 
     def "how many total feet of ribbon should they order"() {
         when:
-        final long length = new Day02(input).requiredLengthOfRibbon()
+        final long length = new Year2015Day02(input).requiredLengthOfRibbon()
 
         then:
         length == expectedResult
