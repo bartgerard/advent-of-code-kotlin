@@ -1,30 +1,35 @@
 package aock2024
 
-import shared.asLongs
-import shared.byLine
+import shared.frequencies
+import shared.table
+import shared.transpose
 import kotlin.math.abs
 
+fun parse2024Day01(text: String): Year2024Day01 {
+    return Year2024Day01.parse(text)
+}
+
 data class Year2024Day01(
-    private val pairs: List<Pair<Long, Long>>
+    private val firstList: List<Long>,
+    private val secondList: List<Long>
 ) {
-    constructor(text: String) : this(
-        text.byLine()
-            .map { it.asLongs() }
-            .map { Pair(it[0], it[1]) }
-    )
+    companion object {
+        fun parse(text: String): Year2024Day01 {
+            val lists = text.table("   ")
+                .transpose()
+                .map { list -> list.map { it.toLong() }.sorted() }
+            return Year2024Day01(lists)
+        }
+    }
+
+    constructor(lists: List<List<Long>>) : this(lists[0], lists[1])
 
     fun distanceBetweenLists(): Long {
-        val firstList = pairs.map { it.first }.sorted()
-        val secondList = pairs.map { it.second }.sorted()
-
         return firstList.indices.sumOf { abs(firstList[it] - secondList[it]) }
     }
 
     fun similarityScore(): Long {
-        val firstList = pairs.map { it.first }.sorted()
-        val frequenciesByNumber: Map<Long, Int> = pairs.map { it.second }
-            .groupBy { it }
-            .mapValues { it.value.size }
+        val frequenciesByNumber: Map<Long, Int> = secondList.frequencies()
 
         return firstList.indices.sumOf { firstList[it] * (frequenciesByNumber[firstList[it]] ?: 0) }
     }

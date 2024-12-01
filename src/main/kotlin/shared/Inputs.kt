@@ -51,6 +51,10 @@ fun String.byLine(): List<String> {
     return this.split("\n")
 }
 
+fun String.table(separator: String): List<List<String>> {
+    return this.byLine().map { it.split(separator) }
+}
+
 /*
 fun String.split(count: Int): List<String> {
     return (0..count)
@@ -83,4 +87,17 @@ fun parseInt(s: String): Int = when (s) {
     "eight" -> 8
     "nine" -> 9
     else -> s.toInt()
+}
+
+fun parseLong(s: String): Long = when (s) {
+    "one" -> 1
+    "two" -> 2
+    "three" -> 3
+    "four" -> 4
+    "five" -> 5
+    "six" -> 6
+    "seven" -> 7
+    "eight" -> 8
+    "nine" -> 9
+    else -> s.toLong()
 }

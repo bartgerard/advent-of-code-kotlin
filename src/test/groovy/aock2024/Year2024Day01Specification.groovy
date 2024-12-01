@@ -2,13 +2,14 @@ package aock2024
 
 import spock.lang.Specification
 
+import static aock2024.Year2024Day01Kt.parse2024Day01
 import static shared.InputsKt.readFile
 
 class Year2024Day01Specification extends Specification {
 
     def "what is the total distance between your lists"() {
         when:
-        final long result = new Year2024Day01(input).distanceBetweenLists()
+        final long result = parse2024Day01(input).distanceBetweenLists()
 
         then:
         result == expectedResult
@@ -22,7 +23,7 @@ class Year2024Day01Specification extends Specification {
 
     def "what is their similarity score"() {
         when:
-        final long result = new Year2024Day01(input).similarityScore()
+        final long result = parse2024Day01(input).similarityScore()
 
         then:
         result == expectedResult
