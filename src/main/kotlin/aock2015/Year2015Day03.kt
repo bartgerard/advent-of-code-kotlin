@@ -8,8 +8,8 @@ import java.util.Collections.unmodifiableSet
 data class Year2015Day03(
     private val directions: List<Direction>
 ) {
-    constructor(text: String) : this(
-        text.chars()
+    constructor(input: String) : this(
+        input.chars()
             .mapToObj { Direction.parse(it.toChar()) }
             .toList()
     )

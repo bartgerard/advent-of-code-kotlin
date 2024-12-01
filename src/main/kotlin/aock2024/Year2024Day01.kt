@@ -5,8 +5,8 @@ import shared.table
 import shared.transpose
 import kotlin.math.abs
 
-fun parse2024Day01(text: String): Year2024Day01 {
-    return Year2024Day01.parse(text)
+fun parse2024Day01(input: String): Year2024Day01 {
+    return Year2024Day01.parse(input)
 }
 
 data class Year2024Day01(
@@ -14,8 +14,9 @@ data class Year2024Day01(
     private val secondList: List<Long>
 ) {
     companion object {
-        fun parse(text: String): Year2024Day01 {
-            val lists = text.table("   ")
+        private const val SEPARATOR = "   "
+        fun parse(input: String): Year2024Day01 {
+            val lists = input.table(SEPARATOR)
                 .transpose()
                 .map { list -> list.map { it.toLong() }.sorted() }
             return Year2024Day01(lists)

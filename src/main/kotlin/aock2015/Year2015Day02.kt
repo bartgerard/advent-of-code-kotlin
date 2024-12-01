@@ -8,7 +8,7 @@ import shared.byLine
 data class Year2015Day02(
     private val boxes: List<Box>
 ) {
-    constructor(text: String) : this(text.byLine().map { it.asLongs().asBox() })
+    constructor(input: String) : this(input.byLine().map { it.asLongs().asBox() })
 
     fun requiredAreaOfWrappingPaper(): Long {
         return this.boxes.sumOf { it.surfaceArea() + it.areaOfSmallestSide() }

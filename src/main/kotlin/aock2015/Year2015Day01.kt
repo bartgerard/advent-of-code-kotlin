@@ -1,23 +1,23 @@
 package aock2015
 
 data class Year2015Day01(
-    private val text: String
+    private val input: String
 ) {
 
     companion object {
-        fun parse(text: String): Year2015Day01 {
-            return Year2015Day01(text)
+        fun parse(input: String): Year2015Day01 {
+            return Year2015Day01(input)
         }
     }
 
     fun floor(): Int {
-        return this.text.count { it == '(' } - this.text.count { it == ')' }
+        return this.input.count { it == '(' } - this.input.count { it == ')' }
     }
 
     fun positionTillFirstArrivalAt(floor: Int): Int {
         var currentFloor = 0
 
-        return this.text.map {
+        return this.input.map {
             if (it == '(') ++currentFloor else --currentFloor
         }
             .indexOf(floor) + 1
