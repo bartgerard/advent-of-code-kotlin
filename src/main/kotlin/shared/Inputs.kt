@@ -1,10 +1,12 @@
 package shared
 
+import java.math.BigInteger
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
 import java.nio.charset.Charset.defaultCharset
+import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.createParentDirectories
 
@@ -101,3 +103,11 @@ fun parseLong(s: String): Long = when (s) {
     "nine" -> 9
     else -> s.toLong()
 }
+
+/**
+ * Converts string to md5 hash.
+ * From the Kotlin template https://github.com/kotlin-hands-on/advent-of-code-kotlin-template/blob/main/src/Utils.kt
+ */
+fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray()))
+    .toString(16)
+    .padStart(32, '0')
