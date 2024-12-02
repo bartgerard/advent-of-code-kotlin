@@ -68,11 +68,13 @@ fun String.split(count: Int): List<String> {
 
 val NUMBER_PATTERN = "-?\\d+".toRegex()
 
-fun String.asLongs(): List<Long> {
-    return NUMBER_PATTERN.findAll(this)
-        .map { it.value.toLong() }
-        .toList()
-}
+fun String.asIntegers(): List<Int> = NUMBER_PATTERN.findAll(this)
+    .map { it.value.toInt() }
+    .toList()
+
+fun String.asLongs(): List<Long> = NUMBER_PATTERN.findAll(this)
+    .map { it.value.toLong() }
+    .toList()
 
 fun List<Long>.asBox(): Box {
     return Box(this[0], this[1], this[2])
@@ -103,6 +105,8 @@ fun parseLong(s: String): Long = when (s) {
     "nine" -> 9
     else -> s.toLong()
 }
+
+operator fun String.times(n: Int) = repeat(n)
 
 /**
  * Converts string to md5 hash.

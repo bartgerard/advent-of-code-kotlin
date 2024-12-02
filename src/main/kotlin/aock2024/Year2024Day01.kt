@@ -25,9 +25,7 @@ data class Year2024Day01(
 
     constructor(lists: List<List<Long>>) : this(lists[0], lists[1])
 
-    fun distanceBetweenLists(): Long {
-        return firstList.indices.sumOf { abs(firstList[it] - secondList[it]) }
-    }
+    fun distanceBetweenLists(): Long = firstList.indices.sumOf { abs(firstList[it] - secondList[it]) }
 
     fun similarityScore(): Long {
         val frequenciesByNumber: Map<Long, Int> = secondList.frequencies()

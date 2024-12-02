@@ -92,8 +92,8 @@ data class Vector3d(
 }
 
 data class Point2d(
-    private val x: Int,
-    private val y: Int
+    val x: Int,
+    val y: Int
 ) {
     companion object {
         val ZERO = Point2d(0, 0)
@@ -145,6 +145,4 @@ data class Point3d(
 data class Line2d(
     private val p1: Point2d,
     private val p2: Point2d
-) {
-
-}
+)

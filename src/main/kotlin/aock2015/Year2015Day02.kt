@@ -17,4 +17,5 @@ data class Year2015Day02(
     fun requiredLengthOfRibbon(): Long {
         return this.boxes.sumOf { it.smallestPerimeter() + it.volume() }
     }
+
 }

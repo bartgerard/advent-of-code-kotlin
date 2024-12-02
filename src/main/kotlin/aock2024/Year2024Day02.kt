@@ -41,9 +41,9 @@ data class Year2024Day02(
     private fun isSafe(difference: Long, firstInterval: Long) = abs(difference) in 1..3 && firstInterval.sign == difference.sign
 
     private fun isSafeWithTolerance(report: List<Long>): Boolean {
-        if (isSafe(report)) {
-            return true
-        } else if (isSafe(report.withoutIndex(0))) {
+        if (isSafe(report.withoutIndex(0))) {
+            // isSafe ignoring the first entry
+            // if the remainder of the report is safe, we can tolerate the bad level at the start
             return true
         }
 
