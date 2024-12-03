@@ -24,11 +24,8 @@ data class Year2015Day06(
         return grid.intensity()
     }
 
-    private fun rectangle(instruction: String): Rectangle {
-        val coordinates = instruction.toIntegers()
-        val rectangle = Rectangle(coordinates[0]..coordinates[2], coordinates[1]..coordinates[3])
-        return rectangle
-    }
+    private fun rectangle(instruction: String): Rectangle = instruction.toIntegers()
+        .let { (x1, y1, x2, y2) -> Rectangle(x1..x2, y1..y2) }
 
     private fun execute(grid: ToggleGrid, instruction: String) {
         val rectangle = rectangle(instruction)
@@ -42,9 +39,7 @@ data class Year2015Day06(
         }
     }
 
-    private fun toggle(previous: Boolean): Boolean {
-        return !previous
-    }
+    private fun toggle(previous: Boolean): Boolean = !previous
 
     private fun execute(grid: IntensityGrid, instruction: String) {
         val rectangle = rectangle(instruction)
@@ -58,11 +53,8 @@ data class Year2015Day06(
         }
     }
 
-    private fun increase(previous: Int, amount: Int): Int {
-        return previous + amount
-    }
+    private fun increase(previous: Int, amount: Int): Int = previous + amount
 
-    private fun decrease(previous: Int): Int {
-        return max(0, previous - 1)
-    }
+    private fun decrease(previous: Int): Int = max(0, previous - 1)
+
 }

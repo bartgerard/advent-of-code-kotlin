@@ -14,6 +14,7 @@ data class Year2024Day03(
         .sumOf { parseMultiplications(it) }
 
     private fun parseMultiplications(input: String): Int = MULTIPLICATION_REGEX.findAll(input)
-        .sumOf { it.groupValues[1].toInt() * it.groupValues[2].toInt() }
+        .map { it.destructured }
+        .sumOf { (x, y) -> x.toInt() * y.toInt() }
 
 }

@@ -28,17 +28,13 @@ data class Year2015Day03(
         return unmodifiableSet(points)
     }
 
-    private fun splitWork(workers: Int): List<Year2015Day03> {
-        return this.directions.groupByIndexRemainder(workers)
-            .map { Year2015Day03(it) }
-    }
+    private fun splitWork(workers: Int): List<Year2015Day03> = this.directions.groupByIndexRemainder(workers)
+        .map { Year2015Day03(it) }
 
-    fun atLeastOnePresentWithHelp(workers: Int): Set<Point2d> {
-        return splitWork(workers)
-            .asSequence()
-            .map { it.atLeastOnePresent() }
-            .flatMap { it }
-            .toSet()
-    }
+    fun atLeastOnePresentWithHelp(workers: Int): Set<Point2d> = splitWork(workers)
+        .asSequence()
+        .map { it.atLeastOnePresent() }
+        .flatMap { it }
+        .toSet()
 
 }

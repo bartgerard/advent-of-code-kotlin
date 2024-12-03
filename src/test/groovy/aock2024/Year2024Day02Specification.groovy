@@ -2,14 +2,13 @@ package aock2024
 
 import spock.lang.Specification
 
-import static aock2024.Year2024Day02Kt.parse2024Day02
 import static shared.InputsKt.readFile
 
 class Year2024Day02Specification extends Specification {
 
     def "how many reports are safe"() {
         when:
-        final int result = parse2024Day02(input).countSafe()
+        final int result = new Year2024Day02(input).countSafe()
 
         then:
         result == expectedResult
@@ -23,7 +22,7 @@ class Year2024Day02Specification extends Specification {
 
     def "how many reports are safe with tolerance"() {
         when:
-        final long result = parse2024Day02(input).countSafeWithTolerance()
+        final long result = new Year2024Day02(input).countSafeWithTolerance()
 
         then:
         result == expectedResult

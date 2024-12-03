@@ -7,18 +7,13 @@ import shared.withoutIndex
 import kotlin.math.abs
 import kotlin.math.sign
 
-fun parse2024Day02(input: String): Year2024Day02 {
-    return Year2024Day02.parse(input)
-}
-
 data class Year2024Day02(
     private val reports: List<List<Long>>
 ) {
-    companion object {
-        fun parse(input: String): Year2024Day02 = input.byLine()
+    constructor(input: String) : this(
+        input.byLine()
             .map { it.toLongs() }
-            .let { Year2024Day02(it) }
-    }
+    )
 
     fun countSafe(): Int = reports.count { isSafe(it) }
 
