@@ -25,7 +25,7 @@ data class Year2015Day06(
     }
 
     private fun rectangle(instruction: String): Rectangle {
-        val coordinates = instruction.asIntegers()
+        val coordinates = instruction.toIntegers()
         val rectangle = Rectangle(coordinates[0]..coordinates[2], coordinates[1]..coordinates[3])
         return rectangle
     }

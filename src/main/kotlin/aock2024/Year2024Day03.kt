@@ -4,21 +4,16 @@ data class Year2024Day03(
     private val input: String
 ) {
     companion object {
-        val MUL_REGEX = "mul\\((\\d+),(\\d+)\\)".toRegex()
+        val MULTIPLICATION_REGEX = "mul\\((\\d{1,3}),(\\d{1,3})\\)".toRegex()
     }
 
-    fun partOne(): Int {
-        return parseMul(input)
-    }
+    fun partOne(): Int = parseMultiplications(input)
 
-    fun partTwo(): Int {
-        return input.split("do()")
-            .map { it.split("don't()")[0] } // first part hasn't been disabled
-            .sumOf { parseMul(it) }
-    }
+    fun partTwo(): Int = input.split("do()")
+        .map { it.splitToSequence("don't()").first() } // first segment hasn't been disabled
+        .sumOf { parseMultiplications(it) }
 
-    private fun parseMul(input: String): Int {
-        return MUL_REGEX.findAll(input)
-            .sumOf { it.groupValues[1].toInt() * it.groupValues[2].toInt() }
-    }
+    private fun parseMultiplications(input: String): Int = MULTIPLICATION_REGEX.findAll(input)
+        .sumOf { it.groupValues[1].toInt() * it.groupValues[2].toInt() }
+
 }

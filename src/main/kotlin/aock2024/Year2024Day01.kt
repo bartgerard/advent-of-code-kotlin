@@ -15,12 +15,10 @@ data class Year2024Day01(
 ) {
     companion object {
         private const val SEPARATOR = "   "
-        fun parse(input: String): Year2024Day01 {
-            val lists = input.table(SEPARATOR)
-                .transpose()
-                .map { list -> list.map { it.toLong() }.sorted() }
-            return Year2024Day01(lists)
-        }
+        fun parse(input: String): Year2024Day01 = input.table(SEPARATOR)
+            .transpose()
+            .map { list -> list.map { it.toLong() }.sorted() }
+            .let { Year2024Day01(it) }
     }
 
     constructor(lists: List<List<Long>>) : this(lists[0], lists[1])

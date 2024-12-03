@@ -23,6 +23,9 @@ class Year2024Day03Specification extends Specification {
         "?(12,34)"        | 0              | "invalid"
         "mul ( 2 , 4 )"   | 0              | "invalid"
 
+        "mul(1000,1)"     | 0              | "invalid (1-3 digit numbers)"
+        "mul(1,1000)"     | 0              | "invalid (1-3 digit numbers)"
+
         readFile(2024, 3) | 165225049      | ""
     }
 

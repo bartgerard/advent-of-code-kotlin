@@ -68,15 +68,15 @@ fun String.split(count: Int): List<String> {
 
 val NUMBER_PATTERN = "-?\\d+".toRegex()
 
-fun String.asIntegers(): List<Int> = NUMBER_PATTERN.findAll(this)
+fun String.toIntegers(): List<Int> = NUMBER_PATTERN.findAll(this)
     .map { it.value.toInt() }
     .toList()
 
-fun String.asLongs(): List<Long> = NUMBER_PATTERN.findAll(this)
+fun String.toLongs(): List<Long> = NUMBER_PATTERN.findAll(this)
     .map { it.value.toLong() }
     .toList()
 
-fun List<Long>.asBox(): Box {
+fun List<Long>.toBox(): Box {
     return Box(this[0], this[1], this[2])
 }
 

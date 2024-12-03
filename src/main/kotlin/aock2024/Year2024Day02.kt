@@ -1,8 +1,8 @@
 package aock2024
 
-import shared.asLongs
 import shared.byLine
 import shared.intervals
+import shared.toLongs
 import shared.withoutIndex
 import kotlin.math.abs
 import kotlin.math.sign
@@ -15,16 +15,14 @@ data class Year2024Day02(
     private val reports: List<List<Long>>
 ) {
     companion object {
-        fun parse(input: String): Year2024Day02 {
-            val reports = input.byLine()
-                .map { it.asLongs() }
-            return Year2024Day02(reports)
-        }
+        fun parse(input: String): Year2024Day02 = input.byLine()
+            .map { it.toLongs() }
+            .let { Year2024Day02(it) }
     }
 
-    fun countSafe(): Int {
-        return reports.count { isSafe(it) }
-    }
+    fun countSafe(): Int = reports.count { isSafe(it) }
+
+    fun countSafeWithTolerance(): Int = reports.count { isSafeWithTolerance(it) }
 
     private fun isSafe(report: List<Long>): Boolean {
         if (report.size <= 2) {
@@ -37,7 +35,8 @@ data class Year2024Day02(
         return intervals.all { isSafe(it, firstInterval) }
     }
 
-    private fun isSafe(difference: Long, firstInterval: Long) = abs(difference) in 1..3 && firstInterval.sign == difference.sign
+    private fun isSafe(difference: Long, firstInterval: Long) =
+        abs(difference) in 1..3 && firstInterval.sign == difference.sign
 
     private fun isSafeWithTolerance(report: List<Long>): Boolean {
         if (isSafe(report.withoutIndex(0))) {
@@ -56,7 +55,4 @@ data class Year2024Day02(
                 || isSafe(report.withoutIndex(indexOfFirstBadLevel + 1))
     }
 
-    fun countSafeWithTolerance(): Int {
-        return reports.count { isSafeWithTolerance(it) }
-    }
 }
