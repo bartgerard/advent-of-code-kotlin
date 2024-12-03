@@ -15,7 +15,6 @@ data class Year2024Day02(
     private val reports: List<List<Long>>
 ) {
     companion object {
-        private const val SEPARATOR = "   "
         fun parse(input: String): Year2024Day02 {
             val reports = input.byLine()
                 .map { it.asLongs() }
