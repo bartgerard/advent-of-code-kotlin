@@ -1,15 +1,42 @@
 package aock2024
 
 import shared.Point2d
+import shared.Vector2d
 import shared.byLine
 
 data class Year2024Day04(
-    private val chars: List<CharArray>
+    private val lines: List<String>
 ) {
-    constructor(input: String) : this(input.byLine().map { it.toCharArray() })
+    companion object {
+        const val WORD: String = "XMAS"
+    }
+
+    constructor(input: String) : this(input.byLine())
 
     fun partOne(): Int {
-        val points = chars.flatMapIndexed { row, line ->
+        val points = lines.flatMapIndexed { row, line ->
+            line.indices
+                .filter { line[it] == WORD[0] }
+                .map { Point2d(it, row) }
+        }
+
+        return points.sumOf { point ->
+            Vector2d.SURROUNDING.count { vector ->
+                WORD.indices.map { index -> index to point + vector * index }
+                    .all { isInBound(it.second) && WORD[it.first] == lines[it.second.y][it.second.x] }
+            }
+        }
+    }
+
+    private fun isInBound(point: Point2d): Boolean = point.x >= 0 && point.y >= 0 && point.y < lines.size && point.x < lines[point.y].length
+
+    private fun neighboursWithCharacter(point: Point2d, character: Char): List<Point2d> = point.neighbours()
+        .filter { it.x >= 0 && it.y >= 0 && it.y < lines.size && it.x < lines[it.y].length }
+        .filter { lines[it.y][it.x] == character }
+
+    fun partTwo(): Int {
+
+        val points = lines.flatMapIndexed { row, line ->
             line.indices
                 .filter { line[it] == 'X' }
                 .map { Point2d(it, row) }
@@ -17,19 +44,9 @@ data class Year2024Day04(
 
         return points.sumOf { point ->
             neighboursWithCharacter(point, 'M')
-                .distinct()
                 .flatMap { neighboursWithCharacter(it, 'A') }
-                .distinct()
                 .flatMap { neighboursWithCharacter(it, 'S') }
-                .distinct()
                 .count()
         }
     }
-
-    private fun neighboursWithCharacter(point: Point2d, character: Char): Sequence<Point2d> = point.neighbours()
-        .filter { it.x >= 0 && it.y >= 0 && it.y < chars.size && it.x < chars[it.y].size }
-        .distinct()
-        .filter { chars[it.y][it.x] == character }
-
-    fun partTwo(): Int = 0
 }

@@ -66,6 +66,20 @@ data class Vector2d(
     companion object {
         val ZERO = Vector2d(0, 0)
 
+        val ORTHOGONAL: List<Vector2d> = listOf(
+            Vector2d(1, 0),
+            Vector2d(0, 1),
+            Vector2d(-1, 0),
+            Vector2d(0, -1)
+        )
+        val DIAGONAL: List<Vector2d> = listOf(
+            Vector2d(-1, -1),
+            Vector2d(1, -1),
+            Vector2d(1, 1),
+            Vector2d(-1, 1)
+        )
+        val SURROUNDING: List<Vector2d> = ORTHOGONAL + DIAGONAL
+
         fun forDirection(direction: Direction): Vector2d {
             return when (direction) {
                 UP -> Vector2d(1, 0)
@@ -76,7 +90,7 @@ data class Vector2d(
         }
     }
 
-    operator fun times(scalar: Int) = Vector3d(x * scalar, y * scalar)
+    operator fun times(scalar: Int) = Vector2d(x * scalar, y * scalar)
 
 }
 
@@ -118,11 +132,11 @@ data class Point2d(
 
     operator fun minus(direction: Direction) = this - Vector2d.forDirection(direction)
 
-    fun orthogonalNeighbours() = listOf(UP, DOWN, LEFT, RIGHT).map { this + it }
+    fun orthogonalNeighbours() = Vector2d.ORTHOGONAL.map { this + it }
 
-    fun neighbours() = sequenceOf(Vector2d(0, -1), Vector2d(-1, 0), Vector2d(-1, -1), Vector2d(1, -1), Vector2d(1, 0), Vector2d(1, 1), Vector2d(0, 1), Vector2d(-1, 1))
-        .map { this + it }
-        .filter { it.x >= 0 && it.y >= 0 }
+    fun diagonalNeighbours() = Vector2d.DIAGONAL.map { this + it }
+
+    fun neighbours() = Vector2d.SURROUNDING.map { this + it }
 }
 
 data class Point3d(
