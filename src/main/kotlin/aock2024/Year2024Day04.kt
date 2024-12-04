@@ -23,7 +23,7 @@ data class Year2024Day04(
         return points.sumOf { point ->
             Vector2d.SURROUNDING.count { vector ->
                 WORD.indices.map { index -> index to point + vector * index }
-                    .all { isInBound(it.second) && WORD[it.first] == lines[it.second.y][it.second.x] }
+                    .all { (index, point) -> isInBound(point) && WORD[index] == lines[point.y][point.x] }
             }
         }
     }
