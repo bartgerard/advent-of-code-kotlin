@@ -28,7 +28,7 @@ data class Year2024Day04(
         }
     }
 
-    private fun isInBound(point: Point2d): Boolean = point.x >= 0 && point.y >= 0 && point.y < lines.size && point.x < lines[point.y].length
+    private fun isInBound(point: Point2d): Boolean = point.y in lines.indices && point.x in 0..<lines[point.y].length
 
     private fun neighboursWithCharacter(point: Point2d, character: Char): List<Point2d> = point.neighbours()
         .filter { it.x >= 0 && it.y >= 0 && it.y < lines.size && it.x < lines[it.y].length }
