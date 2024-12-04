@@ -1,5 +1,5 @@
 package shared
 
-data class Edge() {
+data class Edge(val a: String) {
 
 }

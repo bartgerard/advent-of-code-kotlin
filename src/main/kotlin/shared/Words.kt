@@ -1,7 +1,5 @@
 package shared
 
-import aock2024.Year2024Day04.Companion.WORD
-
 data class WordGrid(
     val lines: List<String>
 ) {
@@ -13,7 +11,7 @@ data class WordGrid(
 
     fun countOccurrences(word: String, directions: Collection<Vector2d>) = findAll(word[0]).sumOf { point ->
         directions.count { vector ->
-            WORD.indices.map { index -> point + vector * index to WORD[index] }
+            word.indices.map { index -> point + vector * index to word[index] }
                 .all { (point, character) -> contains(point) && character == at(point) }
         }
     }
