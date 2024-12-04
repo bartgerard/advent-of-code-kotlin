@@ -14,22 +14,16 @@ class Year2024Day04Specification extends Specification {
         result == expectedResult
 
         where:
-        input                           | expectedResult | comment
-        readFile(2024, 4, "example_1")  | 4              | ""
-        readFile(2024, 4, "example_2")  | 18             | ""
-        readFile(2024, 4, "example_3")  | 18             | ""
+        input                          | expectedResult | comment
+        readFile(2024, 4, "example_1") | 4              | ""
+        readFile(2024, 4, "example_2") | 18             | ""
+        readFile(2024, 4, "example_3") | 18             | ""
 
-        readFile(2024, 4, "example_4")  | 5              | ""
-        readFile(2024, 4, "example_5")  | 1              | ""
-        readFile(2024, 4, "example_6")  | 0              | ""
+        readFile(2024, 4, "example_4") | 5              | ""
+        readFile(2024, 4, "example_5") | 1              | ""
+        readFile(2024, 4, "example_6") | 0              | ""
 
-        readFile(2024, 4, "example_7")  | 3              | ""
-        readFile(2024, 4, "example_8")  | 1              | ""
-        readFile(2024, 4, "example_9")  | 1              | ""
-        readFile(2024, 4, "example_10") | 1              | ""
-        readFile(2024, 4, "example_11") | 8              | ""
-
-        readFile(2024, 4)               | 0              | ">446"
+        readFile(2024, 4)              | 2618           | ""
     }
 
     def "partTwo"() {
@@ -40,10 +34,10 @@ class Year2024Day04Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                            | expectedResult | comment
+        readFile(2024, 4, "example_b_1") | 9              | ""
 
-        readFile(2024, 4) | 0              | ""
+        readFile(2024, 4)                | 2011           | ""
     }
 
 }

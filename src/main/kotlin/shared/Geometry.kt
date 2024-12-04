@@ -1,6 +1,5 @@
 package shared
 
-import shared.Direction.*
 import kotlin.math.abs
 
 data class Box(
@@ -36,16 +35,26 @@ data class Box(
 }
 
 enum class Direction {
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT;
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    NORTH_EAST,
+    SOUTH_EAST,
+    SOUTH_WEST,
+    NORTH_WEST;
 
     companion object {
-        val NORTH = UP
-        val EAST = RIGHT
-        val SOUTH = DOWN
-        val WEST = LEFT
+        val UP = NORTH
+        val RIGHT = EAST
+        val DOWN = SOUTH
+        val LEFT = WEST
+
+        val CARDINAL_DIRECTIONS = listOf(NORTH, EAST, SOUTH, WEST)
+        val ORDINAL_DIRECTIONS = listOf(NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST)
+
+        val ORTHOGONAL = CARDINAL_DIRECTIONS
+        val DIAGONAL = ORDINAL_DIRECTIONS
 
         fun parse(value: Char): Direction {
             return when (value) {
@@ -57,6 +66,19 @@ enum class Direction {
             }
         }
     }
+
+    fun inverse(): Direction {
+        return when (this) {
+            NORTH -> SOUTH
+            EAST -> WEST
+            SOUTH -> NORTH
+            WEST -> EAST
+            NORTH_EAST -> SOUTH_WEST
+            SOUTH_EAST -> NORTH_WEST
+            SOUTH_WEST -> NORTH_EAST
+            NORTH_WEST -> SOUTH_EAST
+        }
+    }
 }
 
 data class Vector2d(
@@ -66,26 +88,22 @@ data class Vector2d(
     companion object {
         val ZERO = Vector2d(0, 0)
 
-        val ORTHOGONAL: List<Vector2d> = listOf(
-            Vector2d(1, 0),
-            Vector2d(0, 1),
-            Vector2d(-1, 0),
-            Vector2d(0, -1)
-        )
-        val DIAGONAL: List<Vector2d> = listOf(
-            Vector2d(-1, -1),
-            Vector2d(1, -1),
-            Vector2d(1, 1),
-            Vector2d(-1, 1)
-        )
-        val SURROUNDING: List<Vector2d> = ORTHOGONAL + DIAGONAL
+        val ORTHOGONAL_ADJACENT = Direction.ORTHOGONAL.map { forDirection(it) }
+
+        val DIAGONAL_ADJACENT = Direction.DIAGONAL.map { forDirection(it) }
+
+        val SURROUNDING = ORTHOGONAL_ADJACENT + DIAGONAL_ADJACENT
 
         fun forDirection(direction: Direction): Vector2d {
             return when (direction) {
-                UP -> Vector2d(1, 0)
-                RIGHT -> Vector2d(0, 1)
-                DOWN -> Vector2d(-1, 0)
-                LEFT -> Vector2d(0, -1)
+                Direction.NORTH -> Vector2d(0, 1)
+                Direction.NORTH_EAST -> Vector2d(1, 1)
+                Direction.EAST -> Vector2d(1, 0)
+                Direction.SOUTH_EAST -> Vector2d(1, -1)
+                Direction.SOUTH -> Vector2d(0, -1)
+                Direction.SOUTH_WEST -> Vector2d(-1, -1)
+                Direction.WEST -> Vector2d(-1, 0)
+                Direction.NORTH_WEST -> Vector2d(-1, 1)
             }
         }
     }
@@ -132,9 +150,9 @@ data class Point2d(
 
     operator fun minus(direction: Direction) = this - Vector2d.forDirection(direction)
 
-    fun orthogonalNeighbours() = Vector2d.ORTHOGONAL.map { this + it }
+    fun orthogonalNeighbours() = Vector2d.ORTHOGONAL_ADJACENT.map { this + it }
 
-    fun diagonalNeighbours() = Vector2d.DIAGONAL.map { this + it }
+    fun diagonalNeighbours() = Vector2d.DIAGONAL_ADJACENT.map { this + it }
 
     fun neighbours() = Vector2d.SURROUNDING.map { this + it }
 }

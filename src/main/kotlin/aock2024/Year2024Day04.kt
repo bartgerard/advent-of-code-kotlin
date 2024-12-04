@@ -1,52 +1,26 @@
 package aock2024
 
-import shared.Point2d
+import shared.Direction.*
 import shared.Vector2d
+import shared.WordGrid
 import shared.byLine
 
 data class Year2024Day04(
-    private val lines: List<String>
+    private val grid: WordGrid
 ) {
     companion object {
-        const val WORD: String = "XMAS"
+        const val WORD = "XMAS"
+        val M_AND_S = setOf('M', 'S')
     }
 
-    constructor(input: String) : this(input.byLine())
+    constructor(input: String) : this(WordGrid(input.byLine()))
 
-    fun partOne(): Int {
-        val points = lines.flatMapIndexed { row, line ->
-            line.indices
-                .filter { line[it] == WORD[0] }
-                .map { Point2d(it, row) }
+    fun partOne(): Int = grid.countOccurrences(WORD, Vector2d.SURROUNDING)
+
+    fun partTwo(): Int = grid.findAll('A')
+        .count { point ->
+            Vector2d.DIAGONAL_ADJACENT.all { grid.contains(point + it) }
+                    && setOf(grid.at(point + NORTH_WEST), grid.at(point + SOUTH_EAST)).containsAll(M_AND_S)
+                    && setOf(grid.at(point + NORTH_EAST), grid.at(point + SOUTH_WEST)).containsAll(M_AND_S)
         }
-
-        return points.sumOf { point ->
-            Vector2d.SURROUNDING.count { vector ->
-                WORD.indices.map { index -> index to point + vector * index }
-                    .all { (index, point) -> isInBound(point) && WORD[index] == lines[point.y][point.x] }
-            }
-        }
-    }
-
-    private fun isInBound(point: Point2d): Boolean = point.y in lines.indices && point.x in 0..<lines[point.y].length
-
-    private fun neighboursWithCharacter(point: Point2d, character: Char): List<Point2d> = point.neighbours()
-        .filter { it.x >= 0 && it.y >= 0 && it.y < lines.size && it.x < lines[it.y].length }
-        .filter { lines[it.y][it.x] == character }
-
-    fun partTwo(): Int {
-
-        val points = lines.flatMapIndexed { row, line ->
-            line.indices
-                .filter { line[it] == 'X' }
-                .map { Point2d(it, row) }
-        }
-
-        return points.sumOf { point ->
-            neighboursWithCharacter(point, 'M')
-                .flatMap { neighboursWithCharacter(it, 'A') }
-                .flatMap { neighboursWithCharacter(it, 'S') }
-                .count()
-        }
-    }
 }

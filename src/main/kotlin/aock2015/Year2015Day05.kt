@@ -8,7 +8,7 @@ data class Year2015Day05(
     companion object {
         private const val VOWELS = "aeiou"
         private val DOUBLE_LETTER_REGEX = "(\\w)\\1".toRegex()
-        private val NAUGHTY_SEQUENCES: List<String> = listOf("ab", "cd", "pq", "xy")
+        private val NAUGHTY_SEQUENCES = listOf("ab", "cd", "pq", "xy")
         private val REPEATING_PAIR_REGEX = "(\\w\\w).*\\1".toRegex()
         private val REPEATING_LETTER_WITH_ONE_LETTER_BETWEEN_REGEX = "(\\w)\\w\\1".toRegex()
     }

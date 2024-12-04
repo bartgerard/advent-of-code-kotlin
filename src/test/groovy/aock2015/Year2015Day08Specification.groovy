@@ -15,9 +15,14 @@ class Year2015Day08Specification extends Specification {
 
         where:
         input                          | expectedResult | comment
-        readFile(2015, 8, "example_1") | 8              | ""
+        "\"\""                         | 2              | ""
+        "\"abc\""                      | 2              | ""
+        "\"aaa\\\"aaa\""               | 3              | ""
+        "\"\\x27\""                    | 5              | ""
 
-        readFile(2015, 8)              | 0              | ">735"
+        readFile(2015, 8, "example_1") | 12             | ""
+
+        readFile(2015, 8)              | 1333           | ">735"
     }
 
     def "partTwo"() {
@@ -28,10 +33,15 @@ class Year2015Day08Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                          | expectedResult | comment
+        "\"\""                         | 4              | ""
+        "\"abc\""                      | 4              | ""
+        "\"aaa\\\"aaa\""               | 6              | ""
+        "\"\\x27\""                    | 5              | ""
 
-        readFile(2015, 8) | 0              | ""
+        readFile(2015, 8, "example_1") | 19             | ""
+
+        readFile(2015, 8)              | 2046           | ""
     }
 
 }

@@ -1,7 +1,7 @@
 import shared.downloadInputFile
 
 fun main() {
-    loadDay(2024, 4)
+    loadDay(2024, 5)
 }
 
 private fun loadDay(

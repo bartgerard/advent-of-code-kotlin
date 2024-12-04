@@ -3,7 +3,9 @@ package shared
 data class Dimension(
     val width: Int,
     val height: Int
-)
+) {
+    fun contains(p: Point2d): Boolean = p.x in 0..<width && p.y in 0..<height
+}
 
 data class Rectangle(
     val x: IntRange,
