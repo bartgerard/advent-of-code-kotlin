@@ -1,5 +1,6 @@
 package shared
 
+import shared.Direction.*
 import kotlin.math.abs
 
 data class Box(
@@ -67,10 +68,10 @@ data class Vector2d(
 
         fun forDirection(direction: Direction): Vector2d {
             return when (direction) {
-                Direction.UP -> Vector2d(1, 0)
-                Direction.RIGHT -> Vector2d(0, 1)
-                Direction.DOWN -> Vector2d(-1, 0)
-                Direction.LEFT -> Vector2d(0, -1)
+                UP -> Vector2d(1, 0)
+                RIGHT -> Vector2d(0, 1)
+                DOWN -> Vector2d(-1, 0)
+                LEFT -> Vector2d(0, -1)
             }
         }
     }
@@ -116,6 +117,12 @@ data class Point2d(
     operator fun plus(direction: Direction) = this + Vector2d.forDirection(direction)
 
     operator fun minus(direction: Direction) = this - Vector2d.forDirection(direction)
+
+    fun orthogonalNeighbours() = listOf(UP, DOWN, LEFT, RIGHT).map { this + it }
+
+    fun neighbours() = sequenceOf(Vector2d(0, -1), Vector2d(-1, 0), Vector2d(-1, -1), Vector2d(1, -1), Vector2d(1, 0), Vector2d(1, 1), Vector2d(0, 1), Vector2d(-1, 1))
+        .map { this + it }
+        .filter { it.x >= 0 && it.y >= 0 }
 }
 
 data class Point3d(

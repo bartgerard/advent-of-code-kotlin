@@ -18,4 +18,5 @@ fun <T> List<T>.frequencies() = this.groupingBy { it }.eachCount()
 
 fun <T> List<T>.withoutIndex(index: Int) = this.filterIndexed { i, _ -> i != index }
 
-fun List<Long>.intervals() = (1..<this.size).map { this[it] - this[it - 1] }
+//fun List<Long>.intervals() = (1..<this.size).map { this[it] - this[it - 1] }
+fun List<Long>.intervals() = this.zipWithNext { a, b -> b - a }
