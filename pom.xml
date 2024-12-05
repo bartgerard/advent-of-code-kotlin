@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>be.gerard</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.0</version>
     </parent>
 
     <artifactId>aock</artifactId>
@@ -15,41 +14,62 @@
     <name>advent-of-code-kotlin</name>
     <description>advent-of-code-kotlin</description>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/bartgerard/advent-of-code-kotlin</url>
-        </repository>
-    </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/bartgerard/*</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <properties>
+        <java.version>21</java.version>
         <kotlin.version>1.9.25</kotlin.version>
+
+        <!-- utilities -->
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons-io.version>2.18.0</commons-io.version>
+
+        <!-- testing -->
+        <spock.version>2.3-groovy-4.0</spock.version>
+
+        <!-- plugins -->
         <gmavenplus-plugin.version>4.0.1</gmavenplus-plugin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
 
-            <!-- first party -->
+            <!-- 3rd party -->
+
+            <!-- utilities -->
+
+            <!-- apache commons-collections -->
             <dependency>
-                <groupId>be.gerard</groupId>
-                <artifactId>aock-utils</artifactId>
-                <version>${project.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+            <!-- apache commons-beanutils -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+            <!-- apache commons-beanutils -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <!-- apache poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${apache-poi.version}</version>
+            </dependency>
+
+            <!-- testing -->
+            <!-- spock -->
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-bom</artifactId>
+                <version>${spock.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
         </dependencies>
@@ -57,6 +77,9 @@
 
     <dependencies>
 
+        <!-- 3rd party -->
+
+        <!-- kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
@@ -66,6 +89,27 @@
             <artifactId>kotlin-stdlib</artifactId>
         </dependency>
 
+        <!-- utilities -->
+        <!-- apache -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <!-- testing -->
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- spock -->
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit5</artifactId>
@@ -100,6 +144,14 @@
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
                 <version>${gmavenplus-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
