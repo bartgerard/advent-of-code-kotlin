@@ -1,9 +1,6 @@
 package aock2024
 
-import shared.byLine
-import shared.intervals
-import shared.toLongs
-import shared.withoutIndex
+import shared.*
 import kotlin.math.abs
 import kotlin.math.sign
 
@@ -11,8 +8,7 @@ data class Year2024Day02(
     private val reports: List<List<Long>>
 ) {
     constructor(input: String) : this(
-        input.byLine()
-            .map { it.toLongs() }
+        input.sanitize().splitByLine().map { it.toLongs() }
     )
 
     fun countSafe(): Int = reports.count { isSafe(it) }

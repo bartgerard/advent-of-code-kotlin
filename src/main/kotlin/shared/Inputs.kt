@@ -49,9 +49,13 @@ fun downloadInputFile(
         .send(request, BodyHandlers.ofFile(destination))
 }
 
-fun String.byLine(): List<String> = this.replace("\r", "").split("\n")
+fun String.sanitize(): String = this.replace("\r", "")
 
-fun String.table(separator: String): List<List<String>> = this.byLine().map { it.split(separator) }
+fun String.splitByLine(): List<String> = this.split("\n")
+
+fun String.splitByNewLine(): List<String> = this.split("\n\n")
+
+fun String.table(separator: String): List<List<String>> = this.splitByLine().map { it.split(separator) }
 
 /*
 fun String.split(count: Int): List<String> {

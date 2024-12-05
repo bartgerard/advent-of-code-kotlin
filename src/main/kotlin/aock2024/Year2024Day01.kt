@@ -1,6 +1,7 @@
 package aock2024
 
 import shared.frequencies
+import shared.sanitize
 import shared.table
 import shared.transpose
 import kotlin.math.abs
@@ -14,7 +15,8 @@ data class Year2024Day01(
     }
 
     constructor(input: String) : this(
-        input.table(SEPARATOR)
+        input.sanitize()
+            .table(SEPARATOR)
             .transpose()
             .map { list -> list.map { it.toLong() }.sorted() }
     )

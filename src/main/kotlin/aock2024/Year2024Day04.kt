@@ -3,7 +3,8 @@ package aock2024
 import shared.Direction.*
 import shared.Vector2d
 import shared.WordGrid
-import shared.byLine
+import shared.splitByLine
+import shared.sanitize
 
 data class Year2024Day04(
     private val grid: WordGrid
@@ -13,7 +14,7 @@ data class Year2024Day04(
         val M_AND_S = setOf('M', 'S')
     }
 
-    constructor(input: String) : this(WordGrid(input.byLine()))
+    constructor(input: String) : this(WordGrid(input.sanitize().splitByLine()))
 
     fun partOne(): Int = grid.countOccurrences(WORD, Vector2d.SURROUNDING)
 
