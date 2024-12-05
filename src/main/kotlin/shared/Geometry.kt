@@ -155,6 +155,9 @@ data class Point2d(
     fun diagonalNeighbours() = Vector2d.DIAGONAL_ADJACENT.map { this + it }
 
     fun neighbours() = Vector2d.SURROUNDING.map { this + it }
+
+    fun towards(p: Point2d): Vector2d = Vector2d(p.x - x, p.y - y)
+
 }
 
 data class Point3d(
@@ -179,6 +182,7 @@ data class Point3d(
     operator fun plus(v: Vector3d) = Point3d(x + v.x, y + v.y, z + v.z)
 
     operator fun minus(v: Vector3d) = Point3d(x - v.x, y - v.y, z - v.z)
+
 }
 
 data class Line2d(

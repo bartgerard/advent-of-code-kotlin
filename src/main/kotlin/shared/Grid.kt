@@ -17,11 +17,11 @@ data class Rectangle(
 }
 
 class ToggleGrid(
-    private val grid: Array<BooleanArray>
+    private val grid: List<BooleanArray>
 ) {
     constructor(
         dimension: Dimension
-    ) : this(Array(dimension.height) { BooleanArray(dimension.width) { false } })
+    ) : this(List(dimension.height) { BooleanArray(dimension.width) { false } })
 
     fun execute(rectangle: Rectangle, instruction: (previous: Boolean) -> Boolean) {
         rectangle.coordinates().forEach { execute(it, instruction) }
@@ -35,11 +35,11 @@ class ToggleGrid(
 }
 
 class IntensityGrid(
-    private val grid: Array<IntArray>
+    private val grid: List<IntArray>
 ) {
     constructor(
         dimension: Dimension
-    ) : this(Array(dimension.height) { IntArray(dimension.width) { 0 } })
+    ) : this(List(dimension.height) { IntArray(dimension.width) { 0 } })
 
     fun execute(rectangle: Rectangle, instruction: (previous: Int) -> Int) {
         rectangle.coordinates().forEach { execute(it, instruction) }

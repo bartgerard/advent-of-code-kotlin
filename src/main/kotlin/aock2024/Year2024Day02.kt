@@ -25,9 +25,8 @@ data class Year2024Day02(
         }
 
         val intervals = report.intervals()
-        val firstInterval = intervals[0]
 
-        return intervals.all { isSafe(it, firstInterval) }
+        return intervals.all { it in -3..-1 } || intervals.all { it in 1..3 }
     }
 
     private fun isSafe(difference: Long, firstInterval: Long) =
@@ -41,6 +40,9 @@ data class Year2024Day02(
         }
 
         val intervals = report.intervals()
+
+        //val a = intervals.count { it in -3..-1 }
+        //val b = intervals.count { it in 1..3 }
         val firstInterval = intervals[0]
 
         val indexOfFirstBadLevel = intervals.indexOfFirst { !isSafe(it, firstInterval) }
