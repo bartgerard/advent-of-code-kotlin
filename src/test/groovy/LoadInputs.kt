@@ -1,20 +1,11 @@
 import shared.downloadInputFile
 
-fun main() {
-    loadDay(2024, 5)
-}
+fun main() = loadDay(2024, 6)
 
-private fun loadDay(
-    year: Int,
-    day: Int
-) {
-    downloadInputFile(year, day)
-}
+private fun loadDay(year: Int, day: Int) = downloadInputFile(year, day)
 
-private fun loadAllYears() {
-    for (year in 2015..2023) {
-        for (day in 1..25) {
-            downloadInputFile(year, day)
-        }
+private fun loadAllYears() = (2015..2023).forEach { year ->
+    (1..25).forEach { day ->
+        downloadInputFile(year, day)
     }
 }

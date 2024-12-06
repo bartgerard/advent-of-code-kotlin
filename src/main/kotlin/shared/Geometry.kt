@@ -79,6 +79,39 @@ enum class Direction {
             NORTH_WEST -> SOUTH_EAST
         }
     }
+
+    fun rotateRight(): Direction = when (this) {
+        NORTH -> EAST
+        EAST -> SOUTH
+        SOUTH -> WEST
+        WEST -> NORTH
+        NORTH_EAST -> TODO()
+        SOUTH_EAST -> TODO()
+        SOUTH_WEST -> TODO()
+        NORTH_WEST -> TODO()
+    }
+
+    fun rotateLeft(): Direction = when (this) {
+        NORTH -> WEST
+        EAST -> NORTH
+        SOUTH -> EAST
+        WEST -> SOUTH
+        NORTH_EAST -> TODO()
+        SOUTH_EAST -> TODO()
+        SOUTH_WEST -> TODO()
+        NORTH_WEST -> TODO()
+    }
+
+    fun flipVertical(): Direction = when (this) {
+        NORTH -> SOUTH
+        EAST -> EAST
+        SOUTH -> NORTH
+        WEST -> WEST
+        NORTH_EAST -> TODO()
+        SOUTH_EAST -> TODO()
+        SOUTH_WEST -> TODO()
+        NORTH_WEST -> TODO()
+    }
 }
 
 data class Vector2d(

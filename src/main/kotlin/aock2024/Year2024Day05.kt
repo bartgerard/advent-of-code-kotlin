@@ -1,39 +1,35 @@
 package aock2024
 
 import shared.sanitize
+import shared.splitByEmptyLine
 import shared.splitByLine
-import shared.splitByNewLine
 import shared.toIntegers
-
-fun parseYear2024Day05(input: String) = Year2024Day05.parse(input)
 
 data class Year2024Day05(
     private val rules: List<Pair<Int, Int>>,
-    private val orders: List<List<Int>>
+    private val updates: List<List<Int>>
 ) {
-    companion object {
-        fun parse(input: String): Year2024Day05 {
-            val (rules, order) = input.sanitize().splitByNewLine()
-            val rules2: List<Pair<Int, Int>> = rules.sanitize().splitByLine()
-                .map { it.toIntegers() }
-                .map { it[0] to it[1] }
-            val order2 = order.sanitize().splitByLine()
-                .map { it.toIntegers() }
 
-            return Year2024Day05(
-                rules2,
-                order2
-            )
-        }
-    }
-
-    fun partOne(): Int = sumOfMiddlePages(orders.filter { isCorrect(it) })
-
-    fun partTwo(): Int = sumOfMiddlePages(
-        orders.filter { !isCorrect(it) }.map { correctOrdering(it) }
+    constructor(input: String) : this(
+        input.sanitize().splitByEmptyLine()
     )
 
-    private fun sumOfMiddlePages(items: List<List<Int>>) = items.sumOf { it[it.size / 2] }
+    constructor(input: List<String>) : this(
+        input[0].splitByLine()
+            .map { it.toIntegers() }
+            .map { it[0] to it[1] },
+        input[1].splitByLine()
+            .map { it.toIntegers() }
+    )
+
+    fun partOne(): Int = updates.filter { isCorrect(it) }
+        .sumOf { middlePage(it) }
+
+    fun partTwo(): Int = updates.filter { !isCorrect(it) }
+        .map { correctOrdering(it) }
+        .sumOf { middlePage(it) }
+
+    private fun middlePage(pages: List<Int>) = pages[pages.size / 2]
 
     private fun isCorrect(order: List<Int>): Boolean = order.mapIndexed { index, item -> item to index }
         .toMap()
@@ -42,27 +38,27 @@ data class Year2024Day05(
                 .all { orderMap[it.first]!! < orderMap[it.second]!! }
         }
 
-    private fun correctOrdering(incorrect: List<Int>): List<Int> {
-        val remainingPages = incorrect.toMutableList()
-        val applicableRules = rules.filter { incorrect.contains(it.first) && incorrect.contains(it.second) }
-            .groupBy { it.second }
-            .mapValues { (_, value) -> value.map { it.first } }
+    private fun correctOrdering(incorrectUpdate: List<Int>): List<Int> {
+        val remainingPages = incorrectUpdate.toMutableList()
+        val applicableRules = rules.filter { incorrectUpdate.contains(it.first) && incorrectUpdate.contains(it.second) }
+            .groupBy({ it.second }, { it.first })
 
-        val result = incorrect.filter { !applicableRules.containsKey(it) }.toMutableList()
-        remainingPages.removeAll(result)
+        val fixedUpdate = incorrectUpdate.filter { !applicableRules.containsKey(it) }
+            .toMutableList()
+        remainingPages.removeAll(fixedUpdate)
 
         while (remainingPages.isNotEmpty()) {
             for (page in remainingPages) {
-                val pagesBefore: List<Int> = applicableRules[page]!!
+                val earlierPages: List<Int> = applicableRules[page]!!
 
-                if (result.containsAll(pagesBefore)) {
-                    result += page
+                if (fixedUpdate.containsAll(earlierPages)) {
+                    fixedUpdate += page
                 }
             }
-            remainingPages.removeAll(result)
+            remainingPages.removeAll(fixedUpdate)
         }
 
-        return result.toList()
+        return fixedUpdate.toList()
     }
 
 }

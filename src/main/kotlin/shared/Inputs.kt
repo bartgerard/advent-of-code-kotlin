@@ -53,7 +53,7 @@ fun String.sanitize(): String = this.replace("\r", "")
 
 fun String.splitByLine(): List<String> = this.split("\n")
 
-fun String.splitByNewLine(): List<String> = this.split("\n\n")
+fun String.splitByEmptyLine(): List<String> = this.split("\n\n")
 
 fun String.table(separator: String): List<List<String>> = this.splitByLine().map { it.split(separator) }
 
