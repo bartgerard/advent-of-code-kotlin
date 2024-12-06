@@ -14,72 +14,143 @@ data class Year2024Day06(
         private const val OBSTACLE = '#'
         private const val GUARD = '^'
         private const val PATH = 'X'
-    }
 
-    constructor(input: String) : this(
-        MutableWordGrid(input)
-    )
+        private fun nextDirection(
+            grid: MutableWordGrid,
+            currentPosition: Point2d,
+            currentDirection: Direction
+        ): Direction? {
+            var newDirection = currentDirection
 
-    constructor(grid: MutableWordGrid) : this(
-        grid,
-        grid.findAll(GUARD)[0]
-    )
+            for (i in 0..3) {
+                val nextPosition = currentPosition + newDirection.flipVertical()
 
-    fun partOne(): Int = findPath().toSet().size
+                if (!grid.contains(nextPosition)) {
+                    return null
+                }
 
-    private fun findPath(): List<Point2d> {
-        var currentPosition = guard
-        var currentDirection = Direction.NORTH
+                if (grid.at(nextPosition) != OBSTACLE) {
+                    return newDirection
+                }
 
-        val path = mutableListOf<Point2d>()
-
-        while (grid.contains(currentPosition)) {
-            val nextPosition = currentPosition + currentDirection.flipVertical()
-
-            if (!grid.contains(nextPosition)) {
-                break
+                newDirection = newDirection.rotateRight()
             }
 
-            if (grid.at(nextPosition) == OBSTACLE) {
-                currentDirection = currentDirection.rotateRight()
-            } else {
-                currentPosition = nextPosition
-                path += currentPosition
-                grid.set(currentPosition, PATH)
-            }
+            return null
         }
 
-        return path.toList()
-    }
+        private fun findPath(
+            grid: MutableWordGrid,
+            position: Point2d,
+            direction: Direction
+        ): Path {
+            var currentPosition = position
+            var currentDirection = direction
+            val path = mutableListOf(currentPosition)
 
-    private fun containsLoop(grid: MutableWordGrid): Boolean {
-        var currentPosition = guard
-        var currentDirection = Direction.NORTH
+            while (grid.contains(currentPosition)) {
+                currentDirection = nextDirection(grid, currentPosition, currentDirection) ?: break
 
-        val path = mutableListOf<Point2d>()
+                val nextPosition = currentPosition + currentDirection.flipVertical()
 
-        while (grid.contains(currentPosition)) {
-            val nextPosition = currentPosition + currentDirection.flipVertical()
+                if (!grid.contains(nextPosition)) {
+                    break
+                }
 
-            if (!grid.contains(nextPosition)) {
-                break
-            }
+                if (path.contains(nextPosition)) {
+                    val candidate = currentPosition + currentDirection.flipVertical()
 
-            if (grid.at(nextPosition) == OBSTACLE) {
-                currentDirection = currentDirection.rotateRight()
-            } else {
-                if (Collections.indexOfSubList(path, listOf(nextPosition, nextPosition)) >= 0) {
-                    return true
+                    val hypotheticalNextPoint = if (grid.at(candidate) == OBSTACLE) {
+                        currentPosition + currentDirection.rotateRight().flipVertical()
+                    } else {
+                        candidate
+                    }
+
+                    val index = Collections.indexOfSubList(path, listOf(nextPosition, hypotheticalNextPoint))
+
+                    if (index >= 0) {
+                        return Path(path.toList(), index)
+                    }
                 }
 
                 currentPosition = nextPosition
                 path += currentPosition
                 grid.set(currentPosition, PATH)
+
+                println(grid.toString())
+                println()
+            }
+
+            return Path(path.toList(), -1)
+        }
+
+    }
+
+    constructor(input: String) : this(MutableWordGrid(input))
+
+    constructor(grid: MutableWordGrid) : this(grid, grid.findAll(GUARD)[0])
+
+    fun partOne(): Int = findPath(grid, guard, Direction.NORTH).path.toSet().size
+
+    fun partTwo(): Int {
+        var currentPosition = guard
+        var currentDirection = Direction.NORTH
+
+        val path = mutableListOf(currentPosition)
+        val candidateObstacles = mutableSetOf<Point2d>()
+
+        while (grid.contains(currentPosition)) {
+            val nextPosition = currentPosition + currentDirection.flipVertical()
+
+            if (!grid.contains(nextPosition)) {
+                break
+            }
+
+            if (grid.at(nextPosition) == OBSTACLE) {
+                currentDirection = currentDirection.rotateRight()
+                continue
+            }
+
+            if (grid.at(nextPosition) in setOf(PATH, GUARD)) {
+                val candidate = nextPosition + currentDirection.flipVertical()
+                val hypotheticalNextPoint = nextPosition + currentDirection.rotateRight().flipVertical()
+
+                if (grid.contains(candidate)
+                    && Collections.indexOfSubList(path, listOf(nextPosition, hypotheticalNextPoint)) >= 0
+                ) {
+                    candidateObstacles += candidate
+                    grid.set(candidate, 'O')
+
+                    //println(grid.toString())
+                    //println()
+                }
+            }
+
+            val hypotheticalNextDirection = currentDirection.rotateRight()
+            val hypotheticalNextPosition = currentPosition + hypotheticalNextDirection.flipVertical()
+
+            if (grid.contains(hypotheticalNextPosition)) {
+                if (findPath(grid, hypotheticalNextPosition, hypotheticalNextDirection).startOfLoopIndex >= 0) {
+                    candidateObstacles += nextPosition
+                }
+            }
+
+            currentPosition = nextPosition
+            path += currentPosition
+
+            if (grid.at(nextPosition) == '.') {
+                grid.set(currentPosition, PATH)
             }
         }
 
-        return false
+        return candidateObstacles.size
     }
+
+    data class Path(
+        val path: List<Point2d>,
+        val startOfLoopIndex: Int
+    )
+
     /*
         fun partTwo(): Int {
             var currentPosition = guard
@@ -126,70 +197,4 @@ data class Year2024Day06(
         }
 
      */
-
-    fun pathUntilObstacleOrBorder(position: Point2d, direction: Direction): List<Point2d> {
-        val path = mutableListOf<Point2d>()
-
-        var currentPosition = position
-
-        while (grid.contains(currentPosition) && grid.at(currentPosition) != OBSTACLE) {
-            currentPosition += direction.flipVertical()
-            path += currentPosition
-        }
-
-        return path.toList()
-    }
-
-    fun partTwo(): Int {
-        return grid.findAll('.')
-            .count {
-                val newGrid = grid.copy()
-                newGrid.set(it, OBSTACLE)
-                containsLoop(newGrid)
-            }
-    }
-
-    fun partTwoAaah(): Int {
-        var currentPosition = guard
-        var currentDirection = Direction.NORTH
-
-        val path = mutableListOf(currentPosition)
-        val candidateObstacles = mutableSetOf<Point2d>()
-
-        while (grid.contains(currentPosition)) {
-            val nextPosition = currentPosition + currentDirection.flipVertical()
-
-            if (!grid.contains(nextPosition)) {
-                break
-            }
-
-            if (grid.at(nextPosition) == OBSTACLE) {
-                currentDirection = currentDirection.rotateRight()
-            } else {
-                if (grid.at(nextPosition) in setOf(PATH, GUARD)) {
-                    val candidate = nextPosition + currentDirection.flipVertical()
-                    val hypotheticalNextPoint = nextPosition + currentDirection.rotateRight().flipVertical()
-
-                    if (grid.contains(candidate)
-                        && Collections.indexOfSubList(path, listOf(nextPosition, hypotheticalNextPoint)) >= 0
-                    ) {
-                        candidateObstacles += candidate
-                        grid.set(candidate, 'O')
-
-                        println(grid.toString())
-                        println()
-                    }
-                }
-
-                currentPosition = nextPosition
-                path += currentPosition
-
-                if (grid.at(nextPosition) == '.') {
-                    grid.set(currentPosition, PATH)
-                }
-            }
-        }
-
-        return candidateObstacles.size
-    }
 }
