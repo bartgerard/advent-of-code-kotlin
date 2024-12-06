@@ -2,7 +2,6 @@ package aock2024
 
 import shared.sanitize
 import shared.splitByEmptyLine
-import shared.splitByLine
 import shared.toIntegers
 
 data class Year2024Day05(
@@ -15,10 +14,10 @@ data class Year2024Day05(
     )
 
     constructor(input: List<String>) : this(
-        input[0].splitByLine()
+        input[0].lines()
             .map { it.toIntegers() }
             .map { it[0] to it[1] },
-        input[1].splitByLine()
+        input[1].lines()
             .map { it.toIntegers() }
     )
 

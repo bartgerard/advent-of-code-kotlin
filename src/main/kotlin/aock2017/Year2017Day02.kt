@@ -1,13 +1,12 @@
 package aock2017
 
 import shared.sanitize
-import shared.splitByLine
 import shared.toIntegers
 
 data class Year2017Day02(
     private val lines: List<List<Int>>
 ) {
-    constructor(input: String) : this(input.sanitize().splitByLine().map { it.toIntegers() })
+    constructor(input: String) : this(input.sanitize().lines().map { it.toIntegers() })
 
     fun partOne(): Int = lines.sumOf { it.max() - it.min() }
 

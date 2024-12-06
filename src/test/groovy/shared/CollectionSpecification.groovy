@@ -22,7 +22,6 @@ class CollectionSpecification extends Specification {
         [[1, 2], [3, 4]] | [1, 2, 3, 4]   | ""
     }
 
-    /*
     def "transpose list of lists"() {
         when:
         final List<List<Integer>> result = CollectionsKt.transpose(values)
@@ -35,6 +34,5 @@ class CollectionSpecification extends Specification {
         [[1], [2], [3]]  | [[1, 2, 3]]      | ""
         [[1, 2], [3, 4]] | [[1, 3], [2, 4]] | ""
     }
-     */
 
 }

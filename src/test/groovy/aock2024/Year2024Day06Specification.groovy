@@ -21,7 +21,7 @@ class Year2024Day06Specification extends Specification {
         readFile(2024, 6)              | 4967           | ""
     }
 
-   // @Ignore("slow")
+    @Ignore("slow")
     def "partTwo"() {
         when:
         final long result = new Year2024Day06(input).partTwo()

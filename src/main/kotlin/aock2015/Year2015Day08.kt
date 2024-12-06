@@ -1,12 +1,11 @@
 package aock2015
 
-import shared.splitByLine
 import shared.sanitize
 
 data class Year2015Day08(
     private val lines: List<String>
 ) {
-    constructor(input: String) : this(input.sanitize().splitByLine())
+    constructor(input: String) : this(input.sanitize().lines())
 
     fun partOne(): Int = lines.sumOf { it.length - representationLength(it) }
 

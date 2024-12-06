@@ -8,7 +8,7 @@ data class Year2024Day02(
     private val reports: List<List<Long>>
 ) {
     constructor(input: String) : this(
-        input.sanitize().splitByLine().map { it.toLongs() }
+        input.sanitize().lines().map { it.toLongs() }
     )
 
     fun countSafe(): Int = reports.count { isSafe(it) }

@@ -1,6 +1,5 @@
 package aock2015
 
-import shared.splitByLine
 import shared.sanitize
 
 data class Year2015Day05(
@@ -14,7 +13,7 @@ data class Year2015Day05(
         private val REPEATING_LETTER_WITH_ONE_LETTER_BETWEEN_REGEX = "(\\w)\\w\\1".toRegex()
     }
 
-    constructor(input: String) : this(input.sanitize().splitByLine())
+    constructor(input: String) : this(input.sanitize().lines())
 
     fun partOne(): Int = strings.count { isNice(it) }
 

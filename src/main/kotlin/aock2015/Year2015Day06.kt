@@ -10,7 +10,7 @@ data class Year2015Day06(
         val DIMENSION = Dimension(1000, 1000)
     }
 
-    constructor(input: String) : this(input.sanitize().splitByLine())
+    constructor(input: String) : this(input.sanitize().lines())
 
     fun partOne(): Int {
         val grid = ToggleGrid(DIMENSION)

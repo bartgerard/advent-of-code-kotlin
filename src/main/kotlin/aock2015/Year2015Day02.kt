@@ -5,7 +5,7 @@ import shared.*
 data class Year2015Day02(
     private val boxes: List<Box>
 ) {
-    constructor(input: String) : this(input.sanitize().splitByLine().map { it.toLongs().toBox() })
+    constructor(input: String) : this(input.sanitize().lines().map { it.toLongs().toBox() })
 
     fun requiredAreaOfWrappingPaper(): Long = this.boxes.sumOf { it.surfaceArea() + it.areaOfSmallestSide() }
 
