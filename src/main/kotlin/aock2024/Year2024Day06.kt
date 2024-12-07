@@ -22,7 +22,7 @@ data class Year2024Day06(
             var newDirection = currentDirection
 
             for (i in 0..3) {
-                val nextPosition = currentPosition + newDirection.flipVertical()
+                val nextPosition = currentPosition + newDirection//.flipVertical()
 
                 if (!grid.contains(nextPosition)) {
                     return null
@@ -50,7 +50,7 @@ data class Year2024Day06(
             while (grid.contains(currentPosition)) {
                 currentDirection = nextDirection(grid, currentPosition, currentDirection) ?: break
 
-                val nextPosition = currentPosition + currentDirection.flipVertical()
+                val nextPosition = currentPosition + currentDirection//.flipVertical()
 
                 currentPosition = nextPosition
                 grid.set(currentPosition, PATH)
@@ -74,7 +74,7 @@ data class Year2024Day06(
             while (grid.contains(currentPosition)) {
                 currentDirection = nextDirection(grid, currentPosition, currentDirection) ?: break
 
-                val nextPosition = currentPosition + currentDirection.flipVertical()
+                val nextPosition = currentPosition + currentDirection//.flipVertical()
 
                 if (pathMap[nextPosition]?.contains(currentDirection) == true) {
                     return true

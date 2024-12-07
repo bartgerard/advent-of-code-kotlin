@@ -74,6 +74,10 @@ fun String.toLongs(): List<Long> = NUMBER_PATTERN.findAll(this)
     .map { it.value.toLong() }
     .toList()
 
+fun String.toDoubles(): List<Double> = NUMBER_PATTERN.findAll(this)
+    .map { it.value.toDouble() }
+    .toList()
+
 fun List<Long>.toBox(): Box {
     return Box(this[0], this[1], this[2])
 }
