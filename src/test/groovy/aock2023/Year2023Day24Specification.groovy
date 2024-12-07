@@ -18,7 +18,7 @@ class Year2023Day24Specification extends Specification {
         input                           | testArea                           | expectedResult | comment
         readFile(2023, 24, "example_1") | [7, 27]                            | 2              | ""
 
-        readFile(2023, 24)              | [200000000000000, 400000000000000] | 0              | "<> 27"
+        readFile(2023, 24)              | [200000000000000, 400000000000000] | 20963          | ""
     }
 
     def "partTwo"() {

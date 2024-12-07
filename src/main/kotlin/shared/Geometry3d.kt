@@ -95,34 +95,12 @@ data class Ray3d(
     val direction: Vector3d
 ) {
     companion object {
-        fun intersectionsFor(rays: List<Ray3d>): List<Point3d> {
-            val intersections = mutableListOf<Point3d>()
-
-            rays.forEachIndexed { index, r1 ->
-                rays.subList(index + 1, rays.size).forEach { r2 ->
-                    val intersection = r1 intersect r2
-                    intersection?.let { intersections += intersection }
-                }
-            }
-
-            return intersections.toList()
+        fun intersectionsFor(rays: List<Ray3d>): List<Point3d> = rays.flatMapIndexed { index, r1 ->
+            rays.subList(index + 1, rays.size).mapNotNull { r2 -> r1 intersect r2 }
         }
 
-        fun intersectionTimesFor(rays: List<Ray3d>): List<Double> {
-            val times = mutableListOf<Double>()
-
-            //val flatMapIndexed: List<Double?> = rays.flatMapIndexed { index, r1 ->
-            //    rays.subList(index + 1, rays.size).map { r2 -> r1 intersectionTime r2 }
-            //}
-
-            rays.forEachIndexed { index, r1 ->
-                rays.subList(index + 1, rays.size).forEach { r2 ->
-                    val intersection = r1 intersectionTime r2
-                    intersection?.let { times += intersection }
-                }
-            }
-
-            return times.toList()
+        fun intersectionMetaDataFor(rays: List<Ray3d>): List<IntersectionMetaData> = rays.flatMapIndexed { index, r1 ->
+            rays.subList(index + 1, rays.size).mapNotNull { r2 -> r1 intersectionMetaData r2 }
         }
     }
 
@@ -150,8 +128,25 @@ data class Ray3d(
         return b.dot(a) / dot
     }
 
+    infix fun intersectionTimes(r: Ray3d): Pair<Double, Double>? {
+        val t = intersectionTime(r) ?: return null
+        val s = r.intersectionTime(this) ?: return null
+        return t to s
+    }
+
+    infix fun intersectionMetaData(r: Ray3d): IntersectionMetaData? {
+        val t = intersectionTime(r) ?: return null
+        val s = r.intersectionTime(this) ?: return null
+        return IntersectionMetaData(at(t), setOf(t, s))
+    }
+
     fun at(t: Double): Point3d = point + direction * t
 }
+
+data class IntersectionMetaData(
+    val point: Point3d,
+    val times: Set<Double>
+)
 
 data class Sphere(
     val center: Point3d = Point3d.ZERO,

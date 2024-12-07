@@ -17,11 +17,10 @@ data class Year2023Day24(
         Year2023Day24(rays.map { Ray3d(Point3d(it.point.x, it.point.y), Vector3d(it.direction.x, it.direction.y)) })
 
     fun partOne(min: Long, max: Long): Int {
-        val testArea = min.toDouble()..max.toDouble()
-        val times = Ray3d.intersectionTimesFor(rays)
-            .filter { testArea.contains(it) }
-
-        return times.count()
+        val testArea = (min.toDouble()..max.toDouble()).let { it -> Box3d(it, it) }
+        return Ray3d.intersectionMetaDataFor(rays)
+            .filter { it.times.all { t -> t >= 0 } }
+            .count { testArea.contains(it.point) }
     }
 
     fun partTwo(): Int = 0
