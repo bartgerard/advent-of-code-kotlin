@@ -25,37 +25,39 @@ data class Year2024Day07(
 
     fun partOne(): Long = this.equations.sumOf { calibrationResult(it, OPERATORS) }
 
+    fun partTwo(): Long = this.equations.sumOf { calibrationResult(it, EXTENDED_OPERATORS) }
+
     fun calibrationResult(
         equation: Pair<Long, List<Long>>,
         operators: List<(Long, Long) -> Long>
     ): Long {
-
         val testValue = equation.first
-        val values = equation.second
+        val numbers = equation.second
 
-        var previous = mutableListOf<Long>(values[0])
-        var next = mutableListOf<Long>()
+        val previousNumbers = mutableListOf<Long>(numbers[0])
+        val nextNumbers = mutableListOf<Long>()
 
-        for (nextValue in values.subList(1, values.size)) {
-            next = mutableListOf<Long>()
-            for (p in previous) {
+        for (rightTerm in numbers.subList(1, numbers.size)) {
+            for (leftTerm in previousNumbers) {
 
                 for (operator in operators) {
-                    val newValue = operator(p, nextValue)
+                    val newValue = operator(leftTerm, rightTerm)
+
                     if (newValue <= testValue) {
-                        next += newValue
+                        nextNumbers += newValue
                     }
                 }
             }
-            previous = next.toMutableList()
+
+            previousNumbers.clear()
+            previousNumbers.addAll(nextNumbers)
+            nextNumbers.clear()
         }
 
-        return if (previous.contains(testValue)) {
-            return testValue
-        } else {
-            return 0
+        return when {
+            previousNumbers.contains(testValue) -> testValue
+            else -> 0
         }
     }
 
-    fun partTwo(): Long = this.equations.sumOf { calibrationResult(it, EXTENDED_OPERATORS) }
 }
