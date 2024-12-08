@@ -60,7 +60,9 @@ data class Year2023Day24(
 
      */
 
-    fun partTwo(): Int {
+    fun partTwo(): Int = findInitialPosition(rays.subList(0, 3)).let { (it.x + it.y + it.z).toInt() }
+
+    private fun findInitialPosition(rays: List<Ray3d>): Point3d {
         val (ray0, ray1, ray2) = rays.subList(0, 3)
 
         val p1 = ray1.point - ray0.point
@@ -78,7 +80,7 @@ data class Year2023Day24(
         val vector: Vector3d = (collision2 - collision1) / (t2 - t1)
         val initialPosition = collision1 - vector * t1
 
-        return (initialPosition.x + initialPosition.y + initialPosition.z).toInt()
+        return initialPosition
     }
 
 }
