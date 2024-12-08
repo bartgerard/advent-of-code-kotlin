@@ -18,10 +18,67 @@ data class Year2023Day24(
 
     fun partOne(min: Long, max: Long): Int {
         val testArea = (min.toDouble()..max.toDouble()).let { it -> Box3d(it, it) }
-        return Ray3d.intersectionMetaDataFor(rays)
-            .filter { it.times.all { t -> t >= 0 } }
-            .count { testArea.contains(it.point) }
+        return Ray3d.intersectionsFor(rays)
+            .filter { it.intersectionTimes().all { t -> t >= 0 } }
+            .count { testArea.contains(it.intersectionPoint()) }
     }
 
-    fun partTwo(): Int = 0
+    /*
+
+          ^
+          |
+    |-----A---> (ray0 -> point0 + direction0 * time0 = A)
+          |
+    |-----B---> (ray1 -> point1 + direction1 * time1 = B)
+          |
+    |-----C---> (ray2 -> point2 + direction2 * time2 = C)
+          |
+          _
+
+    |AB| collinear |BC|
+
+    collinear
+    * common direction
+    * common point
+
+    inspired by DaveBaum
+
+    (p1 + v1 * t1) cross (p2 + v2 * t2) = 0
+
+    [distributive cross product: a * (b + c) = ab + ac ]
+    => (p1 cross p2) + (v1 cross p2) * t1 + (p1 cross v2) * t2 + (v1 cross v2) * t1 * t2 = 0
+
+    [orthogonality: (v1 cross v2) dot v1 = (v1 cross v2) dot v2 = 0 ]
+
+    [multiply with v2]
+    => (p1 cross p2) dot v2 + (v1 cross p2) dot v2 * t1 = 0
+    => t1 = -((p1 cross p2) dot v2) / ((v1 cross p2) dot v2)
+
+    [multiply with v1]
+    => (p1 cross p2) dot v1 + (p1 cross v2) dot v1 * t2 = 0
+    => t2 = -((p1 cross p2) dot v1) / ((p1 cross v2) dot v1)
+
+     */
+
+    fun partTwo(): Int {
+        val (ray0, ray1, ray2) = rays.subList(0, 3)
+
+        val p1 = ray1.point - ray0.point
+        val v1 = ray1.direction - ray0.direction
+
+        val p2 = ray2.point - ray0.point
+        val v2 = ray2.direction - ray0.direction
+
+        val t1 = -((p1 cross p2) dot v2) / ((v1 cross p2) dot v2)
+        val t2 = -((p1 cross p2) dot v1) / ((p1 cross v2) dot v1)
+
+        val collision1 = ray1.at(t1)
+        val collision2 = ray2.at(t2)
+
+        val vector: Vector3d = (collision2 - collision1) / (t2 - t1)
+        val initialPosition = collision1 - vector * t1
+
+        return (initialPosition.x + initialPosition.y + initialPosition.z).toInt()
+    }
+
 }

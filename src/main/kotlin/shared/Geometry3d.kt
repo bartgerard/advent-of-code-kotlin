@@ -48,7 +48,13 @@ data class Vector3d(
 
     constructor(values: List<Double>) : this(values[0], values[1], values[2])
 
+    operator fun minus(v: Vector3d) = Vector3d(x - v.x, y - v.y, z - v.z)
+
+    operator fun times(scalar: Int) = Vector3d(x * scalar, y * scalar, z * scalar)
     operator fun times(scalar: Double) = Vector3d(x * scalar, y * scalar, z * scalar)
+
+    operator fun div(scalar: Int) = Vector3d(x / scalar, y / scalar, z / scalar)
+    operator fun div(scalar: Double) = Vector3d(x / scalar, y / scalar, z / scalar)
 
     infix fun dot(v: Vector3d): Double = x * v.x + y * v.y + z * v.z
 
@@ -88,6 +94,8 @@ data class Point3d(
         y..p.y,
         z..p.z
     )
+
+    override fun toString(): String = "p($x, $y, $z)"
 }
 
 data class Ray3d(
@@ -95,12 +103,12 @@ data class Ray3d(
     val direction: Vector3d
 ) {
     companion object {
-        fun intersectionsFor(rays: List<Ray3d>): List<Point3d> = rays.flatMapIndexed { index, r1 ->
+        fun intersect(rays: List<Ray3d>): List<Point3d> = rays.flatMapIndexed { index, r1 ->
             rays.subList(index + 1, rays.size).mapNotNull { r2 -> r1 intersect r2 }
         }
 
-        fun intersectionMetaDataFor(rays: List<Ray3d>): List<IntersectionMetaData> = rays.flatMapIndexed { index, r1 ->
-            rays.subList(index + 1, rays.size).mapNotNull { r2 -> r1 intersectionMetaData r2 }
+        fun intersectionsFor(rays: List<Ray3d>): List<Intersection> = rays.flatMapIndexed { index, r1 ->
+            rays.subList(index + 1, rays.size).mapNotNull { r2 -> r1 intersection r2 }
         }
     }
 
@@ -109,7 +117,7 @@ data class Ray3d(
     /// t = ((p2 - p1) cross v2) dot (v1 cross v2) / ((v1 cross v2) * (v1 cross v2))
     infix fun intersect(r: Ray3d): Point3d? = intersectionTime(r)?.let { t -> at(t) }
 
-    infix fun intersectionTime(r: Ray3d): Double? {
+    private fun intersectionTime(r: Ray3d): Double? {
         val p1 = point
         val v1 = direction
         val p2 = r.point
@@ -128,25 +136,33 @@ data class Ray3d(
         return b.dot(a) / dot
     }
 
-    infix fun intersectionTimes(r: Ray3d): Pair<Double, Double>? {
-        val t = intersectionTime(r) ?: return null
-        val s = r.intersectionTime(this) ?: return null
-        return t to s
+    infix fun intersection(ray2: Ray3d): Intersection? {
+        val time1 = intersectionTime(ray2) ?: return null
+        val time2 = ray2.intersectionTime(this) ?: return null
+
+        return Intersection(
+            setOf(
+                IntersectedRay3d(this, time1),
+                IntersectedRay3d(ray2, time2)
+            )
+        )
     }
 
-    infix fun intersectionMetaData(r: Ray3d): IntersectionMetaData? {
-        val t = intersectionTime(r) ?: return null
-        val s = r.intersectionTime(this) ?: return null
-        return IntersectionMetaData(at(t), setOf(t, s))
-    }
-
+    fun at(t: Int): Point3d = point + direction * t
     fun at(t: Double): Point3d = point + direction * t
 }
 
-data class IntersectionMetaData(
-    val point: Point3d,
-    val times: Set<Double>
+data class IntersectedRay3d(
+    val ray: Ray3d,
+    val time: Double
 )
+
+data class Intersection(
+    val rays: Set<IntersectedRay3d>
+) {
+    fun intersectionTimes(): List<Double> = rays.map { it.time }
+    fun intersectionPoint(): Point3d = rays.first().let { it.ray.at(it.time) }
+}
 
 data class Sphere(
     val center: Point3d = Point3d.ZERO,
