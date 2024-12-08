@@ -55,6 +55,8 @@ class IntensityGrid(
 data class MutableGrid(
     val grid: MutableList<MutableList<Char>>
 ) {
+    fun height(): Int = grid.size
+    fun width(): Int = grid[0].size
 
     fun copy(): MutableGrid = MutableGrid(grid.map { it.toMutableList() }.toMutableList())
 
