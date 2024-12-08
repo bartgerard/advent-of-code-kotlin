@@ -55,10 +55,6 @@ class IntensityGrid(
 data class MutableGrid(
     val grid: MutableList<MutableList<Char>>
 ) {
-    fun rows(): IntRange = 0 until grid.size
-    fun columns(): IntRange = 0 until grid[0].size
-
-    fun copy(): MutableGrid = MutableGrid(grid.map { it.toMutableList() }.toMutableList())
 
     constructor(input: String) : this(
         input.sanitize()
@@ -66,6 +62,11 @@ data class MutableGrid(
             .map { it.toCharArray().toMutableList().toList().toMutableList() }
             .toMutableList()
     )
+
+    fun rows(): IntRange = 0 until grid.size
+    fun columns(): IntRange = 0 until grid[0].size
+
+    fun copy(): MutableGrid = MutableGrid(grid.map { it.toMutableList() }.toMutableList())
 
     fun findAll(c: Char) = grid.flatMapIndexed { row, line ->
         line.indices.filter { line[it] == c }
@@ -78,7 +79,7 @@ data class MutableGrid(
 
     fun set(p: Point2d, value: Char) = grid[p.y].set(p.x, value)
 
-    fun points() = rows().flatMap { row -> columns().map { column -> Point2d(column, row) } }
+    fun points() = rows().asSequence().flatMap { row -> columns().map { column -> Point2d(column, row) } }
 
     fun frequenciesExcluding(blacklist: Set<Char>): Map<Char, List<Point2d>> = points()
         .map { point -> at(point) to point }
