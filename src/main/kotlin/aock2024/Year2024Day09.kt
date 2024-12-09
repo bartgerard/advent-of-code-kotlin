@@ -27,9 +27,9 @@ data class Year2024Day09(
     0099811188827773336446555566..............
      */
 
-    fun partOne(): Long = disk.compact().checksum()
+    fun partOne(): Long = disk.also { it.compact(false) }.checksum()
 
-    fun partTwo(): Long = disk.compact2().checksum()
+    fun partTwo(): Long = disk.also { it.compact(true) }.checksum()
 
 }
 
@@ -64,49 +64,48 @@ data class Disk(
 
     fun checksum(): Long = formattedFiles.sumOf { it.checksum() }
 
-    fun move(index: Int) {
+    fun move(index: Int, shouldFit: Boolean) {
         val file = files[index]
         files.removeAt(index)
 
-        if (freeSpaces.isEmpty() || file.range.last < freeSpaces[0].start) {
+        if (freeSpaces.isEmpty()) {
             formattedFiles += file
             return
         }
 
-        val freeRange = freeSpaces[0]
-        freeSpaces.removeAt(0)
+        val selectedSpace = if (shouldFit) {
+            freeSpaces.firstOrNull { file.range.length() <= it.length() }
+        } else {
+            freeSpaces.firstOrNull()
+        }
+        freeSpaces.remove(selectedSpace)
+
+        if (selectedSpace == null || file.range.last < selectedSpace.start) {
+            formattedFiles += file
+            return
+        }
 
         val fileLength = file.range.length()
-        val freeLength = freeRange.length()
+        val freeLength = selectedSpace.length()
 
         val min = min(freeLength, fileLength)
         val difference = fileLength - freeLength
 
         when {
             difference > 0 -> files += File(file.fileId, file.range.start..<(file.range.start + difference))
-            difference < 0 -> freeSpaces.addFirst((freeRange.start + min)..freeRange.last)
+            difference < 0 -> freeSpaces.addFirst((selectedSpace.start + min)..selectedSpace.last)
         }
 
-        formattedFiles += File(file.fileId, freeRange.start..<(freeRange.start + min))
+        formattedFiles += File(file.fileId, selectedSpace.start..<(selectedSpace.start + min))
 
         val oldFileRange = (file.range.last - min + 1)..file.range.last
         freeSpaces = freeSpaces.mergeOne(oldFileRange).toMutableList()
     }
 
-    fun compact(): Disk {
+    fun compact(shouldFit: Boolean) {
         while (!files.isEmpty()) {
-            move(files.lastIndex)
+            move(files.lastIndex, shouldFit)
         }
-
-        return this
-    }
-
-    fun compact2(): Disk {
-        while (!files.isEmpty()) {
-            move(files.lastIndex) // TODO select differently
-        }
-
-        return this
     }
 
     fun print(): String = formattedFiles.sortedBy { it.range.start }
