@@ -86,8 +86,8 @@ data class Disk(
         }
     }
 
-    fun print(): String = formattedFiles.sortedBy { it.range.start }
-        .joinToString(separator = "") { file -> file.fileId.toString().repeat(file.range.length().toInt()) }
+    //fun print(): String = formattedFiles.sortedBy { it.range.start }
+    //    .joinToString(separator = "") { file -> file.fileId.toString().repeat(file.range.length().toInt()) }
 }
 
 data class File(
