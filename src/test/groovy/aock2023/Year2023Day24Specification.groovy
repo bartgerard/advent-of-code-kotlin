@@ -29,10 +29,11 @@ class Year2023Day24Specification extends Specification {
         result == expectedResult
 
         where:
-        input                           | expectedResult | comment
-        readFile(2023, 24, "example_1") | 47             | ""
+        input                           | expectedResult  | comment
+        readFile(2023, 24, "example_1") | 47              | ""
 
-        readFile(2023, 24)              | 0              | ">2147483648"
+        // x = 287430900705823, y = 451620998712421, z = 260730677041648
+        readFile(2023, 24)              | 999782576459892 | ""
     }
 
 }

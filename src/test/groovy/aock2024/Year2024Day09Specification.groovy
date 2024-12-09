@@ -7,7 +7,7 @@ import static shared.InputsKt.readFile
 
 class Year2024Day09Specification extends Specification {
 
-    def "partOne"() {
+    def "what is the resulting filesystem checksum"() {
         when:
         final long result = new Year2024Day09(input).partOne()
 
@@ -15,10 +15,10 @@ class Year2024Day09Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                 | expectedResult | comment
+        "2333133121414131402" | 1928           | ""
 
-        readFile(2024, 9) | 0              | ""
+        readFile(2024, 9)     | 6242766523059  | ""
     }
 
     def "partTwo"() {

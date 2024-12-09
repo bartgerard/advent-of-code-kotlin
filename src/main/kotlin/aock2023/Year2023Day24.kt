@@ -1,5 +1,9 @@
 package aock2023
 
+import Jama.Matrix
+import org.apache.commons.math3.linear.Array2DRowRealMatrix
+import org.apache.commons.math3.linear.ArrayRealVector
+import org.apache.commons.math3.linear.LUDecomposition
 import shared.*
 
 data class Year2023Day24(
@@ -83,4 +87,45 @@ data class Year2023Day24(
         return initialPosition
     }
 
+}
+
+fun solveLinearSystem() {
+    val coefficients = Array2DRowRealMatrix(
+        arrayOf(
+            doubleArrayOf(3.0, -2.0, 5.0),
+            doubleArrayOf(2.0, 4.0, 1.0),
+            doubleArrayOf(1.0, -3.0, 2.0)
+        )
+    )
+
+    val constants = ArrayRealVector(doubleArrayOf(10.0, 4.0, -2.0))
+
+    val solver = LUDecomposition(coefficients).solver
+    val solution = solver.solve(constants)
+
+    println("Solution: ${solution}")
+}
+
+fun solveLinearSystem2() {
+    // 232488932265751, 93844132799095, 203172424390144 @ 64, 273, 119
+    // 258285813391475, 225317967801013, 306162724914014 @ 14, -10, -22
+    // 377519381672953, 343737262245611, 485395777725108 @ -182, -80, -373
+    val coefficients = arrayOf(
+        doubleArrayOf(1.0, 0.0, 0.0),
+        doubleArrayOf(0.0, 1.0, 0.0),
+        doubleArrayOf(0.0, 0.0, 1.0)
+    )
+    val constants = doubleArrayOf(10.0, 4.0, -2.0)
+
+    val matrixA = Matrix(coefficients)
+    val matrixB = Matrix(constants, constants.size)
+
+    val solution = matrixA.solve(matrixB)
+
+    println("Solution: ${solution}")
+}
+
+fun main() {
+    println(287430900705823 + 451620998712421 + 260730677041648)
+    solveLinearSystem()
 }
