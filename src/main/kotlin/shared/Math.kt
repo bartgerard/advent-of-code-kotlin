@@ -46,14 +46,10 @@ fun lcm(values: List<Long>): Long {
 }
 
 fun lcm(values: LongArray): Long {
-    val maxPowerByPrimeFactor = values.asSequence()
-        .map { primeFactors(it) }
-        .flatMap { it.entries }
-        .groupBy { it.key }
+    val maxPowerByPrimeFactor = values.asSequence().map { primeFactors(it) }.flatMap { it.entries }.groupBy { it.key }
         .mapValues { (_, values) -> values.maxOf { it.value } }
 
-    return maxPowerByPrimeFactor
-        .map { it.key.toDouble().pow(it.value).toLong() }
+    return maxPowerByPrimeFactor.map { it.key.toDouble().pow(it.value).toLong() }
         .fold(1L, Long::times)// { x: Long, y: Long -> x * y }
 }
 
@@ -66,4 +62,11 @@ tailrec fun gcd(x: Long, y: Long): Long = when {
         val min = minOf(x, y)
         gcd(min, max % min)
     }
+}
+
+fun sum(range: IntRange): Long = sum(range.min().toLong()..range.max().toLong())
+
+fun sum(range: LongRange): Long {
+    val n = range.max() - range.min() + 1
+    return n * (range.min() + range.max()) / 2
 }
