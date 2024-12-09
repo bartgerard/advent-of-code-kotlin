@@ -29,13 +29,13 @@ data class Year2024Day09(
 
     fun partOne(): Long = disk.compact().checksum()
 
-    fun partTwo(): Int = 0
+    fun partTwo(): Long = disk.compact2().checksum()
 
 }
 
 data class Disk(
     val files: MutableList<File>,
-    val freeSpaces: MutableList<LongRange>,
+    var freeSpaces: MutableList<LongRange>,
     val formattedFiles: MutableList<File> = mutableListOf(),
 ) {
     companion object {
@@ -88,12 +88,22 @@ data class Disk(
         }
 
         formattedFiles += File(file.fileId, freeRange.start..<(freeRange.start + min))
-        //freeSpaces += (file.range.last - min)..file.range.last
+
+        val oldFileRange = (file.range.last - min + 1)..file.range.last
+        freeSpaces = freeSpaces.mergeOne(oldFileRange).toMutableList()
     }
 
     fun compact(): Disk {
         while (!files.isEmpty()) {
             move(files.lastIndex)
+        }
+
+        return this
+    }
+
+    fun compact2(): Disk {
+        while (!files.isEmpty()) {
+            move(files.lastIndex) // TODO select differently
         }
 
         return this
