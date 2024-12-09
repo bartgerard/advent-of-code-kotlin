@@ -65,6 +65,17 @@ fun Collection<LongRange>.merge(): List<LongRange> {
         .zipWithNext { i, j -> sortedIntersections[borderIndices[i]].first..sortedIntersections[borderIndices[j] - 1].last }
 }
 
+fun MutableList<LongRange>.mergeOne(newRange: LongRange) {
+    val overlappingRanges = buildList {
+        addAll(this@mergeOne.filter { (it.start - 1) in newRange || (it.last + 1) in newRange })
+        add(newRange)
+    }
+    removeAll(overlappingRanges)
+    add(overlappingRanges.minOf { it.first }..overlappingRanges.maxOf { it.last })
+
+    sortBy { it.start }
+}
+
 fun Collection<LongRange>.mergeOne(newRange: LongRange): List<LongRange> {
     val overlappingRanges = buildList {
         addAll(this@mergeOne.filter { (it.start - 1) in newRange || (it.last + 1) in newRange })
