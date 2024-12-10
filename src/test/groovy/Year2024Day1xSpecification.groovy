@@ -1,15 +1,15 @@
-import aock2024.Year2024Day0x
+import aock2024.Year2024Day1x
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
 @Ignore("template")
-class Year2024Day0xSpecification extends Specification {
+class Year2024Day1xSpecification extends Specification {
 
     def "partOne"() {
         when:
-        final long result = new Year2024Day0x(input).partOne()
+        final long result = new Year2024Day1x(input).partOne()
 
         then:
         result == expectedResult
@@ -23,7 +23,7 @@ class Year2024Day0xSpecification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2024Day0x(input).partTwo()
+        final long result = new Year2024Day1x(input).partTwo()
 
         then:
         result == expectedResult
