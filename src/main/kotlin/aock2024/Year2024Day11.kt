@@ -2,45 +2,50 @@ package aock2024
 
 import shared.sanitize
 import shared.toLongs
+import kotlin.math.log10
+import kotlin.math.pow
 
 data class Year2024Day11(
     private val stones: List<Long>
 ) {
-    constructor(input: String) : this(input.sanitize().toLongs().toMutableList())
+    companion object {
+        val MEMORY = mutableMapOf<Pair<Long, Int>, Long>()
 
-    fun partOne(blinks: Int): Long = stones.sumOf { sizeAfter(it, blinks) }
-
-    fun partTwo(): Long {
-        return 0
-    }
-
-    private fun sizeAfter(value: Long, blinks: Int): Long {
-        val previousStones = mutableListOf<Long>(value)
-        val nextStones = mutableListOf<Long>()
-
-        for (i in 1..blinks) {
-            for (stone in previousStones) {
-                val text = stone.toString()
-
-                when {
-                    stone == 0L -> nextStones.add(1)
-                    text.length % 2 == 0 -> stone.let {
-                        val base = (1..(text.length / 2)).fold(1L) { acc, i -> acc * 10 }
-
-                        nextStones.add(it / base)
-                        nextStones.add(it % base)
-                    }
-
-                    else -> nextStones.add(stone * 2024)
-                }
+        // memoization
+        fun expand(stone: Long, blinks: Int): Long {
+            if (blinks == 0) {
+                return 1L
             }
 
-            previousStones.clear()
-            previousStones.addAll(nextStones)
-            nextStones.clear()
+            val key = stone to blinks
+            if (MEMORY.containsKey(key)) {
+                return MEMORY[key]!!
+            }
+
+            val count = blink(stone).sumOf { expand(it, blinks - 1) }
+
+            MEMORY[key] = count
+            return count
         }
 
-        return previousStones.size.toLong()
+        fun blink(stone: Long): List<Long> {
+            val length = log10(stone.toDouble()).toInt() + 1
+
+            return when {
+                stone == 0L -> listOf(1L)
+                length % 2 == 0 -> stone.let {
+                    val base = 10.0.pow(length / 2).toLong()
+
+                    listOf(it / base, it % base)
+                }
+
+                else -> listOf(stone * 2024)
+            }
+        }
     }
+
+    constructor(input: String) : this(input.sanitize().toLongs())
+
+    fun stonesAfter(blinks: Int): Long = stones.sumOf { expand(it, blinks) }
 
 }
