@@ -1,14 +1,19 @@
 package aock2023
 
-import Jama.Matrix
-import org.apache.commons.math3.linear.Array2DRowRealMatrix
-import org.apache.commons.math3.linear.ArrayRealVector
-import org.apache.commons.math3.linear.LUDecomposition
+import com.microsoft.z3.Context
+import com.microsoft.z3.IntNum
+import com.microsoft.z3.Status
 import shared.*
+import kotlin.math.roundToLong
 
 data class Year2023Day24(
     private val rays: List<Ray3d>
 ) {
+    companion object {
+        fun equation(i: Int, axis: Axis) = "pr$axis + vr$axis * t$i = p$i$axis + v$i$axis * t$i"
+        fun equations() = (1..3).flatMap { i -> Axis.THREE_DIMENSIONAL.map { axis -> equation(i, axis) } }
+    }
+
     constructor(input: String) : this(
         input.sanitize().lines()
             .map {
@@ -64,7 +69,7 @@ data class Year2023Day24(
 
      */
 
-    fun partTwo(): Int = findInitialPosition(rays.subList(0, 3)).let { (it.x + it.y + it.z).toInt() }
+    fun partTwo(): Long = findInitialPosition(rays.subList(0, 3)).let { it.x.roundToLong() + it.y.roundToLong() + it.z.roundToLong() }
 
     private fun findInitialPosition(rays: List<Ray3d>): Point3d {
         val (ray0, ray1, ray2) = rays.subList(0, 3)
@@ -87,45 +92,44 @@ data class Year2023Day24(
         return initialPosition
     }
 
-}
+    fun partTwoZ3(): Long = solve(rays.subList(0, 3))
 
-fun solveLinearSystem() {
-    val coefficients = Array2DRowRealMatrix(
-        arrayOf(
-            doubleArrayOf(3.0, -2.0, 5.0),
-            doubleArrayOf(2.0, 4.0, 1.0),
-            doubleArrayOf(1.0, -3.0, 2.0)
-        )
-    )
+    private fun solve(rays: List<Ray3d>): Long {
+        return Context().use { ctx ->
+            val variables = buildMap {
+                putAll(rays.indices.map { "t$it" }.associateWith { ctx.mkIntConst(it) })
+                putAll(Axis.THREE_DIMENSIONAL.map { "pr$it" }.associateWith { ctx.mkIntConst(it) })
+                putAll(Axis.THREE_DIMENSIONAL.map { "vr$it" }.associateWith { ctx.mkIntConst(it) })
+            }
 
-    val constants = ArrayRealVector(doubleArrayOf(10.0, 4.0, -2.0))
+            val solver = ctx.mkSolver()
 
-    val solver = LUDecomposition(coefficients).solver
-    val solution = solver.solve(constants)
+            rays.indices.map { "t$it" }.map { variables[it] }.forEach { solver.add(ctx.mkGe(it, ctx.mkInt(0))) }
 
-    println("Solution: ${solution}")
-}
+            // prX + vrX * t{i} = p{i}X + v{i}X * t{i}
+            val equations = rays.flatMapIndexed { i, ray ->
+                Axis.THREE_DIMENSIONAL.map { axis ->
+                    ctx.mkEq(
+                        ctx.mkAdd(variables["pr$axis"], ctx.mkMul(variables["vr$axis"], variables["t$i"])),
+                        ctx.mkAdd(ctx.mkInt(ray.point.on(axis).roundToLong()), ctx.mkMul(ctx.mkInt(ray.direction.on(axis).roundToLong()), variables["t$i"]))
+                    )
+                }
+            }
+            equations.forEach { solver.add(it) }
 
-fun solveLinearSystem2() {
-    // 232488932265751, 93844132799095, 203172424390144 @ 64, 273, 119
-    // 258285813391475, 225317967801013, 306162724914014 @ 14, -10, -22
-    // 377519381672953, 343737262245611, 485395777725108 @ -182, -80, -373
-    val coefficients = arrayOf(
-        doubleArrayOf(1.0, 0.0, 0.0),
-        doubleArrayOf(0.0, 1.0, 0.0),
-        doubleArrayOf(0.0, 0.0, 1.0)
-    )
-    val constants = doubleArrayOf(10.0, 4.0, -2.0)
+            when (solver.check()) {
+                Status.SATISFIABLE -> {
+                    val x = solver.model.eval(variables["prX"], false) as IntNum
+                    val y = solver.model.eval(variables["prY"], false) as IntNum
+                    val z = solver.model.eval(variables["prZ"], false) as IntNum
 
-    val matrixA = Matrix(coefficients)
-    val matrixB = Matrix(constants, constants.size)
+                    println("Solution: p (x = $x, y = $y, z = $z)")
+                    return x.int64 + y.int64 + z.int64
+                }
 
-    val solution = matrixA.solve(matrixB)
+                else -> throw IllegalStateException("No solution found!")
+            }
+        }
+    }
 
-    println("Solution: ${solution}")
-}
-
-fun main() {
-    println(287430900705823 + 451620998712421 + 260730677041648)
-    solveLinearSystem()
 }

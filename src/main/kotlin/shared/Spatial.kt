@@ -1,5 +1,16 @@
 package shared
 
+enum class Axis {
+    X,
+    Y,
+    Z;
+
+    companion object {
+        val TWO_DIMENSIONAL = setOf(X, Y)
+        val THREE_DIMENSIONAL = setOf(X, Y, Z)
+    }
+}
+
 enum class Direction {
     NORTH,
     EAST,

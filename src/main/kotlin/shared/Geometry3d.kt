@@ -30,6 +30,12 @@ data class Vector3d(
         x * v.y - y * v.x
     )
 
+    fun on(axis: Axis) = when (axis) {
+        Axis.X -> x
+        Axis.Y -> y
+        Axis.Z -> z
+    }
+
 }
 
 data class Point3d(
@@ -60,6 +66,12 @@ data class Point3d(
         y..p.y,
         z..p.z
     )
+
+    fun on(axis: Axis) = when (axis) {
+        Axis.X -> x
+        Axis.Y -> y
+        Axis.Z -> z
+    }
 
     override fun toString(): String = "p($x, $y, $z)"
 }

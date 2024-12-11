@@ -6,7 +6,7 @@ import static shared.InputsKt.readFile
 
 class Year2015Day09Specification extends Specification {
 
-    def "partOne"() {
+    def "what is the distance of the shortest route"() {
         when:
         final long result = new Year2015Day09(input).partOne()
 
@@ -17,10 +17,10 @@ class Year2015Day09Specification extends Specification {
         input                          | expectedResult | comment
         readFile(2015, 9, "example_1") | 605            | ""
 
-        readFile(2015, 9)              | 0              | ""
+        readFile(2015, 9)              | 207            | ""
     }
 
-    def "partTwo"() {
+    def "what is the distance of the longest route"() {
         when:
         final long result = new Year2015Day09(input).partTwo()
 
@@ -28,10 +28,10 @@ class Year2015Day09Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                          | expectedResult | comment
+        readFile(2015, 9, "example_1") | 982            | ""
 
-        readFile(2015, 9) | 0              | ""
+        readFile(2015, 9)              | 804            | ""
     }
 
 }

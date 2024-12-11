@@ -32,8 +32,7 @@ class Year2023Day24Specification extends Specification {
         input                           | expectedResult  | comment
         readFile(2023, 24, "example_1") | 47              | ""
 
-        // x = 287430900705823, y = 451620998712421, z = 260730677041648
-        readFile(2023, 24)              | 999782576459892 | ""
+        readFile(2023, 24)              | 999782576459892 | "x = 287430900705823, y = 451620998712421, z = 260730677041648"
     }
 
 }
