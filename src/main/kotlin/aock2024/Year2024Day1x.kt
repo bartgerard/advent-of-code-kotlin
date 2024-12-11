@@ -7,6 +7,6 @@ data class Year2024Day1x(
 ) {
     constructor(input: String) : this(input.sanitize().lines())
 
-    fun partOne(): Int = 0
-    fun partTwo(): Int = 0
+    fun partOne(): Long = 0
+    fun partTwo(): Long = 0
 }

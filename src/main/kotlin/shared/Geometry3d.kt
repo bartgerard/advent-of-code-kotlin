@@ -3,40 +3,6 @@ package shared
 import kotlin.math.PI
 import kotlin.math.abs
 
-
-data class Box(
-    private val length: Long,
-    private val width: Long,
-    private val height: Long
-) {
-    fun volume(): Long {
-        return length * width * height
-    }
-
-    fun surfaceArea(): Long {
-        return 2 * (length * width + width * height + height * length)
-    }
-
-    fun areaOfSmallestSide(): Long {
-        return sequenceOf(
-            length * width,
-            width * height,
-            height * length
-        )
-            .min()
-    }
-
-    fun smallestPerimeter(): Long {
-        return 2 * sequenceOf(
-            length + width,
-            width + height,
-            height + length
-        )
-            .min()
-    }
-}
-
-
 data class Vector3d(
     val x: Double,
     val y: Double,
@@ -124,16 +90,15 @@ data class Ray3d(
         val v2 = r.direction
 
         val a = v1 cross v2
-        val dot = a dot a
+        val aDot = a dot a
 
-        if (dot == 0.0) {
+        if (aDot == 0.0) {
             // r1 and r2 are parallel
             return null
         }
 
-        val b = (p2 - p1).cross(v2)
-
-        return b.dot(a) / dot
+        val b = (p2 - p1) cross v2
+        return b dot a / aDot
     }
 
     infix fun intersection(ray2: Ray3d): Intersection? {
@@ -203,4 +168,36 @@ data class Box3d(
         .min()
 
     fun contains(p: Point3d): Boolean = p.x in x && p.y in y && p.z in z
+}
+
+data class Box(
+    private val length: Long,
+    private val width: Long,
+    private val height: Long
+) {
+    fun volume(): Long {
+        return length * width * height
+    }
+
+    fun surfaceArea(): Long {
+        return 2 * (length * width + width * height + height * length)
+    }
+
+    fun areaOfSmallestSide(): Long {
+        return sequenceOf(
+            length * width,
+            width * height,
+            height * length
+        )
+            .min()
+    }
+
+    fun smallestPerimeter(): Long {
+        return 2 * sequenceOf(
+            length + width,
+            width + height,
+            height + length
+        )
+            .min()
+    }
 }
