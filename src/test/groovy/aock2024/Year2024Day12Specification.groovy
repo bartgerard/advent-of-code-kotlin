@@ -15,10 +15,12 @@ class Year2024Day12Specification extends Specification {
         result == expectedResult
 
         where:
-        input              | expectedResult | comment
-        ""                 | 0              | ""
+        input                           | expectedResult | comment
+        readFile(2024, 12, "example_1") | 140            | ""
+        readFile(2024, 12, "example_2") | 772            | ""
+        readFile(2024, 12, "example_3") | 1930           | ""
 
-        readFile(2024, 12) | 0              | ""
+        readFile(2024, 12)              | 1573474        | ""
     }
 
     def "partTwo"() {
@@ -29,10 +31,12 @@ class Year2024Day12Specification extends Specification {
         result == expectedResult
 
         where:
-        input              | expectedResult | comment
-        ""                 | 0              | ""
+        input                           | expectedResult | comment
+        readFile(2024, 12, "example_1") | 80             | ""
+        readFile(2024, 12, "example_2") | 436            | ""
+        readFile(2024, 12, "example_3") | 1206           | ""
 
-        readFile(2024, 12) | 0              | ""
+        readFile(2024, 12)              | 0              | ""
     }
 
 }

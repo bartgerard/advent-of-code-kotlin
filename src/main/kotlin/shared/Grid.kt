@@ -11,9 +11,7 @@ data class Rectangle(
     val x: IntRange,
     val y: IntRange
 ) {
-    fun coordinates(): List<Point2d> {
-        return x.flatMap { a -> y.map { b -> Point2d(a, b) } }
-    }
+    fun coordinates(): List<Point2d> = x.flatMap { a -> y.map { b -> Point2d(a, b) } }
 }
 
 class ToggleGrid(
@@ -23,9 +21,7 @@ class ToggleGrid(
         dimension: Dimension
     ) : this(List(dimension.height) { BooleanArray(dimension.width) { false } })
 
-    fun execute(rectangle: Rectangle, instruction: (previous: Boolean) -> Boolean) {
-        rectangle.coordinates().forEach { execute(it, instruction) }
-    }
+    fun execute(rectangle: Rectangle, instruction: (previous: Boolean) -> Boolean) = rectangle.coordinates().forEach { execute(it, instruction) }
 
     private fun execute(point: Point2d, instruction: (previous: Boolean) -> Boolean) {
         grid[point.y][point.x] = instruction(grid[point.y][point.x])
@@ -41,9 +37,7 @@ class IntensityGrid(
         dimension: Dimension
     ) : this(List(dimension.height) { IntArray(dimension.width) { 0 } })
 
-    fun execute(rectangle: Rectangle, instruction: (previous: Int) -> Int) {
-        rectangle.coordinates().forEach { execute(it, instruction) }
-    }
+    fun execute(rectangle: Rectangle, instruction: (previous: Int) -> Int) = rectangle.coordinates().forEach { execute(it, instruction) }
 
     private fun execute(point: Point2d, instruction: (previous: Int) -> Int) {
         grid[point.y][point.x] = instruction(grid[point.y][point.x])
@@ -59,7 +53,7 @@ data class MutableGrid(
     constructor(input: String) : this(
         input.sanitize()
             .lines()
-            .map { it.toCharArray().toMutableList().toList().toMutableList() }
+            .map { it.toMutableList() }
             .toMutableList()
     )
 
@@ -87,5 +81,27 @@ data class MutableGrid(
         .groupBy({ it.first }, { it.second })
 
     override fun toString(): String = grid.joinToString("\n") { it.joinToString("") }
+
+    fun regions(): List<List<Point2d>> {
+        val remainingPoints = points().toMutableList()
+        val regions = mutableListOf<MutableList<Point2d>>()
+
+        while (remainingPoints.isNotEmpty()) {
+            val region = mutableListOf(remainingPoints.removeFirst())
+            var i = 0
+            while (i < region.size) {
+                val point = region[i]
+                val character = at(point)
+                val neighbours = point.neighbours().filter { !region.contains(it) }
+                val sameRegion = neighbours.filter { contains(it) && at(it) == character }
+                remainingPoints.removeAll(sameRegion)
+                region.addAll(sameRegion)
+                i++
+            }
+            regions += region
+        }
+
+        return regions
+    }
 
 }

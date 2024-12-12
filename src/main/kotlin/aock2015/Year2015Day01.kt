@@ -9,7 +9,11 @@ data class Year2015Day01(
         var currentFloor = 0
 
         return this.input.map {
-            if (it == '(') ++currentFloor else --currentFloor
+            if (it == '(') {
+                ++currentFloor
+            } else {
+                --currentFloor
+            }
         }
             .indexOf(floor) + 1
     }

@@ -20,3 +20,9 @@ fun <T> List<T>.withoutIndex(index: Int) = this.filterIndexed { i, _ -> i != ind
 
 //fun List<Long>.intervals() = (1..<this.size).map { this[it] - this[it - 1] }
 fun List<Long>.intervals() = this.zipWithNext { a, b -> b - a }
+
+fun <T> List<T>.cyclic() = CyclicList<T>(this)
+
+data class CyclicList<T>(val list: List<T>) : List<T> by list {
+    override operator fun get(i: Int): T = list[i % list.size]
+}
