@@ -51,12 +51,12 @@ data class Vector2d(
 }
 
 data class Area2d(
-    val points: List<Point2d>
+    val points: Set<Point2d>
 ) {
     companion object {
         fun areas(points: List<Point2d>): List<Area2d> {
             val remaining = points.toMutableList()
-            val areas = mutableListOf<List<Point2d>>()
+            val areas = mutableSetOf<List<Point2d>>()
 
             while (remaining.isNotEmpty()) {
                 val region = mutableListOf(remaining.removeFirst())
@@ -72,49 +72,34 @@ data class Area2d(
                 areas += region
             }
 
-            return areas.map { Area2d(it) }
+            return areas.map { Area2d(it.toSet()) }
         }
     }
 
-    fun walkPerimeter() = points.flatMap { it.orthogonalNeighbours() }.filter { !points.contains(it) }
+    fun area() = points.size
+    fun perimeter() = sides().sum()
 
     fun sides(): List<Int> {
-        if (points.isEmpty()) {
-            return emptyList()
-        } else if (points.size == 1) {
-            return listOf(1, 1, 1, 1)
-        }
-
         val borders: Map<Point2d, MutableSet<Direction>> = points.associateWith { point -> Direction.ORTHOGONAL.filter { !points.contains(point + it) }.toMutableSet() }
 
         val sides = mutableListOf<Int>()
-        val remaining = points.toMutableList()
 
-        while (remaining.isNotEmpty()) {
-            val point = remaining.removeFirst()
-            val directions = borders[point] ?: continue
+        points.forEach { point ->
+            borders[point]!!.toList()
+                .forEach { direction ->
+                    val nextPoints = mutableListOf(point)
+                    val visited = mutableListOf<Point2d>()
 
-            if (directions.isEmpty()) {
-                continue
-            } else if (directions.size == 4) {
-                sides += listOf(1, 1, 1, 1)
-                continue
-            }
+                    while (nextPoints.isNotEmpty()) {
+                        val nextPoint = nextPoints.removeFirst()
+                        visited += nextPoint
+                        nextPoints += nextPoint.orthogonalNeighbours().filter { !visited.contains(it) && points.contains(it) && borders[it]!!.contains(direction) }
+                    }
 
-            for (direction in directions.toList()) {
-                val nextPoints = mutableListOf(point)
-                val visited = mutableListOf<Point2d>()
+                    visited.forEach { borders[it]!!.remove(direction) }
 
-                while (nextPoints.isNotEmpty()) {
-                    val nextPoint = nextPoints.removeFirst()
-                    visited += nextPoint
-                    nextPoints += nextPoint.orthogonalNeighbours().filter { !visited.contains(it) && remaining.contains(it) && borders[it]!!.contains(direction) }
+                    sides += visited.size
                 }
-
-                visited.forEach { borders[it]!!.remove(direction) }
-
-                sides += visited.size
-            }
         }
 
         return sides
@@ -179,11 +164,9 @@ data class Point2d(
 
     operator fun plus(direction: Direction) = this + Vector2d.forDirection(direction)
 
+    operator fun plus(directions: Collection<Direction>) = directions.map { this + it }
+
     operator fun minus(direction: Direction) = this - Vector2d.forDirection(direction)
-
-    fun horizontalNeighbours() = Vector2d.HORIZONTAL_ADJACENT.map { this + it }
-
-    fun verticalNeighbours() = Vector2d.VERTICAL_ADJACENT.map { this + it }
 
     fun orthogonalNeighbours() = Vector2d.ORTHOGONAL_ADJACENT.map { this + it }
 

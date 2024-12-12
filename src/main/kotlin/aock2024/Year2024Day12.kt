@@ -9,22 +9,14 @@ data class Year2024Day12(
 ) {
     constructor(input: String) : this(MutableGrid(input.sanitize()))
 
-    fun partOne(): Int = grid.points().groupBy { grid.at(it) }
-        .values.sumOf { points ->
-            Area2d.areas(points).sumOf {
-                val area = it.points.size
-                val perimeter = it.sides().sum()
-                area * perimeter
-            }
-        }
+    fun partOne(): Int = grid.points()
+        .groupBy { grid.at(it) }
+        .values.flatMap { Area2d.areas(it) }
+        .sumOf { it.area() * it.perimeter() }
 
-    fun partTwo(): Int = grid.points().groupBy { grid.at(it) }
-        .values.sumOf { points ->
-            Area2d.areas(points).sumOf {
-                val area = it.points.size
-                val perimeter = it.sides().count()
-                area * perimeter
-            }
-        }
+    fun partTwo(): Int = grid.points()
+        .groupBy { grid.at(it) }
+        .values.flatMap { Area2d.areas(it) }
+        .sumOf { it.area() * it.sides().count() }
 
 }
