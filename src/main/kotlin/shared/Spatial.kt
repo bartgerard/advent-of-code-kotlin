@@ -30,6 +30,8 @@ enum class Direction {
         val CARDINAL_DIRECTIONS = listOf(NORTH, EAST, SOUTH, WEST)
         val ORDINAL_DIRECTIONS = listOf(NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST)
 
+        val VERTICAL = listOf(NORTH, SOUTH)
+        val HORIZONTAL = listOf(WEST, EAST)
         val ORTHOGONAL = CARDINAL_DIRECTIONS
         val DIAGONAL = ORDINAL_DIRECTIONS
 

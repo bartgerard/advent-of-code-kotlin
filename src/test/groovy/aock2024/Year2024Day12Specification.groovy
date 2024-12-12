@@ -35,8 +35,10 @@ class Year2024Day12Specification extends Specification {
         readFile(2024, 12, "example_1") | 80             | ""
         readFile(2024, 12, "example_2") | 436            | ""
         readFile(2024, 12, "example_3") | 1206           | ""
+        readFile(2024, 12, "example_4") | 236            | ""
+        readFile(2024, 12, "example_5") | 368            | ""
 
-        readFile(2024, 12)              | 0              | ""
+        readFile(2024, 12)              | 966476         | ""
     }
 
 }

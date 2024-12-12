@@ -90,6 +90,7 @@ fun Collection<LongRange>.mergeOne(newRange: LongRange): List<LongRange> {
         .sortedBy { it.start }
 }
 
+fun IntRange.length() = this.last - this.first + 1
 fun LongRange.length() = this.last - this.first + 1
 
 fun main() {
