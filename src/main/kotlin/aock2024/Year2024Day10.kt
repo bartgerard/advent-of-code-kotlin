@@ -2,6 +2,7 @@ package aock2024
 
 import shared.MutableGrid
 import shared.Point2d
+import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 
 data class Year2024Day10(
     private val grid: MutableGrid
@@ -40,6 +41,6 @@ data class Year2024Day10(
         nextPoints(point, trailTail[0]).sumOf { scoreForTrailStartingAt(it, trailTail.subList(1, trailTail.size)) }
     }
 
-    private fun nextPoints(previousPoint: Point2d, nextHeight: Char): List<Point2d> = previousPoint.orthogonalNeighbours().filter { grid.contains(it) && grid.at(it) == nextHeight }
+    private fun nextPoints(previousPoint: Point2d, nextHeight: Char): List<Point2d> = previousPoint.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) == nextHeight }
 
 }

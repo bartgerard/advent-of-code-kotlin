@@ -1,5 +1,6 @@
 package shared
 
+import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
 import kotlin.math.abs
 
@@ -10,6 +11,11 @@ data class Vector2d(
     companion object {
         val ZERO = Vector2d(0, 0)
 
+        ///            x-axis
+        ///        O------>
+        ///        |
+        ///        |
+        /// y-axis v
         val NORTH_WEST = Vector2d(-1, -1)
         val NORTH = Vector2d(0, -1)
         val NORTH_EAST = Vector2d(1, -1)
@@ -30,11 +36,6 @@ data class Vector2d(
         val SURROUNDING = ORTHOGONAL_ADJACENT + DIAGONAL_ADJACENT
 
         fun forDirection(direction: Direction): Vector2d = when (direction) {
-            ///            x-axis
-            ///        O------>
-            ///        |
-            ///        |
-            /// y-axis v
             Direction.NORTH_WEST -> NORTH_WEST
             Direction.NORTH -> NORTH
             Direction.NORTH_EAST -> NORTH_EAST
@@ -59,17 +60,9 @@ data class Area2d(
             val areas = mutableSetOf<List<Point2d>>()
 
             while (remaining.isNotEmpty()) {
-                val region = mutableListOf(remaining.removeFirst())
-                var i = 0
-                while (i < region.size) {
-                    val point = region[i]
-                    val neighbours = point.orthogonalNeighbours().filter { !region.contains(it) }
-                    val sameRegion = neighbours.filter { remaining.contains(it) }
-                    remaining.removeAll(sameRegion)
-                    region.addAll(sameRegion)
-                    i++
-                }
-                areas += region
+                val region2 = remaining.first().neighbours(ORTHOGONAL_ADJACENT) { remaining.contains(it) && remaining.remove(it) }
+                remaining.removeAll(region2)
+                areas += region2
             }
 
             return areas.map { Area2d(it.toSet()) }
@@ -82,27 +75,13 @@ data class Area2d(
     fun sides(): List<Int> {
         val borders: Map<Point2d, MutableSet<Direction>> = points.associateWith { point -> Direction.ORTHOGONAL.filter { !points.contains(point + it) }.toMutableSet() }
 
-        val sides = mutableListOf<Int>()
-
-        points.forEach { point ->
-            borders[point]!!.toList()
-                .forEach { direction ->
-                    val nextPoints = mutableListOf(point)
-                    val visited = mutableListOf<Point2d>()
-
-                    while (nextPoints.isNotEmpty()) {
-                        val nextPoint = nextPoints.removeFirst()
-                        visited += nextPoint
-                        nextPoints += nextPoint.orthogonalNeighbours().filter { !visited.contains(it) && points.contains(it) && borders[it]!!.contains(direction) }
-                    }
-
-                    visited.forEach { borders[it]!!.remove(direction) }
-
-                    sides += visited.size
-                }
+        return points.flatMap { point ->
+            borders[point]!!.toList().map { direction ->
+                val visited = point.neighbours(ORTHOGONAL_ADJACENT) { points.contains(it) && borders[it]!!.contains(direction) }
+                visited.forEach { borders[it]!!.remove(direction) }
+                visited.size
+            }
         }
-
-        return sides
     }
 
 }
@@ -168,11 +147,21 @@ data class Point2d(
 
     operator fun minus(direction: Direction) = this - Vector2d.forDirection(direction)
 
-    fun orthogonalNeighbours() = Vector2d.ORTHOGONAL_ADJACENT.map { this + it }
+    fun neighbours(directions: List<Vector2d>) = directions.map { this + it }
 
-    fun diagonalNeighbours() = Vector2d.DIAGONAL_ADJACENT.map { this + it }
+    fun neighbours(directions: List<Vector2d>, predicate: (Point2d) -> Boolean): List<Point2d> {
+        val nextPoints = mutableListOf(this)
+        val visited = mutableListOf<Point2d>()
 
-    fun neighbours() = Vector2d.SURROUNDING.map { this + it }
+        while (nextPoints.isNotEmpty()) {
+            val nextPoint = nextPoints.removeFirst()
+            visited += nextPoint
+            nextPoints += directions.map { nextPoint + it }
+                .filter { !visited.contains(it) && predicate(it) }
+        }
+
+        return visited
+    }
 
     fun towards(p: Point2d): Vector2d = Vector2d(p.x - x, p.y - y)
 

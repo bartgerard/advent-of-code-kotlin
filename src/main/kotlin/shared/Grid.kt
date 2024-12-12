@@ -82,26 +82,4 @@ data class MutableGrid(
 
     override fun toString(): String = grid.joinToString("\n") { it.joinToString("") }
 
-    fun regions(): List<List<Point2d>> {
-        val remainingPoints = points().toMutableList()
-        val regions = mutableListOf<MutableList<Point2d>>()
-
-        while (remainingPoints.isNotEmpty()) {
-            val region = mutableListOf(remainingPoints.removeFirst())
-            var i = 0
-            while (i < region.size) {
-                val point = region[i]
-                val character = at(point)
-                val neighbours = point.neighbours().filter { !region.contains(it) }
-                val sameRegion = neighbours.filter { contains(it) && at(it) == character }
-                remainingPoints.removeAll(sameRegion)
-                region.addAll(sameRegion)
-                i++
-            }
-            regions += region
-        }
-
-        return regions
-    }
-
 }
