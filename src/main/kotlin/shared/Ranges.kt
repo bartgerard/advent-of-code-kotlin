@@ -40,7 +40,7 @@ fun allIntersections(ranges: Collection<LongRange>): List<LongRange> {
         .zipWithNext { i, j -> keyValues[i]..(keyValues[j] - 1) }
 }
 
-fun Collection<LongRange>.usedIntersections(): List<LongRange> = allIntersections(this)
+fun Collection<LongRange>.usedIntersections() = allIntersections(this)
     .filter { intersection -> this.any { it.contains(intersection.start) } }
 
 fun Collection<LongRange>.merge(): List<LongRange> {

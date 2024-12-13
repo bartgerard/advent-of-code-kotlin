@@ -21,16 +21,16 @@ data class Year2024Day05(
             .map { it.toIntegers() }
     )
 
-    fun partOne(): Int = updates.filter { isCorrect(it) }
+    fun partOne() = updates.filter { isCorrect(it) }
         .sumOf { middlePage(it) }
 
-    fun partTwo(): Int = updates.filter { !isCorrect(it) }
+    fun partTwo() = updates.filter { !isCorrect(it) }
         .map { correctOrdering(it) }
         .sumOf { middlePage(it) }
 
     private fun middlePage(pages: List<Int>) = pages[pages.size / 2]
 
-    private fun isCorrect(order: List<Int>): Boolean = order.mapIndexed { index, item -> item to index }
+    private fun isCorrect(order: List<Int>) = order.mapIndexed { index, item -> item to index }
         .toMap()
         .let { orderMap ->
             rules.filter { orderMap.contains(it.first) && orderMap.contains(it.second) }

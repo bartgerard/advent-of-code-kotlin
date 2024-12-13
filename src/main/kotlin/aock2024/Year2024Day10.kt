@@ -1,21 +1,21 @@
 package aock2024
 
-import shared.MutableGrid
+import shared.CharGrid
 import shared.Point2d
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 
 data class Year2024Day10(
-    private val grid: MutableGrid
+    private val grid: CharGrid
 ) {
     companion object {
         val TRAIL = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
     }
 
-    constructor(input: String) : this(MutableGrid(input))
+    constructor(input: String) : this(CharGrid(input))
 
-    fun partOne(): Int = trailheads().sumOf { findDestinationsStartingAt(it).count() }
+    fun partOne() = trailheads().sumOf { findDestinationsStartingAt(it).count() }
 
-    fun partTwo(): Long = trailheads().sumOf { scoreForTrailStartingAt(it, TRAIL.subList(1, TRAIL.size)) }
+    fun partTwo() = trailheads().sumOf { scoreForTrailStartingAt(it, TRAIL.subList(1, TRAIL.size)) }
 
     fun trailheads() = grid.findAll(TRAIL[0])
 
@@ -41,6 +41,6 @@ data class Year2024Day10(
         nextPoints(point, trailTail[0]).sumOf { scoreForTrailStartingAt(it, trailTail.subList(1, trailTail.size)) }
     }
 
-    private fun nextPoints(previousPoint: Point2d, nextHeight: Char): List<Point2d> = previousPoint.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) == nextHeight }
+    private fun nextPoints(previousPoint: Point2d, nextHeight: Char) = previousPoint.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) == nextHeight }
 
 }

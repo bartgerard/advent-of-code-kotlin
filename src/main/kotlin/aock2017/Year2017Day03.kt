@@ -36,7 +36,7 @@ data class Year2017Day03(
 
     }
 
-    fun partTwo(): Int = 0
+    fun partTwo() = 0
 
     fun positionOf(squareId: Int): Point2d {
         val ringId = sqrt(squareId.toDouble()).toInt()

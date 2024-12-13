@@ -12,9 +12,9 @@ data class Year2024Day09(
         input.sanitize().chunked(1).map { it.toInt() }.groupByIndexRemainder(2)
     )
 
-    fun partOne(): Long = disk.also { it.compact(false) }.checksum()
+    fun partOne() = disk.also { it.compact(false) }.checksum()
 
-    fun partTwo(): Long = disk.also { it.compact(true) }.checksum()
+    fun partTwo() = disk.also { it.compact(true) }.checksum()
 
 }
 
@@ -47,7 +47,7 @@ data class Disk(
         }
     }
 
-    fun checksum(): Long = formattedFiles.sumOf { it.checksum() }
+    fun checksum() = formattedFiles.sumOf { it.checksum() }
 
     fun moveLastFile(shouldFit: Boolean) {
         val file = files.removeLast()
@@ -94,7 +94,7 @@ data class File(
     val fileId: Int,
     val range: LongRange
 ) {
-    fun checksum(): Long = fileId * sum(range)
+    fun checksum() = fileId * sum(range)
 }
 
 /*

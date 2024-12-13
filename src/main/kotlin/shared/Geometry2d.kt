@@ -4,6 +4,9 @@ import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
 import kotlin.math.abs
 
+fun <T> Pair<T, T>.x() = first
+fun <T> Pair<T, T>.y() = second
+
 data class Vector2d(
     val x: Int,
     val y: Int
@@ -25,13 +28,11 @@ data class Vector2d(
         val SOUTH_WEST = Vector2d(-1, 1)
         val WEST = Vector2d(-1, 0)
 
-        val HORIZONTAL_ADJACENT = Direction.HORIZONTAL.map { forDirection(it) }
+        val HORIZONTAL_ADJACENT = listOf(WEST, EAST)
+        val VERTICAL_ADJACENT = listOf(NORTH, SOUTH)
 
-        val VERTICAL_ADJACENT = Direction.VERTICAL.map { forDirection(it) }
-
-        val ORTHOGONAL_ADJACENT = Direction.ORTHOGONAL.map { forDirection(it) }
-
-        val DIAGONAL_ADJACENT = Direction.DIAGONAL.map { forDirection(it) }
+        val ORTHOGONAL_ADJACENT = listOf(NORTH, EAST, SOUTH, WEST)
+        val DIAGONAL_ADJACENT = listOf(NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST)
 
         val SURROUNDING = ORTHOGONAL_ADJACENT + DIAGONAL_ADJACENT
 
@@ -165,10 +166,7 @@ data class Point2d(
 
     fun towards(p: Point2d): Vector2d = Vector2d(p.x - x, p.y - y)
 
-    infix fun to(p: Point2d) = Rectangle2d(
-        x..p.x,
-        y..p.y
-    )
+    infix fun to(p: Point2d) = Rectangle2d(x..p.x, y..p.y)
 
     fun on(axis: Axis) = when (axis) {
         Axis.X -> x

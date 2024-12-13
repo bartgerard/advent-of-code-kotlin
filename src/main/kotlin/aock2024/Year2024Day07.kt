@@ -23,9 +23,9 @@ data class Year2024Day07(
             }
     )
 
-    fun partOne(): Long = this.equations.sumOf { calibrationResult(it, OPERATORS) }
+    fun partOne() = this.equations.sumOf { calibrationResult(it, OPERATORS) }
 
-    fun partTwo(): Long = this.equations.sumOf { calibrationResult(it, EXTENDED_OPERATORS) }
+    fun partTwo() = this.equations.sumOf { calibrationResult(it, EXTENDED_OPERATORS) }
 
     fun calibrationResult(
         equation: Pair<Long, List<Long>>,

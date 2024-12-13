@@ -5,7 +5,7 @@ import java.util.Collections.unmodifiableMap
 import kotlin.math.abs
 import kotlin.math.pow
 
-fun factorial(n: Long): Long = (1..n).fold(1, Long::times)
+fun factorial(n: Long) = (1..n).fold(1, Long::times)
 
 fun combinations(k: Long, n: Long): Long {
     isTrue(0 <= k, "k should be positive")
@@ -14,13 +14,9 @@ fun combinations(k: Long, n: Long): Long {
     return factorial(n) / (factorial(k) * factorial(n - k))
 }
 
-fun simplex(k: Long, n: Long): Long {
-    return combinations(k, n + k)
-}
+fun simplex(k: Long, n: Long) = combinations(k, n + k)
 
-fun triangular(n: Long): Long {
-    return n * (n + 1) / 2
-}
+fun triangular(n: Long) = n * (n + 1) / 2
 
 fun primeFactors(value: Long): Map<Long, Int> {
     val powerByPrimeFactor: MutableMap<Long, Int> = HashMap()
@@ -41,9 +37,7 @@ fun primeFactors(value: Long): Map<Long, Int> {
 }
 
 // least common multiple
-fun lcm(values: List<Long>): Long {
-    return lcm(values.toLongArray())
-}
+fun lcm(values: List<Long>) = lcm(values.toLongArray())
 
 fun lcm(values: LongArray): Long {
     val maxPowerByPrimeFactor = values.asSequence().map { primeFactors(it) }.flatMap { it.entries }.groupBy { it.key }
@@ -64,9 +58,6 @@ tailrec fun gcd(x: Long, y: Long): Long = when {
     }
 }
 
-fun sum(range: IntRange): Long = sum(range.min().toLong()..range.max().toLong())
+fun sum(range: IntRange) = sum(range.min().toLong()..range.max().toLong())
 
-fun sum(range: LongRange): Long {
-    val n = range.max() - range.min() + 1
-    return n * (range.min() + range.max()) / 2
-}
+fun sum(range: LongRange): Long = (range.min() + range.max()) * range.length() / 2

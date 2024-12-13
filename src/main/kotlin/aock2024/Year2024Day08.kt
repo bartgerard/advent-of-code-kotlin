@@ -1,21 +1,21 @@
 package aock2024
 
-import shared.MutableGrid
+import shared.CharGrid
 import shared.Point2d
 
 data class Year2024Day08(
-    private val grid: MutableGrid
+    private val grid: CharGrid
 ) {
-    constructor(input: String) : this(MutableGrid(input))
+    constructor(input: String) : this(CharGrid(input))
 
-    fun partOne(): Int = findAntinodes(grid.frequenciesExcluding(setOf('.')), 1..1).count()
+    fun partOne() = findAntiNodes(grid.frequenciesExcluding(setOf('.')), 1..1).count()
 
-    fun partTwo(): Int = findAntinodes(grid.frequenciesExcluding(setOf('.')), 0..Int.MAX_VALUE).count()
+    fun partTwo() = findAntiNodes(grid.frequenciesExcluding(setOf('.')), 0..Int.MAX_VALUE).count()
 
-    private fun findAntinodes(
+    private fun findAntiNodes(
         frequencies: Map<Char, List<Point2d>>,
         broadcastingRange: IntRange
-    ): Set<Point2d> = frequencies.flatMap { (_, antennas) ->
+    ) = frequencies.flatMap { (_, antennas) ->
         antennas.flatMap { antenna1 ->
             antennas.filter { antenna2 -> antenna1 != antenna2 }
                 .flatMap { antenna2 ->

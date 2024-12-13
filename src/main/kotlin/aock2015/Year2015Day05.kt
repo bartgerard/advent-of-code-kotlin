@@ -15,11 +15,11 @@ data class Year2015Day05(
 
     constructor(input: String) : this(input.sanitize().lines())
 
-    fun partOne(): Int = strings.count { isNice(it) }
+    fun partOne() = strings.count { isNice(it) }
 
-    fun partTwo(): Int = strings.count { isNiceAccordingToNewRules(it) }
+    fun partTwo() = strings.count { isNiceAccordingToNewRules(it) }
 
-    private fun isNice(text: String): Boolean = containsAtLeastThreeVowels(text)
+    private fun isNice(text: String) = containsAtLeastThreeVowels(text)
             && containsDoubleLetter(text)
             && NAUGHTY_SEQUENCES.none { text.contains(it) }
 
@@ -27,7 +27,7 @@ data class Year2015Day05(
 
     private fun containsDoubleLetter(text: String) = text.contains(DOUBLE_LETTER_REGEX)
 
-    private fun isNiceAccordingToNewRules(text: String): Boolean = text.contains(REPEATING_PAIR_REGEX)
+    private fun isNiceAccordingToNewRules(text: String) = text.contains(REPEATING_PAIR_REGEX)
             && text.contains(REPEATING_LETTER_WITH_ONE_LETTER_BETWEEN_REGEX)
 
 }

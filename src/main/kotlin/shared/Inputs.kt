@@ -10,30 +10,16 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.createParentDirectories
 
-fun readFile(
-    year: Int,
-    day: Int
-): String {
-    return readFile(year, day, "input")
-}
+fun readFile(year: Int, day: Int) = readFile(year, day, "input")
 
-fun readFile(
-    year: Int,
-    day: Int,
-    filename: String = "input"
-): String {
-    return readFile("$year/day$day/$filename.txt")
-}
+fun readFile(year: Int, day: Int, filename: String = "input") = readFile("$year/day$day/$filename.txt")
 
 fun readFile(filename: String = "input"): String {
     val resource = Thread.currentThread().contextClassLoader.getResource(filename)
     return resource!!.readText(defaultCharset()).trimEnd()
 }
 
-fun downloadInputFile(
-    year: Int,
-    day: Int
-) {
+fun downloadInputFile(year: Int, day: Int) {
     val session = readFile("session.private")
     val request = HttpRequest.newBuilder(URI("https://adventofcode.com/$year/day/$day/input"))
         .header("Cookie", "session=$session")
@@ -49,40 +35,31 @@ fun downloadInputFile(
         .send(request, BodyHandlers.ofFile(destination))
 }
 
-fun String.sanitize(): String = this.replace("\r", "")
+fun String.sanitize() = this.replace("\r", "")
 
-fun String.splitByEmptyLine(): List<String> = this.split("\n\n")
+fun String.splitByEmptyLine() = this.split("\n\n")
 
-fun String.table(separator: String): List<List<String>> = this.lines().map { it.split(separator) }
-
-/*
-fun String.split(count: Int): List<String> {
-    return (0..count)
-        .asSequence()
-        .map { i -> this.filterIndexed { it, _ -> it % count == i } }
-        .toList()
-}
- */
+fun String.table(separator: String) = this.lines().map { it.split(separator) }
 
 val NUMBER_PATTERN = "-?\\d+".toRegex()
 
-fun String.toIntegers(): List<Int> = NUMBER_PATTERN.findAll(this)
+fun String.toIntegers() = NUMBER_PATTERN.findAll(this)
     .map { it.value.toInt() }
     .toList()
 
-fun String.toLongs(): List<Long> = NUMBER_PATTERN.findAll(this)
+fun String.toLongs() = NUMBER_PATTERN.findAll(this)
     .map { it.value.toLong() }
     .toList()
 
-fun String.toDoubles(): List<Double> = NUMBER_PATTERN.findAll(this)
+fun String.toDoubles() = NUMBER_PATTERN.findAll(this)
     .map { it.value.toDouble() }
     .toList()
 
-fun List<Long>.toBox(): Box {
-    return Box(this[0], this[1], this[2])
-}
+fun List<Long>.toBox() = Box(this[0], this[1], this[2])
 
-fun parseInt(s: String): Int = when (s) {
+fun String.toRectangle() = toIntegers().let { (x1, y1, x2, y2) -> Point2d(x1, y1) to Point2d(x2, y2) }
+
+fun parseInt(s: String) = when (s) {
     "one" -> 1
     "two" -> 2
     "three" -> 3
@@ -95,7 +72,7 @@ fun parseInt(s: String): Int = when (s) {
     else -> s.toInt()
 }
 
-fun parseLong(s: String): Long = when (s) {
+fun parseLong(s: String) = when (s) {
     "one" -> 1
     "two" -> 2
     "three" -> 3

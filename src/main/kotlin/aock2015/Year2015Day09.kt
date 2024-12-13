@@ -5,9 +5,9 @@ data class Year2015Day09(
 ) {
     constructor(input: String) : this(Destinations.parse(input))
 
-    fun partOne(): Long = destinations.findShortestRoute(destinations.cities.toList())
+    fun partOne() = destinations.findShortestRoute(destinations.cities.toList())
 
-    fun partTwo(): Long = destinations.findLongestRoute(destinations.cities.toList())
+    fun partTwo() = destinations.findLongestRoute(destinations.cities.toList())
 }
 
 data class Destinations(

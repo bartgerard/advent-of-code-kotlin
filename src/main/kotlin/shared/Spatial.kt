@@ -45,7 +45,7 @@ enum class Direction {
 
     }
 
-    fun inverse(): Direction = when (this) {
+    fun inverse() = when (this) {
         NORTH -> SOUTH
         EAST -> WEST
         SOUTH -> NORTH
@@ -56,7 +56,7 @@ enum class Direction {
         NORTH_WEST -> SOUTH_EAST
     }
 
-    fun rotateRight(): Direction = when (this) {
+    fun rotateRight() = when (this) {
         NORTH -> EAST
         EAST -> SOUTH
         SOUTH -> WEST
@@ -67,7 +67,7 @@ enum class Direction {
         NORTH_WEST -> NORTH_EAST
     }
 
-    fun rotateLeft(): Direction = when (this) {
+    fun rotateLeft() = when (this) {
         NORTH -> WEST
         EAST -> NORTH
         SOUTH -> EAST
@@ -78,7 +78,7 @@ enum class Direction {
         NORTH_WEST -> SOUTH_WEST
     }
 
-    fun flipVertical(): Direction = when (this) {
+    fun flipVertical() = when (this) {
         NORTH -> SOUTH
         EAST -> EAST
         SOUTH -> NORTH

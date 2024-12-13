@@ -92,9 +92,9 @@ data class Year2023Day24(
         return initialPosition
     }
 
-    fun partTwoZ3(): Long = solve(rays.subList(0, 3))
+    fun partTwoZ3(): Long = solveZ3(rays.subList(0, 3))
 
-    private fun solve(rays: List<Ray3d>): Long {
+    private fun solveZ3(rays: List<Ray3d>): Long {
         return Context().use { ctx ->
             val variables = buildMap {
                 putAll(rays.indices.map { "t$it" }.associateWith { ctx.mkIntConst(it) })

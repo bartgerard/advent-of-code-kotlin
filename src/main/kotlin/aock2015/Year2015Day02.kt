@@ -1,6 +1,9 @@
 package aock2015
 
-import shared.*
+import shared.Box
+import shared.sanitize
+import shared.toBox
+import shared.toLongs
 
 data class Year2015Day02(
     private val boxes: List<Box>

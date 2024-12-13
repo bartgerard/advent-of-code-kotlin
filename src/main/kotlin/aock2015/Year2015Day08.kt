@@ -7,23 +7,19 @@ data class Year2015Day08(
 ) {
     constructor(input: String) : this(input.sanitize().lines())
 
-    fun partOne(): Int = lines.sumOf { it.length - representationLength(it) }
+    fun partOne() = lines.sumOf { it.length - representationLength(it) }
 
-    fun partTwo(): Int = lines.sumOf { encodedLength(it) - it.length }
+    fun partTwo() = lines.sumOf { encodedLength(it) - it.length }
 
-    private fun representationLength(s: String): Int {
-        return s
-            .replace("\\\\", "?")
-            .replace("\\\"", "?")
-            .replace("\\\\x\\w{2}".toRegex(), "?")
-            .length - 2
-    }
+    private fun representationLength(s: String) = s
+        .replace("\\\\", "?")
+        .replace("\\\"", "?")
+        .replace("\\\\x\\w{2}".toRegex(), "?")
+        .length - 2
 
-    private fun encodedLength(s: String): Int {
-        return s
-            .replace("\\", "\\\\")
-            .replace("\"", "\\\"")
-            .length + 2
-    }
+    private fun encodedLength(s: String) = s
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+        .length + 2
 
 }

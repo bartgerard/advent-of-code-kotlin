@@ -1,12 +1,12 @@
 package aock2024
 
 import shared.Direction
-import shared.MutableGrid
+import shared.CharGrid
 import shared.Point2d
 
 
 data class Year2024Day06(
-    private val grid: MutableGrid,
+    private val grid: CharGrid,
     private val guard: Point2d
 ) {
     companion object {
@@ -15,7 +15,7 @@ data class Year2024Day06(
         private const val PATH = 'X'
 
         private fun nextDirection(
-            grid: MutableGrid,
+            grid: CharGrid,
             currentPosition: Point2d,
             currentDirection: Direction
         ): Direction? {
@@ -39,7 +39,7 @@ data class Year2024Day06(
         }
 
         fun findPath(
-            grid: MutableGrid,
+            grid: CharGrid,
             position: Point2d,
             direction: Direction
         ): List<Point2d> {
@@ -62,7 +62,7 @@ data class Year2024Day06(
         }
 
         fun containsLoop(
-            grid: MutableGrid,
+            grid: CharGrid,
             position: Point2d,
             direction: Direction
         ): Boolean {
@@ -91,13 +91,13 @@ data class Year2024Day06(
 
     }
 
-    constructor(input: String) : this(MutableGrid(input))
+    constructor(input: String) : this(CharGrid(input))
 
-    constructor(grid: MutableGrid) : this(grid, grid.findAll(GUARD)[0])
+    constructor(grid: CharGrid) : this(grid, grid.findAll(GUARD)[0])
 
-    fun partOne(): Int = findPath(grid, guard, Direction.NORTH).toSet().size
+    fun partOne() = findPath(grid, guard, Direction.NORTH).toSet().size
 
-    fun partTwo(): Int = findPath(grid, guard, Direction.NORTH).asSequence()
+    fun partTwo() = findPath(grid, guard, Direction.NORTH).asSequence()
         .distinct()
         .map {
             val newGrid = grid.copy()

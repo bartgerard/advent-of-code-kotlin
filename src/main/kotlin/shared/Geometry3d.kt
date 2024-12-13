@@ -2,6 +2,11 @@ package shared
 
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.sqrt
+
+fun <T> Triple<T, T, T>.x() = first
+fun <T> Triple<T, T, T>.y() = second
+fun <T> Triple<T, T, T>.z() = third
 
 data class Vector3d(
     val x: Double,
@@ -22,9 +27,11 @@ data class Vector3d(
     operator fun div(scalar: Int) = Vector3d(x / scalar, y / scalar, z / scalar)
     operator fun div(scalar: Double) = Vector3d(x / scalar, y / scalar, z / scalar)
 
-    infix fun dot(v: Vector3d): Double = x * v.x + y * v.y + z * v.z
+    fun length() = sqrt(x * x + y * y + z * z)
 
-    infix fun cross(v: Vector3d): Vector3d = Vector3d(
+    infix fun dot(v: Vector3d) = x * v.x + y * v.y + z * v.z
+
+    infix fun cross(v: Vector3d) = Vector3d(
         y * v.z - z * v.y,
         z * v.x - x * v.z,
         x * v.y - y * v.x
@@ -50,22 +57,16 @@ data class Point3d(
     constructor(values: List<Double>) : this(values[0], values[1], values[2])
 
     operator fun plus(p: Point3d) = Point3d(x + p.x, y + p.y, z + p.z)
+    operator fun plus(v: Vector3d) = Point3d(x + v.x, y + v.y, z + v.z)
 
     operator fun minus(p: Point3d) = Vector3d(x - p.x, y - p.y, z - p.z)
+    operator fun minus(v: Vector3d) = Point3d(x - v.x, y - v.y, z - v.z)
 
     operator fun times(p: Point3d) = Point3d(x * p.x, y * p.y, z * p.z)
 
     fun manhattan(p: Point3d) = abs(x - p.x) + abs(y - p.y) + abs(z - p.z)
 
-    operator fun plus(v: Vector3d) = Point3d(x + v.x, y + v.y, z + v.z)
-
-    operator fun minus(v: Vector3d) = Point3d(x - v.x, y - v.y, z - v.z)
-
-    infix fun to(p: Point3d) = Box3d(
-        x..p.x,
-        y..p.y,
-        z..p.z
-    )
+    infix fun to(p: Point3d) = Box3d(x..p.x, y..p.y, z..p.z)
 
     fun on(axis: Axis) = when (axis) {
         Axis.X -> x
@@ -73,7 +74,7 @@ data class Point3d(
         Axis.Z -> z
     }
 
-    override fun toString(): String = "p($x, $y, $z)"
+    override fun toString() = "p($x, $y, $z)"
 }
 
 data class Ray3d(
@@ -125,8 +126,8 @@ data class Ray3d(
         )
     }
 
-    fun at(t: Int): Point3d = point + direction * t
-    fun at(t: Double): Point3d = point + direction * t
+    fun at(t: Int) = point + direction * t
+    fun at(t: Double) = point + direction * t
 }
 
 data class IntersectedRay3d(
@@ -145,71 +146,37 @@ data class Sphere(
     val center: Point3d = Point3d.ZERO,
     val radius: Double
 ) {
-    fun diameter(): Double = radius * 2
-
-    fun area(): Double = PI * radius * radius * 4
-
-    fun volume(): Double = (PI * radius * radius * radius * 4) / 3
+    fun diameter() = radius * 2
+    fun area() = PI * radius * radius * 4
+    fun volume() = (PI * radius * radius * radius * 4) / 3
 }
 
 data class Box3d(
-    private val x: ClosedFloatingPointRange<Double>,
-    private val y: ClosedFloatingPointRange<Double>,
-    private val z: ClosedFloatingPointRange<Double> = 0.0..0.0
+    val x: ClosedFloatingPointRange<Double>,
+    val y: ClosedFloatingPointRange<Double>,
+    val z: ClosedFloatingPointRange<Double> = 0.0..0.0
 ) {
-    fun length(): Double = x.endInclusive - x.start
-    fun width(): Double = y.endInclusive - y.start
-    fun height(): Double = z.endInclusive - z.start
+    constructor(length: Double, width: Double, height: Double = 0.0) : this(0.0..length, 0.0..width, 0.0..height)
 
-    fun volume(): Double = length() * width() * height()
+    fun length() = x.endInclusive - x.start
+    fun width() = y.endInclusive - y.start
+    fun height() = z.endInclusive - z.start
 
-    fun surfaceArea(): Double = 2 * (length() * width() + width() * height() + height() * length())
+    fun volume() = length() * width() * height()
+    fun surfaceArea() = 2 * (length() * width() + width() * height() + height() * length())
+    fun areaOfSmallestSide() = sequenceOf(length() * width(), width() * height(), height() * length()).min()
+    fun smallestPerimeter() = 2 * sequenceOf(length() + width(), width() + height(), height() + length()).min()
 
-    fun areaOfSmallestSide(): Double = sequenceOf(
-        length() * width(),
-        width() * height(),
-        height() * length()
-    )
-        .min()
-
-    fun smallestPerimeter(): Double = 2 * sequenceOf(
-        length() + width(),
-        width() + height(),
-        height() + length()
-    )
-        .min()
-
-    fun contains(p: Point3d): Boolean = p.x in x && p.y in y && p.z in z
+    fun contains(p: Point3d) = p.x in x && p.y in y && p.z in z
 }
 
 data class Box(
-    private val length: Long,
-    private val width: Long,
-    private val height: Long
+    val length: Long,
+    val width: Long,
+    val height: Long
 ) {
-    fun volume(): Long {
-        return length * width * height
-    }
-
-    fun surfaceArea(): Long {
-        return 2 * (length * width + width * height + height * length)
-    }
-
-    fun areaOfSmallestSide(): Long {
-        return sequenceOf(
-            length * width,
-            width * height,
-            height * length
-        )
-            .min()
-    }
-
-    fun smallestPerimeter(): Long {
-        return 2 * sequenceOf(
-            length + width,
-            width + height,
-            height + length
-        )
-            .min()
-    }
+    fun volume() = length * width * height
+    fun surfaceArea() = 2 * (length * width + width * height + height * length)
+    fun areaOfSmallestSide() = sequenceOf(length * width, width * height, height * length).min()
+    fun smallestPerimeter() = 2 * sequenceOf(length + width, width + height, height + length).min()
 }
