@@ -19,7 +19,7 @@ data class Dimension(
     }
 
     fun display(points: Collection<Point2d>) = List(height) { y -> List(width) { x -> points.contains(Point2d(x, y)) } }
-        .joinToString("\n", "\n") { row -> row.joinToString("") { if (it) "#" else "." } }
+        .joinToString("\n", "\n") { row -> row.joinToString("") { if (it) "#" else " " } }
 }
 
 class ToggleGrid(
