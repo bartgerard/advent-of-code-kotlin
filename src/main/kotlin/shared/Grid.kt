@@ -1,10 +1,25 @@
 package shared
 
+import shared.Direction.*
+
 data class Dimension(
     val width: Int,
     val height: Int
 ) {
     fun contains(p: Point2d): Boolean = p.x in 0..<width && p.y in 0..<height
+
+    fun quadrants() = buildMap {
+        val midX = width / 2
+        val midY = height / 2
+
+        put(NORTH_WEST, Rectangle2d(0..<midX, 0..<midY))
+        put(NORTH_EAST, Rectangle2d((midX + 1)..<width, 0..<midY))
+        put(SOUTH_EAST, Rectangle2d((midX + 1)..<width, (midY + 1)..<height))
+        put(SOUTH_WEST, Rectangle2d(0..<midX, (midY + 1)..<height))
+    }
+
+    fun display(points: Collection<Point2d>) = List(height) { y -> List(width) { x -> points.contains(Point2d(x, y)) } }
+        .joinToString("\n", "\n") { row -> row.joinToString("") { if (it) "#" else "." } }
 }
 
 class ToggleGrid(
