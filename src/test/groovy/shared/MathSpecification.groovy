@@ -1,15 +1,9 @@
 package shared
 
-
 import spock.lang.Specification
 
 import static org.assertj.core.api.Assertions.assertThat
-import static shared.MathKt.combinations
-import static shared.MathKt.gcd
-import static shared.MathKt.lcm
-import static shared.MathKt.primeFactors
-import static shared.MathKt.simplex
-import static shared.MathKt.triangular
+import static shared.MathKt.*
 
 class MathSpecification extends Specification {
 
