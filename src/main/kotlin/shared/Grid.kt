@@ -50,28 +50,49 @@ class IntensityGrid(
     fun intensity() = grid.sumOf { row -> row.sumOf { it } }
 }
 
+interface Grid<T> {
+    fun rows(): IntRange
+    fun columns(): IntRange
+    fun points(): Sequence<Point2d>
+    fun contains(point: Point2d): Boolean
+    fun at(point: Point2d): T
+    fun set(point: Point2d, value: T)
+    fun setInDirection(point: Point2d, direction: Vector2d, values: List<T>)
+    fun findAll(value: T): List<Point2d>
+}
+
 data class CharGrid(
     val grid: MutableList<MutableList<Char>>
-) {
+) : Grid<Char> {
     constructor(input: String) : this(input.sanitize().lines().map { it.toMutableList() }.toMutableList())
-
-    fun rows() = 0 until grid.size
-    fun columns() = 0 until grid[0].size
 
     fun copy() = CharGrid(grid.map { it.toMutableList() }.toMutableList())
 
-    fun findAll(c: Char) = grid.flatMapIndexed { row, line ->
+    override fun rows() = 0 until grid.size
+    override fun columns() = 0 until grid[0].size
+    override fun points() = rows().asSequence().flatMap { row -> columns().map { column -> Point2d(column, row) } }
+
+    override fun contains(p: Point2d) = p.y in grid.indices && p.x in 0..<grid[p.y].size
+
+    override fun at(p: Point2d) = grid[p.y][p.x]
+
+    override fun set(p: Point2d, value: Char) {
+        grid[p.y][p.x] = value
+    }
+
+    override fun setInDirection(p: Point2d, d: Vector2d, values: List<Char>) {
+        values.forEachIndexed { i, value -> set(p + d * i, value) }
+    }
+
+    override fun findAll(c: Char) = grid.flatMapIndexed { row, line ->
         line.indices.filter { line[it] == c }
             .map { column -> Point2d(column, row) }
     }
 
-    fun contains(p: Point2d) = p.y in grid.indices && p.x in 0..<grid[p.y].size
-
-    fun at(p: Point2d) = grid[p.y][p.x]
-
-    fun set(p: Point2d, value: Char) = grid[p.y].set(p.x, value)
-
-    fun points() = rows().asSequence().flatMap { row -> columns().map { column -> Point2d(column, row) } }
+    fun sequenceInDirection(p: Point2d, d: Vector2d) = generateSequence(0) { it + 1 }
+        .map { p + d * it }
+        .takeWhile { contains(it) }
+        .map { at(it) }
 
     fun frequenciesExcluding(blacklist: Set<Char>): Map<Char, List<Point2d>> = points()
         .map { point -> at(point) to point }
@@ -86,5 +107,37 @@ data class CharGrid(
     }
 
     override fun toString() = grid.joinToString("\n") { it.joinToString("") }
+
+}
+
+data class PushableGrid(
+    val grid: CharGrid,
+    val walls: Set<Char>,
+    val empty: Set<Char>
+) : Grid<Char> by grid {
+
+    constructor(input: String, walls: Set<Char>, empty: Set<Char>) : this(CharGrid(input), walls, empty)
+
+    fun push(p: Point2d, d: Direction): Boolean {
+        val v = Vector2d.forDirection(d)
+        val sequence = grid.sequenceInDirection(p, v)
+            .takeWhile { !walls.contains(it) }
+            .joinToString("")
+        val firstEmptySpace = sequence.indexOfFirst { empty.contains(it) }
+
+        if (firstEmptySpace < 0) {
+            return false
+        }
+        val emptySpace = "${sequence[firstEmptySpace]}"
+        val newSequence = emptySpace + sequence.replaceFirst(emptySpace, "")
+
+        if (sequence == newSequence) {
+            return false
+        }
+
+        grid.setInDirection(p, v, newSequence.toList())
+
+        return true
+    }
 
 }
