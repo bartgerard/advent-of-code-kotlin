@@ -1,8 +1,8 @@
-package aock2015
+package aock2024
 
 import shared.sanitize
 
-data class Year2015Day1x(
+data class Year2024Day16(
     private val input: List<String>
 ) {
     constructor(input: String) : this(input.sanitize().lines())
