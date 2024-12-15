@@ -21,18 +21,4 @@ class Year2023Day25Specification extends Specification {
         readFile(2023, 25)              | 0              | ""
     }
 
-    def "partTwo"() {
-        when:
-        final long result = new Year2023Day25(input).partTwo()
-
-        then:
-        result == expectedResult
-
-        where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
-
-        readFile(2024, 0) | 0              | ""
-    }
-
 }

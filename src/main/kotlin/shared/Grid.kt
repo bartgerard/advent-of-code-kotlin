@@ -27,7 +27,8 @@ class ToggleGrid(
 ) {
     constructor(dimension: Dimension) : this(List(dimension.height) { MutableList(dimension.width) { false } })
 
-    fun execute(rectangle: Rectangle2d, instruction: Boolean.() -> Boolean) = rectangle.points().forEach { execute(it, instruction) }
+    fun execute(rectangle: Rectangle2d, instruction: Boolean.() -> Boolean) =
+        rectangle.points().forEach { execute(it, instruction) }
 
     private fun execute(point: Point2d, instruction: Boolean.() -> Boolean) {
         grid[point.y][point.x] = grid[point.y][point.x].instruction()
@@ -41,7 +42,8 @@ class IntensityGrid(
 ) {
     constructor(dimension: Dimension) : this(List(dimension.height) { MutableList(dimension.width) { 0 } })
 
-    fun execute(rectangle: Rectangle2d, instruction: (Int) -> Int) = rectangle.points().forEach { execute(it, instruction) }
+    fun execute(rectangle: Rectangle2d, instruction: (Int) -> Int) =
+        rectangle.points().forEach { execute(it, instruction) }
 
     private fun execute(point: Point2d, instruction: Int.() -> Int) {
         grid[point.y][point.x] = grid[point.y][point.x].instruction()
@@ -51,6 +53,7 @@ class IntensityGrid(
 }
 
 interface Grid<T> {
+    fun dimension(): Dimension
     fun rows(): IntRange
     fun columns(): IntRange
     fun points(): Sequence<Point2d>
@@ -64,10 +67,16 @@ interface Grid<T> {
 data class CharGrid(
     val grid: MutableList<MutableList<Char>>
 ) : Grid<Char> {
+    constructor(
+        dimension: Dimension,
+        defaultValue: Char
+    ) : this(MutableList(dimension.height) { MutableList(dimension.width) { defaultValue } })
+
     constructor(input: String) : this(input.sanitize().lines().map { it.toMutableList() }.toMutableList())
 
     fun copy() = CharGrid(grid.map { it.toMutableList() }.toMutableList())
 
+    override fun dimension() = Dimension(grid[0].size, grid.size)
     override fun rows() = 0 until grid.size
     override fun columns() = 0 until grid[0].size
     override fun points() = rows().asSequence().flatMap { row -> columns().map { column -> Point2d(column, row) } }
