@@ -45,14 +45,14 @@ class Dijkstra {
             val previousCosts = mutableMapOf<E, Long>()
 
             val paths = Paths(start)
-            val ends = mutableSetOf<E>()
+            var end: E? = null
 
-            while (nextVertices.isNotEmpty()) {
+            while (end == null && nextVertices.isNotEmpty()) {
                 val currentVertex = nextVertices.poll()
                 val currentEdge = currentVertex.destination
 
                 if (isEnd(currentEdge)) {
-                    ends.add(currentEdge)
+                    end = currentEdge
                 }
 
                 val newVertices = neighbors(currentEdge)
@@ -77,7 +77,7 @@ class Dijkstra {
                 }
             }
 
-            return Solutions<E>(start, ends, paths)
+            return Solutions<E>(start, end, paths)
         }
     }
 
@@ -128,14 +128,14 @@ data class Paths<E>(
 
 data class Solutions<E>(
     val source: E,
-    val destinations: Set<E>,
+    val destination: E?,
     val path: Paths<E>
 ) {
-    fun cost() = path[destinations.first()]?.first()?.cost ?: Long.MAX_VALUE
+    fun cost() = path[destination]?.first()?.cost ?: Long.MAX_VALUE
 
     fun vertices(): Set<E> {
         val result = mutableSetOf<E>()
-        val remaining = destinations.toMutableList()
+        val remaining = mutableListOf(destination ?: return result)
 
         while (remaining.isNotEmpty()) {
             val vertex = remaining.removeFirst()
