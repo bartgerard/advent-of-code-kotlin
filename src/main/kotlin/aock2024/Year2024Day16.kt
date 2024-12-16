@@ -1,9 +1,6 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Dijkstra
-import shared.Direction
-import shared.Point2d
+import shared.*
 
 data class Year2024Day16(
     private val grid: CharGrid
@@ -16,11 +13,15 @@ data class Year2024Day16(
 
     constructor(input: String) : this(CharGrid(input))
 
-    fun partOne(): Long {
+    fun partOne(): Long = shortestPath().cost()
+
+    fun partTwo() = shortestPath().vertices().size
+
+    private fun shortestPath(): Solutions<Pair<Point2d, Direction>> {
         val start = grid.findAll(START).first()
         val end = grid.findAll(END).first()
 
-        val shortestPath = Dijkstra.findShortestPath(
+        val shortestPath = Dijkstra.findShortestPaths(
             start to Direction.EAST,
             { it.first == end },
             { it ->
@@ -33,16 +34,8 @@ data class Year2024Day16(
             },
             ::costFunction
         )
-
-        val path = shortestPath.fullPath()
-
-        path.forEach { grid.set(it.first, '|') }
-        println(grid)
-
-        return shortestPath.cost()
+        return shortestPath
     }
-
-    fun partTwo() = 0L
 
     fun costFunction(current: Pair<Point2d, Direction>, next: Pair<Point2d, Direction>): Long? = if (current.first == next.first) {
         1000L
@@ -50,17 +43,4 @@ data class Year2024Day16(
         1
     }
 
-    /*
-    private fun costFor(v1: Vector2d, v2: Vector2d): Long {
-        if (v1 == v2) {
-            return 1L
-        }
-
-        if (v1.x == -v2.x || v1.y == -v2.y) {
-            return 2001L
-        }
-
-        return 1001L
-    }
-     */
 }
