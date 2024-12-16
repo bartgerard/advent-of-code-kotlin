@@ -15,7 +15,12 @@ data class Year2024Day16(
 
     fun partOne(): Long = shortestPath().cost()
 
-    fun partTwo() = shortestPath().vertices().size
+    fun partTwo() = shortestPath().vertices().map { it.first }.toSet().also { display(it) }.size
+
+    private fun display(points: Set<Point2d>) {
+        points.forEach { grid.set(it, 'O') }
+        println(grid)
+    }
 
     private fun shortestPath(): Solutions<Pair<Point2d, Direction>> {
         val start = grid.findAll(START).first()

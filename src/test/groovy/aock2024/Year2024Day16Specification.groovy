@@ -34,7 +34,7 @@ class Year2024Day16Specification extends Specification {
         readFile(2024, 16, "example_1") | 45             | ""
         readFile(2024, 16, "example_2") | 64             | ""
 
-        readFile(2024, 16)              | 0              | ""
+        readFile(2024, 16)              | 481            | ""
     }
 
 }

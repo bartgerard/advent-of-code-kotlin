@@ -2,20 +2,6 @@ package shared
 
 import java.util.*
 
-/*
-data class Vertex<T>(
-    val label: String,
-    val values: T
-)
-
-data class Edge(
-    val label: String,
-    val v1: String,
-    val v2: String
-)
-
- */
-
 class Dijkstra {
     companion object {
         fun <E> findShortestPath(
