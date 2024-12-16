@@ -1,12 +1,51 @@
 package aock2024
 
-import shared.sanitize
+import shared.*
 
 data class Year2024Day16(
-    private val input: List<String>
+    private val grid: CharGrid
 ) {
-    constructor(input: String) : this(input.sanitize().lines())
+    companion object {
+        const val START = 'S'
+        const val END = 'E'
+        const val WALL = '#'
+    }
 
-    fun partOne() = 0L
-    fun partTwo() = 0L
+    constructor(input: String) : this(CharGrid(input))
+
+    fun partOne(): Long = shortestPath().cost()
+
+    fun partTwo() = shortestPath().vertices().map { it.first }.toSet().also { display(it) }.size
+
+    private fun display(points: Set<Point2d>) {
+        points.forEach { grid.set(it, 'O') }
+        println(grid)
+    }
+
+    private fun shortestPath(): Solutions<Pair<Point2d, Direction>> {
+        val start = grid.findAll(START).first()
+        val end = grid.findAll(END).first()
+
+        val shortestPath = Dijkstra.findShortestPaths(
+            start to Direction.EAST,
+            { it.first == end },
+            { it ->
+                buildList {
+                    add(it.first + it.second to it.second)
+                    add(it.first to it.second.rotateLeft())
+                    add(it.first to it.second.rotateRight())
+                }
+                    .filter { grid.contains(it.first) && grid.at(it.first) != WALL }
+            },
+            ::costFunction
+        )
+        return shortestPath
+    }
+
+    fun costFunction(current: Pair<Point2d, Direction>, next: Pair<Point2d, Direction>): Long? = if (current.first == next.first) {
+        1000L
+    } else {
+        1
+    }
+
 }
