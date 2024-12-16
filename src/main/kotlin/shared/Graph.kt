@@ -22,7 +22,7 @@ class Dijkstra {
             start: E,
             isEnd: (E) -> Boolean,
             neighbors: (E) -> List<E>,
-            costFunction: (previous: E?, current: E, next: E) -> Long? = { _, _, _ -> 1 }
+            costFunction: (current: E, next: E) -> Long? = { _, _ -> 1 }
         ): Solution<E> {
             val nextVertices = PriorityQueue<Vertex<E>>(compareBy { it.cost })
             nextVertices.add(Vertex(start, 0L))
@@ -39,7 +39,7 @@ class Dijkstra {
 
                 val newVertices = neighbors(currentEdge)
                     .filter { !path.containsKey(it) }
-                    .map { Vertex(it, currentVertex.cost + (costFunction.invoke(path[currentEdge]?.source, currentEdge, it) ?: Long.MAX_VALUE)) }
+                    .map { Vertex(it, currentVertex.cost + (costFunction.invoke(currentEdge, it) ?: Long.MAX_VALUE)) }
 
                 nextVertices += newVertices
                 newVertices.forEach { path.put(it.destination, Path(currentEdge, it.cost)) }

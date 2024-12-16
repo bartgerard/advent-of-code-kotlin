@@ -2,9 +2,8 @@ package aock2024
 
 import shared.CharGrid
 import shared.Dijkstra
+import shared.Direction
 import shared.Point2d
-import shared.Vector2d
-import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 
 data class Year2024Day16(
     private val grid: CharGrid
@@ -22,15 +21,22 @@ data class Year2024Day16(
         val end = grid.findAll(END).first()
 
         val shortestPath = Dijkstra.findShortestPath(
-            start,
-            { it == end },
-            { it -> it.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) != WALL } },
+            start to Direction.EAST,
+            { it.first == end },
+            { it ->
+                buildList {
+                    add(it.first + it.second to it.second)
+                    add(it.first to it.second.rotateLeft())
+                    add(it.first to it.second.rotateRight())
+                }
+                    .filter { grid.contains(it.first) && grid.at(it.first) != WALL }
+            },
             ::costFunction
         )
 
         val path = shortestPath.fullPath()
 
-        path.forEach { grid.set(it, '|') }
+        path.forEach { grid.set(it.first, '|') }
         println(grid)
 
         return shortestPath.cost()
@@ -38,16 +44,13 @@ data class Year2024Day16(
 
     fun partTwo() = 0L
 
-    fun costFunction(previous: Point2d?, current: Point2d, next: Point2d): Long? {
-        val v2 = next - current
-
-        if (previous == null) {
-            return costFor(Vector2d.EAST, v2)
-        }
-
-        return costFor(current - previous, v2)
+    fun costFunction(current: Pair<Point2d, Direction>, next: Pair<Point2d, Direction>): Long? = if (current.first == next.first) {
+        1000L
+    } else {
+        1
     }
 
+    /*
     private fun costFor(v1: Vector2d, v2: Vector2d): Long {
         if (v1 == v2) {
             return 1L
@@ -59,4 +62,5 @@ data class Year2024Day16(
 
         return 1001L
     }
+     */
 }
