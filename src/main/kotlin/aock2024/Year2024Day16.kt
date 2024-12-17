@@ -30,14 +30,14 @@ data class Year2024Day16(
 
         val shortestPath = Dijkstra.findShortestPaths(
             start to Direction.EAST,
-            { it.first == end },
+            { (point, _) -> point == end },
             { it ->
                 buildList {
                     add(it.first + it.second to it.second)
                     add(it.first to it.second.rotateLeft())
                     add(it.first to it.second.rotateRight())
                 }
-                    .filter { grid.contains(it.first) && grid.at(it.first) != WALL }
+                    .filter { (point, _) -> grid.contains(point) && grid.at(point) != WALL }
             },
             ::costFunction
         )
