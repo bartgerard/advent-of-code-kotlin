@@ -24,21 +24,21 @@ class Year2024Day17Specification extends Specification {
 
         readFile(2024, 17, "example_1") | "4,6,3,5,6,3,5,2,1,0"   | ""
 
-        readFile(2024, 17)              | ""                      | "not 4,3,2,6,5,5,3,2,4 or 4,3,2,6,1,5,3,2,4"
+        readFile(2024, 17)              | "4,3,2,6,4,5,3,2,4"     | ""
     }
 
     def "partTwo"() {
         when:
-        final long result = new Year2024Day17(input).partTwo()
+        final long result = new Year2024Day17(input).partTwo(start)
 
         then:
         result == expectedResult
 
         where:
-        input              | expectedResult | comment
-        ""                 | 0              | ""
+        input                           | start             | expectedResult | comment
+        readFile(2024, 17, "example_2") | 0                 | 117440         | ""
 
-        readFile(2024, 17) | 0              | ""
+        readFile(2024, 17)              | Integer.MAX_VALUE | 0              | ""
     }
 
 }

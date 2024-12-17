@@ -3,10 +3,12 @@ package aock2024
 import shared.sanitize
 import shared.splitByEmptyLine
 import shared.toIntegers
+import shared.toLongs
+import java.util.*
 
 data class Year2024Day17(
-    private val initialRegisters: List<Int>,
-    private val program: List<Pair<Instruction, Int>>
+    private val initialRegisters: List<Long>,
+    private val program: List<Int>
 ) {
     companion object {
         const val A = 0
@@ -16,38 +18,48 @@ data class Year2024Day17(
 
     constructor(input: String) : this(input.sanitize().splitByEmptyLine())
     constructor(input: List<String>) : this(
-        input[0].toIntegers(),
-        input[1].toIntegers().chunked(2).map { Instruction.parse(it[0]) to it[1] }
+        input[0].toLongs(),
+        input[1].toIntegers()
     )
 
-    fun partOne(): String = execute().joinToString(",")
+    fun partOne(): String = execute(initialRegisters.toMutableList()).joinToString(",")
 
-    fun partTwo() = 0L
+    fun partTwo(start: Long): Long = (start..Long.MAX_VALUE).asSequence()
+        .first { isCopy(it) }
 
-    fun execute(): List<Int> {
-        val output = mutableListOf<Int>()
+    fun isCopy(i: Long): Boolean {
         val registers = initialRegisters.toMutableList()
+        registers[0] = i
+        return execute(registers) { Collections.indexOfSubList(program, it) != 0 } == program
+    }
+
+    fun execute(
+        registers: MutableList<Long>,
+        endEarly: (List<Int>) -> Boolean = { _ -> false }
+    ): List<Int> {
+        val output = mutableListOf<Int>()
+        val compiledProgram = program.chunked(2).map { Instruction.parse(it[0]) to it[1] }
 
         var i = 0
 
-        while (i in program.indices) {
-            val (instruction, operand) = program[i]
+        while (i in compiledProgram.indices) {
+            val (instruction, operand) = compiledProgram[i]
 
             when (instruction) {
                 Instruction.ADV -> {
-                    registers[A] = registers[A] / (2.shl(comboOperand(registers, operand) - 1))
+                    registers[A] = registers[A].shr(comboOperand(registers, operand))
                 }
 
                 Instruction.BXL -> {
-                    registers[B] = registers[B].xor(operand)
+                    registers[B] = registers[B].xor(operand.toLong())
                 }
 
                 Instruction.BST -> {
-                    registers[B] = comboOperand(registers, operand).mod(8)
+                    registers[B] = comboOperand(registers, operand).mod(8L)
                 }
 
                 Instruction.JNZ -> {
-                    if (registers[A] != 0) {
+                    if (registers[A] != 0L) {
                         i = operand
                         continue
                     }
@@ -59,40 +71,30 @@ data class Year2024Day17(
 
                 Instruction.OUT -> {
                     output += comboOperand(registers, operand).mod(8)
+                    if (endEarly(output)) {
+                        return emptyList()
+                    }
                 }
 
                 Instruction.BDV -> {
-                    registers[B] = registers[A] / (2.shl(comboOperand(registers, operand) - 1))
+                    registers[B] = registers[A].shr(comboOperand(registers, operand))
                 }
 
                 Instruction.CDV -> {
-                    registers[C] = divide(registers, operand)
+                    registers[C] = registers[A].shr(comboOperand(registers, operand))
                 }
             }
             i++
         }
 
-        println(registers)
-
         return output
     }
 
-    private fun divide(registers: MutableList<Int>, operand: Int): Int {
-        val comboOperand = comboOperand(registers, operand)
-        return if (comboOperand == 1) {
-            registers[A]
-        } else if (comboOperand <= 1) {
-            1
-        } else {
-            registers[A] / (2.shl(comboOperand - 1))
-        }
-    }
-
-    private fun comboOperand(registers: List<Int>, literalOperand: Int): Int = when (literalOperand) {
+    private fun comboOperand(registers: List<Long>, literalOperand: Int): Int = when (literalOperand) {
         in 0..3 -> literalOperand
-        4 -> registers[A]
-        5 -> registers[B]
-        6 -> registers[C]
+        4 -> registers[A].toInt()
+        5 -> registers[B].toInt()
+        6 -> registers[C].toInt()
         7 -> TODO()
         else -> throw IllegalArgumentException("invalid operand: $literalOperand")
     }
