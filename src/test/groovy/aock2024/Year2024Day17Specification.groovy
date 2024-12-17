@@ -29,16 +29,16 @@ class Year2024Day17Specification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2024Day17(input).partTwo(start)
+        final long result = new Year2024Day17(input).partTwo()
 
         then:
         result == expectedResult
 
         where:
-        input                           | start             | expectedResult | comment
-        readFile(2024, 17, "example_2") | 0                 | 117440         | ""
+        input                           | expectedResult  | comment
+        readFile(2024, 17, "example_2") | 117440          | ""
 
-        readFile(2024, 17)              | Integer.MAX_VALUE | 0              | ""
+        readFile(2024, 17)              | 164540892147389 | ""
     }
 
 }

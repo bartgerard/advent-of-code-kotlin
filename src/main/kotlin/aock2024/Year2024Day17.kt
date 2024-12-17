@@ -4,7 +4,6 @@ import shared.sanitize
 import shared.splitByEmptyLine
 import shared.toIntegers
 import shared.toLongs
-import java.util.*
 
 data class Year2024Day17(
     private val initialRegisters: List<Long>,
@@ -24,19 +23,13 @@ data class Year2024Day17(
 
     fun partOne(): String = execute(initialRegisters.toMutableList()).joinToString(",")
 
-    fun partTwo(start: Long): Long = (start..Long.MAX_VALUE).asSequence()
-        .first { isCopy(it) }
+    fun partTwo(): Long = findCopyGeneratingInput()
 
-    fun isCopy(i: Long): Boolean {
-        val registers = initialRegisters.toMutableList()
-        registers[0] = i
-        return execute(registers) { Collections.indexOfSubList(program, it) != 0 } == program
-    }
+    fun execute(i: Long): List<Int> = initialRegisters.toMutableList()
+        .also { it[0] = i }
+        .let { execute(it) }
 
-    fun execute(
-        registers: MutableList<Long>,
-        endEarly: (List<Int>) -> Boolean = { _ -> false }
-    ): List<Int> {
+    fun execute(registers: MutableList<Long>): List<Int> {
         val output = mutableListOf<Int>()
         val compiledProgram = program.chunked(2).map { Instruction.parse(it[0]) to it[1] }
 
@@ -71,9 +64,6 @@ data class Year2024Day17(
 
                 Instruction.OUT -> {
                     output += comboOperand(registers, operand).mod(8)
-                    if (endEarly(output)) {
-                        return emptyList()
-                    }
                 }
 
                 Instruction.BDV -> {
@@ -95,9 +85,23 @@ data class Year2024Day17(
         4 -> registers[A].toInt()
         5 -> registers[B].toInt()
         6 -> registers[C].toInt()
-        7 -> TODO()
         else -> throw IllegalArgumentException("invalid operand: $literalOperand")
+    }.mod(8)
+
+    fun findCopyGeneratingInput(): Long {
+        var value = 0L
+
+        (0..<program.size).toList().reversed().forEach { i ->
+            value = value shl 3
+
+            while (execute(value) != program.subList(i, program.size)) {
+                value++
+            }
+        }
+
+        return value
     }
+
 }
 
 enum class Instruction(
