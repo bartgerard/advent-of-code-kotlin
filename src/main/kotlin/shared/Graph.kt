@@ -1,13 +1,14 @@
 package shared
 
 import java.util.*
+import kotlin.collections.get
 
 class Dijkstra {
     companion object {
         fun <E> findShortestPath(
             start: E,
             isEnd: (E) -> Boolean,
-            neighbors: (E) -> List<E>,
+            neighbors: (path: Path<E>, current: E) -> List<E>,
             costFunction: (current: E, next: E) -> Long? = { _, _ -> 1 }
         ): Solution<E> {
             val nextVertices = PriorityQueue<Vertex<E>>(compareBy { it.cost })
@@ -23,7 +24,7 @@ class Dijkstra {
                     return Solution<E>(start, currentEdge, path)
                 }
 
-                val newVertices = neighbors(currentEdge)
+                val newVertices = neighbors(path, currentEdge)
                     .filter { !path.containsKey(it) }
                     .map { Vertex(it, currentVertex.cost + (costFunction.invoke(currentEdge, it) ?: Long.MAX_VALUE)) }
 
@@ -97,6 +98,18 @@ data class Path<E>(
     val steps: MutableMap<E, Step<E>>
 ) : MutableMap<E, Step<E>> by steps {
     constructor(start: E) : this(mutableMapOf(start to Step(null, 0L)))
+
+    fun fullPathTo(destination: E?): List<E> {
+        val result = mutableListOf<E>()
+        var current = destination
+
+        while (current != null) {
+            result.add(current)
+            current = steps[current]!!.source
+        }
+
+        return result.reversed()
+    }
 }
 
 data class Solution<E>(
@@ -106,18 +119,7 @@ data class Solution<E>(
 ) {
     fun cost() = path[destination]?.cost ?: Long.MAX_VALUE
 
-    fun fullPath() = fullPathTo(destination)
-    fun fullPathTo(destination: E?): List<E> {
-        val result = mutableListOf<E>()
-        var current = destination
-
-        while (current != null) {
-            result.add(current)
-            current = path[current]!!.source
-        }
-
-        return result.reversed()
-    }
+    fun fullPath() = path.fullPathTo(destination)
 }
 
 data class Paths<E>(
