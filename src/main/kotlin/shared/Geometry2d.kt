@@ -148,6 +148,8 @@ data class Point2d(
 
     operator fun minus(direction: Direction) = this - Vector2d.forDirection(direction)
 
+    infix fun mod(d: Dimension) = Point2d(x.mod(d.width), y.mod(d.height))
+
     fun neighbours(directions: List<Vector2d>) = directions.map { this + it }
 
     fun neighbours(directions: List<Vector2d>, predicate: (Point2d) -> Boolean): List<Point2d> {
