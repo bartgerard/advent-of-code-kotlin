@@ -26,88 +26,41 @@ data class Year2024Day20(
         var cheats = 0L
         val shortCuts = mutableListOf<Int>()
 
-        for (i in shortestPath.indices) {
-            val currentStep = shortestPath[i]
-
-            for (j in shortestPath.indices.reversed()) {
-                val difference = j - i
-                if (difference <= minimumSaving + 2) {
-                    break
-                }
-
-                val nextStep = shortestPath[j]
-
+        for ((i, currentStep) in shortestPath.withIndex()) {
+            for ((j, nextStep) in shortestPath.withIndex().drop(i + 1)) {
                 val lengthOfShortcut = currentStep.manhattan(nextStep)
-                if (lengthOfShortcut in 2..allowedShortcut) {
-                    shortCuts.add(difference - lengthOfShortcut)
+                val timeSaved = j - i - lengthOfShortcut
+                if (lengthOfShortcut in 2..allowedShortcut && minimumSaving <= timeSaved) {
+                    shortCuts.add(timeSaved)
                 }
             }
 
             cheats = cheats + shortCuts.size
         }
 
-        val frequencies = shortCuts.groupingBy { it }.eachCount()
-        println(frequencies)
+        display(shortCuts)
 
-        return shortCuts.filter { it >= minimumSaving }.size
+        return shortCuts.size
     }
 
-    fun partTwo(minimumSaving: Int): Long {
-        val solution = findShortestPath()
-
-        val shortestPath = solution.fullPath()
-        shortestPath.forEach { grid.set(it, 'O') }
-
-        var cheats = 0L
-        val shortCuts = mutableListOf<Long>()
-
-        for (i in shortestPath.indices) {
-            val currentStep = shortestPath[i]
-            val cost = i
-
-            for (j in shortestPath.indices.reversed()) {
-                if (i + minimumSaving > j) {
-                    break
-                }
-
-                val nextStep = shortestPath[i]
-
-                if (currentStep.manhattan(nextStep) <= 20) {
-
-                }
-            }
-
-            shortCuts += currentStep.neighbours(ORTHOGONAL_ADJACENT)
-                .filter { grid.contains(it) && grid.at(it) == WALL }
-                .flatMap { it.neighbours(ORTHOGONAL_ADJACENT) }
-                .filter {
-                    grid.contains(it)
-                            && grid.at(it) != WALL
-                            && it != currentStep
-                }
-                .map { solution.path.costTo(it) - cost - 2 } // going through the wall
-                .filter { it > 0 }
-
-            cheats = cheats + shortCuts.size
-        }
-
-        val frequencies = shortCuts.groupingBy { it }.eachCount()
-        println(frequencies)
-
-        return 0
-        //return shortCuts.filter { it >= minimumSaving }.size
+    private fun display(shortCuts: List<Int>) {
+        shortCuts.groupingBy { it }
+            .eachCount()
+            .toSortedMap { key: Int, value: Int -> key }
+            .entries
+            .joinToString(separator = ", ", prefix = "{", postfix = "}") { "${it.value}x${it.key}" }
+            .let { println(it) }
     }
 
     private fun findShortestPath(): Solution<Point2d> {
         val start = grid.findAll(START).first()
         val end = grid.findAll(END).first()
 
-        val solution = Dijkstra.findShortestPath(
+        return Dijkstra.findShortestPath(
             start,
             { point -> point == end },
             { _, point -> point.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) != WALL } }
         )
-        return solution
     }
 
 }

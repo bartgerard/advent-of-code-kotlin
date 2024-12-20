@@ -16,9 +16,9 @@ class Year2024Day20Specification extends Specification {
 
         where:
         input                           | minimumSaving | expectedResult | comment
-        readFile(2024, 20, "example_1") | 0             | 44             | ""
+        readFile(2024, 20, "example_1") | 2             | 44             | ""
 
-        readFile(2024, 20)              | 100           | 1310           | ""
+        readFile(2024, 20)              | 100           | 1343           | ""
     }
 
     def "partTwo"() {
@@ -32,7 +32,8 @@ class Year2024Day20Specification extends Specification {
         input                           | minimumSaving | expectedResult | comment
         readFile(2024, 20, "example_1") | 50            | 285            | ""
 
-        readFile(2024, 20)              | 100           | 0              | "not 7704580, 982858"
+        readFile(2024, 20)              | 100           | 982891         | ""
     }
+
 
 }
