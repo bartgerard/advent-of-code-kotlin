@@ -1,6 +1,6 @@
 import shared.downloadInputFile
 
-fun main() = loadDay(2024, 19)
+fun main() = loadDay(2024, 20)
 
 private fun loadDay(year: Int, day: Int) = downloadInputFile(year, day)
 

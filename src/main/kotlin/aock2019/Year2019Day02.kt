@@ -4,17 +4,27 @@ import shared.sanitize
 import shared.toIntegers
 
 data class Year2019Day02(
-    private val program: MutableList<Int>
+    private val program: List<Int>
 ) {
-    constructor(input: String) : this(input.sanitize().toIntegers().toMutableList())
-
-    fun programAlarm(): Year2019Day02 {
-        program[1] = 12
-        program[2] = 2
-        return this
+    companion object {
+        const val NOUN = 1
+        const val VERB = 2
     }
 
-    fun partOne(): List<Int> {
+    constructor(input: String) : this(input.sanitize().toIntegers().toMutableList())
+
+    fun alter(initialProgram: List<Int>, noun: Int, verb: Int): MutableList<Int> {
+        val program = initialProgram.toMutableList()
+        program[NOUN] = noun
+        program[VERB] = verb
+        return program
+    }
+
+    fun partOne(noun: Int, verb: Int) = run(alter(program, noun, verb))
+
+    fun runProgram() = run(program.toMutableList())
+
+    fun run(program: MutableList<Int>): List<Int> {
         var position = 0
         while (true) {
             val opcode = program[position]
@@ -38,6 +48,17 @@ data class Year2019Day02(
         return program
     }
 
-    fun partTwo() = 0L
+    fun partTwo(address0: Int): Int {
+        for (noun in 0..99) {
+            for (verb in 0..99) {
+                val result = partOne(noun, verb)
+                if (result[0] == address0) {
+                    return 100 * noun + verb
+                }
+            }
+        }
+
+        return -1
+    }
 
 }

@@ -1,12 +1,35 @@
 package aock2024
 
 import shared.sanitize
+import shared.splitByEmptyLine
 
 data class Year2024Day19(
-    private val input: List<String>
+    private val towels: List<String>,
+    private val designs: List<String>
 ) {
-    constructor(input: String) : this(input.sanitize().lines())
+    companion object {
+        fun toRegex(towels: List<String>) = towels.joinToString(separator = ")|(", prefix = "^(?:(", postfix = "))+\$").toRegex()
 
-    fun partOne() = 0L
-    fun partTwo() = 0L
+        fun countPossibilities(design: String, towels: List<String>, cache: MutableMap<String, Long>): Long = cache.getOrPut(design) {
+            if (design.isEmpty()) {
+                1L
+            } else {
+                towels.filter { design.startsWith(it) }
+                    .map { design.drop(it.length) }
+                    .sumOf { remainingDesign -> countPossibilities(remainingDesign, towels.filter { remainingDesign.contains(it) }, cache) }
+            }
+        }
+    }
+
+    constructor(input: String) : this(input.sanitize().splitByEmptyLine())
+    constructor(input: List<String>) : this(
+        input[0].split(", "),
+        input[1].lines()
+    )
+
+    fun partOne() = designs.count { isPossible(it, towels) }
+    fun partTwo() = designs.sumOf { countPossibilities(it, towels, mutableMapOf()) }
+
+    fun isPossible(design: String, towels: List<String>): Boolean = toRegex(towels).matches(design)
+
 }

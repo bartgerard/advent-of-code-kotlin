@@ -1,7 +1,6 @@
 package shared
 
 import java.util.*
-import kotlin.collections.get
 
 class Dijkstra {
     companion object {
@@ -99,6 +98,8 @@ data class Path<E>(
 ) : MutableMap<E, Step<E>> by steps {
     constructor(start: E) : this(mutableMapOf(start to Step(null, 0L)))
 
+    fun costTo(point: E?): Long = steps[point]?.cost ?: Long.MAX_VALUE
+
     fun fullPathTo(destination: E?): List<E> {
         val result = mutableListOf<E>()
         var current = destination
@@ -117,7 +118,7 @@ data class Solution<E>(
     val destination: E?,
     val path: Path<E>
 ) {
-    fun cost() = path[destination]?.cost ?: Long.MAX_VALUE
+    fun cost() = path.costTo(destination)
 
     fun fullPath() = path.fullPathTo(destination)
 }

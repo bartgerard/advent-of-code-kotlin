@@ -10,7 +10,7 @@ class Year2019Day02Specification extends Specification {
 
     def "partOne examples"() {
         when:
-        final List<Long> result = new Year2019Day02(input).partOne()
+        final List<Long> result = new Year2019Day02(input).runProgram()
 
         then:
         assertThat(result).containsExactlyElementsOf(expectedResult)
@@ -25,7 +25,7 @@ class Year2019Day02Specification extends Specification {
 
     def "partOne"() {
         when:
-        final List<Long> result = new Year2019Day02(input).programAlarm().partOne()
+        final List<Long> result = new Year2019Day02(input).partOne(12, 2)
 
         then:
         result[0] == expectedResult
@@ -37,16 +37,14 @@ class Year2019Day02Specification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2019Day02(input).partTwo()
+        final long result = new Year2019Day02(input).partTwo(address0)
 
         then:
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
-
-        readFile(2019, 2) | 0              | ""
+        input             | address0 | expectedResult | comment
+        readFile(2019, 2) | 19690720 | 4019           | ""
     }
 
 }
