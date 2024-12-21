@@ -15,8 +15,8 @@ class Year2024Day22Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input              | expectedResult | comment
+        ""                 | 0              | ""
 
         readFile(2024, 22) | 0              | ""
     }
@@ -29,10 +29,10 @@ class Year2024Day22Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input              | expectedResult  | comment
+        ""                 | 0               | ""
 
-        readFile(2024, 22) | 0              | ""
+        readFile(2024, 22) | 260586897262600 | ""
     }
 
 }
