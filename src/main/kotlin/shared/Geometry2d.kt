@@ -50,6 +50,31 @@ data class Vector2d(
 
     operator fun times(scalar: Int) = Vector2d(x * scalar, y * scalar)
 
+    fun orthogonal() = buildSet {
+        if (x != 0) add(Vector2d(x, 0))
+        if (y != 0) add(Vector2d(0, y))
+        if (x == 0 && y == 0) add(ZERO)
+    }
+
+    fun orthogonalOptions() = buildList {
+        when {
+            x != 0 && y != 0 -> {
+                add(buildList {
+                    add(Vector2d(x, 0))
+                    add(Vector2d(0, y))
+                })
+                add(buildList {
+                    add(Vector2d(0, y))
+                    add(Vector2d(x, 0))
+                })
+            }
+
+            x != 0 -> add(listOf(Vector2d(x, 0)))
+            y != 0 -> add(listOf(Vector2d(0, y)))
+            else -> add(listOf(ZERO))
+        }
+    }
+
 }
 
 data class Area2d(

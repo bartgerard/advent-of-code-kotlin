@@ -2,8 +2,6 @@ package aock2024
 
 import shared.CharGrid
 import shared.Dijkstra
-import shared.Point2d
-import shared.Solution
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 
 data class Year2024Day20(
@@ -18,7 +16,13 @@ data class Year2024Day20(
     constructor(input: String) : this(CharGrid(input))
 
     fun partOne(minimumSaving: Int, allowedShortcut: Int = 2): Int {
-        val solution = findShortestPath()
+        val start = grid.findAll(START).first()
+        val end = grid.findAll(END).first()
+        val solution = Dijkstra.findShortestPath(
+            start,
+            { point -> point == end },
+            { _, point -> point.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) != WALL } }
+        )
 
         val shortestPath = solution.fullPath()
         shortestPath.forEach { grid.set(it, 'O') }
@@ -50,17 +54,6 @@ data class Year2024Day20(
             .entries
             .joinToString(separator = ", ", prefix = "{", postfix = "}") { "${it.value}x${it.key}" }
             .let { println(it) }
-    }
-
-    private fun findShortestPath(): Solution<Point2d> {
-        val start = grid.findAll(START).first()
-        val end = grid.findAll(END).first()
-
-        return Dijkstra.findShortestPath(
-            start,
-            { point -> point == end },
-            { _, point -> point.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) != WALL } }
-        )
     }
 
 }

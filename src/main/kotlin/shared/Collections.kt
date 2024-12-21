@@ -24,3 +24,11 @@ fun <T> List<T>.cyclic() = CyclicList<T>(this)
 data class CyclicList<T>(val list: List<T>) : List<T> by list {
     override operator fun get(i: Int): T = list[i % list.size]
 }
+
+/**
+ * Generate Strings based on available options at each segment.
+ * [["A"], ["B", "C"], ["D"]] -> ["ABD","ACD"]
+ */
+fun List<List<String>>.generate(): List<String> = fold(listOf("")) { acc, options ->
+    acc.flatMap { previous -> options.map { previous + it } }
+}
