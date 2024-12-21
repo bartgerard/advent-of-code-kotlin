@@ -38,6 +38,7 @@ enum class Keypad(
     );
 
     companion object {
+        val CACHE = mutableMapOf<String, List<String>>()
         fun toInstructions(v: Vector2d): String = if (v.x != 0) {
             (if (v.x > 0) ">" else "<").repeat(v.x.absoluteValue)
         } else if ((v.y != 0)) {
@@ -56,6 +57,15 @@ enum class Keypad(
             .map { it.joinToString(separator = "", postfix = "A") { toInstructions(it) } }
     }
 
-    fun allPossibleInstructionsFor(code: String): List<String> = "A$code".zipWithNext { key1, key2 -> allPossibleInstructionsBetween(key1, key2) }
+    fun allPossibleInstructionsFor(code: String) = "A$code".zipWithNext { key1, key2 -> allPossibleInstructionsBetween(key1, key2) }
         .generate()
+        .allShortest()
+
+    fun lengthOfShortestSequence(from: Char, to: Char, repetition: Int): Int {
+        return  0
+    }
+}
+
+fun main() {
+    Keypad.DIRECTIONAL.lengthOfShortestSequence('<', '>', 25)
 }

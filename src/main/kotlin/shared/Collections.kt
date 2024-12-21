@@ -32,3 +32,6 @@ data class CyclicList<T>(val list: List<T>) : List<T> by list {
 fun List<List<String>>.generate(): List<String> = fold(listOf("")) { acc, options ->
     acc.flatMap { previous -> options.map { previous + it } }
 }
+
+fun List<String>.allShortest() = minOf { it.length }
+    .let { min -> filter { it.length == min } }
