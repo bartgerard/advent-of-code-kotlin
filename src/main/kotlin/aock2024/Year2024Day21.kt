@@ -12,18 +12,26 @@ data class Year2024Day21(
 
     fun partTwo() = codes.sumOf { complexity(it, 25) }
 
-    private fun complexity(string: String, indirections: Int): Int = numericPart(string) * lengthOfShortestSequence(string, indirections)
+    private fun complexity(string: String, depth: Int) = numericPart(string) * lengthOfShortestSequence2(string, depth)
 
-    fun numericPart(code: String) = code.trimStart('0').toIntegers().first()
+    private fun numericPart(code: String) = code.trimStart('0').toIntegers().first()
 
-    fun lengthOfShortestSequence(code: String, indirections: Int): Int {
-        var previous = Keypad.NUMERIC.allPossibleInstructionsFor(code)
+    private fun lengthOfShortestSequence(code: String, indirections: Int): Int {
+        var previous = Keypad.NUMERIC.allPossibleNumericKeypadInstructionsFor(code)
 
         repeat(indirections) {
-            previous = previous.flatMap { Keypad.DIRECTIONAL.allPossibleInstructionsFor(it) }
+            previous = previous.flatMap { Keypad.DIRECTIONAL.allPossibleDirectionalKeypadInstructionsFor(it) }
         }
 
         return previous.minOf { it.length }
+    }
+
+    private fun lengthOfShortestSequence2(code: String, depth: Int): Long {
+        val sequences = Keypad.NUMERIC.allPossibleNumericKeypadInstructionsFor(code)
+
+        return sequences.minOf { sequence ->
+            "A$sequence".zipWithNext { a, b -> Keypad.DIRECTIONAL.lengthOfShortestSequence(a, b, depth) }.sum()
+        }
     }
 }
 
@@ -38,7 +46,7 @@ enum class Keypad(
     );
 
     companion object {
-        val CACHE = mutableMapOf<String, List<String>>()
+        val CACHE = mutableMapOf<Pair<Pair<Char, Char>, Int>, Long>()
         fun toInstructions(v: Vector2d): String = if (v.x != 0) {
             (if (v.x > 0) ">" else "<").repeat(v.x.absoluteValue)
         } else if ((v.y != 0)) {
@@ -46,9 +54,17 @@ enum class Keypad(
         } else {
             ""
         }
+
+        val SEQUENCES = DIRECTIONAL.layout.values()
+            .filter { it != ' ' }
+            .combinations()
+            .associateWith { (a, b) -> DIRECTIONAL.allPossibleInstructionsBetween(a, b) }
+
+        val LENGTHS = SEQUENCES.entries
+            .associate { it.key to it.value.first().length.toLong() }
     }
 
-    fun allPossibleInstructionsBetween(from: Char, to: Char): List<String> {
+    private fun allPossibleInstructionsBetween(from: Char, to: Char): List<String> {
         val p1 = layout.findAll(from).first()
         val p2 = layout.findAll(to).first()
         val v = p2 - p1
@@ -57,15 +73,23 @@ enum class Keypad(
             .map { it.joinToString(separator = "", postfix = "A") { toInstructions(it) } }
     }
 
-    fun allPossibleInstructionsFor(code: String) = "A$code".zipWithNext { key1, key2 -> allPossibleInstructionsBetween(key1, key2) }
-        .generate()
-        .allShortest()
+    fun allPossibleNumericKeypadInstructionsFor(code: String) =
+        "A$code".zipWithNext { key1, key2 -> allPossibleInstructionsBetween(key1, key2) }
+            .generate()
+            .allShortest()
 
-    fun lengthOfShortestSequence(from: Char, to: Char, repetition: Int): Int {
-        return  0
+    fun allPossibleDirectionalKeypadInstructionsFor(code: String) =
+        "A$code".zipWithNext { key1, key2 -> SEQUENCES[key1 to key2]!! }
+            .generate()
+            .allShortest()
+
+    fun lengthOfShortestSequence(key1: Char, key2: Char, depth: Int): Long = CACHE.getOrPut((key1 to key2) to depth) {
+        if (depth == 1) {
+            LENGTHS[key1 to key2]!!
+        } else {
+            SEQUENCES[key1 to key2]!!.minOf { sequence ->
+                "A${sequence}".zipWithNext { a, b -> lengthOfShortestSequence(a, b, depth - 1) }.sum()
+            }
+        }
     }
-}
-
-fun main() {
-    Keypad.DIRECTIONAL.lengthOfShortestSequence('<', '>', 25)
 }

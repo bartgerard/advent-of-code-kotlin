@@ -62,6 +62,7 @@ interface Grid<T> {
     fun set(point: Point2d, value: T)
     fun setInDirection(point: Point2d, direction: Vector2d, values: List<T>)
     fun findAll(value: T): List<Point2d>
+    fun values(): Set<T> = points().map { at(it) }.toSet()
 }
 
 data class CharGrid(
@@ -81,25 +82,25 @@ data class CharGrid(
     override fun columns() = 0 until grid[0].size
     override fun points() = rows().asSequence().flatMap { row -> columns().map { column -> Point2d(column, row) } }
 
-    override fun contains(p: Point2d) = p.y in grid.indices && p.x in 0..<grid[p.y].size
+    override fun contains(point: Point2d) = point.y in grid.indices && point.x in 0..<grid[point.y].size
 
-    override fun at(p: Point2d) = grid[p.y][p.x]
+    override fun at(point: Point2d) = grid[point.y][point.x]
 
-    override fun set(p: Point2d, value: Char) {
-        grid[p.y][p.x] = value
+    override fun set(point: Point2d, value: Char) {
+        grid[point.y][point.x] = value
     }
 
-    override fun setInDirection(p: Point2d, d: Vector2d, values: List<Char>) {
-        values.forEachIndexed { i, value -> set(p + d * i, value) }
+    override fun setInDirection(point: Point2d, direction: Vector2d, values: List<Char>) {
+        values.forEachIndexed { i, value -> set(point + direction * i, value) }
     }
 
-    override fun findAll(c: Char) = grid.flatMapIndexed { row, line ->
-        line.indices.filter { line[it] == c }
+    override fun findAll(value: Char) = grid.flatMapIndexed { row, line ->
+        line.indices.filter { line[it] == value }
             .map { column -> Point2d(column, row) }
     }
 
-    fun sequenceInDirection(p: Point2d, d: Vector2d) = generateSequence(0) { it + 1 }
-        .map { p + d * it }
+    fun sequenceInDirection(point: Point2d, direction: Vector2d) = generateSequence(0) { it + 1 }
+        .map { point + direction * it }
         .takeWhile { contains(it) }
         .map { at(it) }
 
