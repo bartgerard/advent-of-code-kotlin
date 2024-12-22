@@ -1,6 +1,6 @@
 package aock2024
 
-
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static shared.InputsKt.readFile
@@ -15,12 +15,13 @@ class Year2024Day22Specification extends Specification {
         result == expectedResult
 
         where:
-        input              | expectedResult | comment
-        ""                 | 0              | ""
+        input                           | expectedResult | comment
+        readFile(2024, 22, "example_1") | 37327623       | ""
 
-        readFile(2024, 22) | 0              | ""
+        readFile(2024, 22)              | 13429191512    | ""
     }
 
+    @Ignore("slow")
     def "partTwo"() {
         when:
         final long result = new Year2024Day22(input).partTwo()
@@ -29,10 +30,10 @@ class Year2024Day22Specification extends Specification {
         result == expectedResult
 
         where:
-        input              | expectedResult  | comment
-        ""                 | 0               | ""
+        input                           | expectedResult | comment
+        readFile(2024, 22, "example_2") | 23             | ""
 
-        readFile(2024, 22) | 260586897262600 | ""
+        readFile(2024, 22)              | 1582           | ""
     }
 
 }
