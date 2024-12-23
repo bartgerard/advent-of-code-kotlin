@@ -32,6 +32,15 @@ data class LinearFunction2d(
     val m: Double,
     val y0: Double
 ) {
+    companion object {
+        fun from(line: Line2d): LinearFunction2d = LinearFunction2d(line.slope(), line.yIntercept())
+
+        fun intersect(f1: LinearFunction2d, f2: LinearFunction2d) = ((f2.y0 - f1.y0) / (f2.m - f1.m))
+            .let { x -> x to f1.at(x) }
+    }
+
+    constructor(m: Number, y0: Number) : this(m.toDouble(), y0.toDouble())
+
     // y = (c - a x) / b
     fun at(x: Double) = m * x + y0
 
@@ -39,4 +48,6 @@ data class LinearFunction2d(
     fun intercept() = y0
 
     fun toGeneralForm() = LinearEquation2d(m, 1.0, -y0)
+
+    infix fun intersect(f: LinearFunction2d) = intersect(this, f)
 }

@@ -15,24 +15,24 @@ class Year2024Day23Specification extends Specification {
         result == expectedResult
 
         where:
-        input              | expectedResult | comment
-        ""                 | 0              | ""
+        input                           | expectedResult | comment
+        readFile(2024, 23, "example_1") | 7              | ""
 
-        readFile(2024, 23) | 0              | ""
+        readFile(2024, 23)              | 1110           | ""
     }
 
     def "partTwo"() {
         when:
-        final long result = new Year2024Day23(input).partTwo()
+        final String result = new Year2024Day23(input).partTwo()
 
         then:
         result == expectedResult
 
         where:
-        input              | expectedResult | comment
-        ""                 | 0              | ""
+        input                           | expectedResult                           | comment
+        readFile(2024, 23, "example_1") | "co,de,ka,ta"                            | ""
 
-        readFile(2024, 23) | 0              | ""
+        readFile(2024, 23)              | "ej,hm,ks,ms,ns,rb,rq,sc,so,un,vb,vd,wd" | ""
     }
 
 }

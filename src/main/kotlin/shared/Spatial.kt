@@ -40,6 +40,12 @@ enum class Direction {
             '>' -> RIGHT
             'v' -> DOWN
             '<' -> LEFT
+
+            'U' -> UP
+            'R' -> RIGHT
+            'D' -> DOWN
+            'L' -> LEFT
+
             else -> throw IllegalArgumentException("$value is not a direction")
         }
 

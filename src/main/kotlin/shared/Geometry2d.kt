@@ -3,6 +3,7 @@ package shared
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 fun <T> Pair<T, T>.x() = first
 fun <T> Pair<T, T>.y() = second
@@ -204,9 +205,17 @@ data class Point2d(
 }
 
 data class Line2d(
-    private val p1: Point2d,
-    private val p2: Point2d
-)
+    val p1: Point2d,
+    val p2: Point2d
+) {
+    fun slope() = (p2.y - p1.y) / (p2.x - p1.x)
+    fun yIntercept() = p1.y - slope() * p1.x
+
+    fun toFunction() = LinearFunction2d(slope(), yIntercept())
+
+    fun intersection(other: Line2d) = (toFunction() intersect other.toFunction())
+        .let { (x, y) -> Point2d(x.roundToInt(), y.roundToInt()) }
+}
 
 data class Circle(
     private val center: Point2d = Point2d.ZERO,

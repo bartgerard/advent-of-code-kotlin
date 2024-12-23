@@ -37,7 +37,7 @@ class Year2019Day01Specification extends Specification {
         "1969"            | 966            | ""
         "100756"          | 50346          | ""
 
-        readFile(2019, 1) | 0              | ""
+        readFile(2019, 1) | 4975084        | ""
     }
 
 }
