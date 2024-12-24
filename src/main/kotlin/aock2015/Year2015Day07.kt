@@ -19,7 +19,7 @@ data class Circuit(
             .lines()
             .associate { line ->
                 line.split(" -> ")
-                    .let { it[1] to Instruction.parse(it[0]) }
+                    .let { it[1].trim() to Instruction.parse(it[0]) }
             }
             .let { Circuit(it) }
     }
