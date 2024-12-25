@@ -54,11 +54,15 @@ class IntensityGrid(
 
 interface Grid<T> {
     fun dimension(): Dimension
-    fun rows(): IntRange
-    fun columns(): IntRange
+    fun rowIndices(): IntRange
+    fun columnIndices(): IntRange
     fun points(): Sequence<Point2d>
     fun contains(point: Point2d): Boolean
+    fun at(row: Int, column: Int): T
     fun at(point: Point2d): T
+    fun firstRow(): List<T>
+    fun lastRow(): List<T>
+    fun columns(): List<List<T>>
     fun set(point: Point2d, value: T)
     fun setInDirection(point: Point2d, direction: Vector2d, values: List<T>)
     fun findAll(value: T): List<Point2d>
@@ -78,13 +82,19 @@ data class CharGrid(
     fun copy() = CharGrid(grid.map { it.toMutableList() }.toMutableList())
 
     override fun dimension() = Dimension(grid[0].size, grid.size)
-    override fun rows() = 0 until grid.size
-    override fun columns() = 0 until grid[0].size
-    override fun points() = rows().asSequence().flatMap { row -> columns().map { column -> Point2d(column, row) } }
+    override fun rowIndices() = 0 until grid.size
+    override fun columnIndices() = 0 until grid[0].size
+    override fun points() = rowIndices().asSequence().flatMap { row -> columnIndices().map { column -> Point2d(column, row) } }
 
     override fun contains(point: Point2d) = point.y in grid.indices && point.x in 0..<grid[point.y].size
 
+    override fun at(row: Int, column: Int) = grid[row][column]
     override fun at(point: Point2d) = grid[point.y][point.x]
+
+    override fun firstRow() = grid.first()
+    override fun lastRow() = grid.last()
+
+    override fun columns() = columnIndices().map { column -> rowIndices().map { row -> at(row, column) } }
 
     override fun set(point: Point2d, value: Char) {
         grid[point.y][point.x] = value

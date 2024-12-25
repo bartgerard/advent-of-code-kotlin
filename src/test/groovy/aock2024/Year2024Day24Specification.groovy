@@ -24,16 +24,16 @@ class Year2024Day24Specification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2024Day24(input).partTwo()
+        final String result = new Year2024Day24(input).partTwo(operation, swaps)
 
         then:
         result == expectedResult
 
         where:
-        input              | expectedResult | comment
-        ""                 | 0              | ""
+        input                           | operation | swaps | expectedResult                    | comment
+        readFile(2024, 24, "example_3") | "AND"     | 2     | "z00,z01,z02,z05"                 | ""
 
-        readFile(2024, 24) | 0              | ""
+        readFile(2024, 24)              | "ADD"     | 4     | "fvw,grf,mdb,nwq,wpq,z18,z22,z36" | ""
     }
 
 }

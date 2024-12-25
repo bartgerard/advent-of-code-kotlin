@@ -1,4 +1,4 @@
-import aock2024.Year2024Day1x
+import aock2024.Year2024Day25
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -9,7 +9,7 @@ class Year2024Day1xSpecification extends Specification {
 
     def "partOne"() {
         when:
-        final long result = new Year2024Day1x(input).partOne()
+        final long result = new Year2024Day25(input).partOne()
 
         then:
         result == expectedResult
@@ -23,7 +23,7 @@ class Year2024Day1xSpecification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2024Day1x(input).partTwo()
+        final long result = new Year2024Day25(input).partTwo()
 
         then:
         result == expectedResult
