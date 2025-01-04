@@ -37,3 +37,5 @@ fun <T> Collection<T>.combinations() = flatMap { i -> map { j -> Pair(i, j) } }
 
 fun List<String>.allShortest() = minOf { it.length }
     .let { min -> filter { it.length == min } }
+
+infix fun <T> Iterable<T>.difference(other: Iterable<T>) = (this union other) - (this intersect other)

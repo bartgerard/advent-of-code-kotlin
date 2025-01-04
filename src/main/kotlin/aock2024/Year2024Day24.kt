@@ -1,5 +1,6 @@
 package aock2024
 
+import shared.difference
 import shared.sanitize
 import shared.splitByEmptyLine
 import java.util.*
@@ -51,6 +52,7 @@ data class Year2024Day24(
         val maxZ = gates.keys.filter { it.startsWith('z') }.maxOf { it.substring(1).toInt() }
 
         val bookkeeper = Bookkeeper(gates, inputs.keys)
+        //toGraph()
 
         when (operation) {
             "AND" -> (0..maxZ).forEach {
@@ -58,55 +60,32 @@ data class Year2024Day24(
                 bookkeeper.expect("x$i", "y$i", Operation.AND, "z$i")
             }
 
-            "ADD" -> (0..maxZ).forEach {
+            "ADD" -> (0..maxZ - 1).forEach {
                 val i = toLabel(it)
                 val j = toLabel(it - 1)
 
-                val xorI = Gate(setOf("x$i", "y$i"), Operation.XOR)
-                val andI = Gate(setOf("x$i", "y$i"), Operation.AND)
-
                 if (it == 0) {
-                    bookkeeper.expect("x$i", "y$i", Operation.XOR, "z$i")
-                    bookkeeper.expect("x$i", "y$i", Operation.AND, "carry$i$i") // ppj
+                    bookkeeper.expect("x$i", "y$i", Operation.XOR, "z$i") // z00
+                    bookkeeper.expect("x$i", "y$i", Operation.AND, "carry$i") // ppj
                 } else {
-                    //put("xor$i", xorI)
-                    //put("z$i", Gate(setOf("xor$i", "carry$j"), Operation.XOR)) // z01, zo2..
+                    bookkeeper.expect("x$i", "y$i", Operation.XOR, "xor$i") // mtd,
+                    bookkeeper.expect("xor$i", "carry$j", Operation.XOR, "z$i") // z01, zo2, z03..
 
-                    if (it < maxZ) {
-                        //put("half$i", Gate(setOf("xor$i", "carry$j"), Operation.AND)) // jrp
-                        //put("and$i", andI) // dsm
-                        //put("carry$i", Gate(setOf("and$i", "half$i"), Operation.OR)) // wjg
-                    }
-                }
-            }
-        }
+                    bookkeeper.expect("x$i", "y$i", Operation.AND, "and$i") // dsm
+                    bookkeeper.expect("xor$i", "carry$j", Operation.AND, "half$i") // jrp
 
-        /*
-        while (remainingGates.isNotEmpty()) {
-            for ((out, gate) in remainingGates.toMap()) {
-                if (visitedNodes.contains(gate.wire1) && visitedNodes.contains(gate.wire2)) {
-                    remainingGates.remove(out)
-
-                    // TODO
-
-                    val templateNode = Node.of(gate.operation, setOf(visitedGates[gate.wire1]!!, visitedGates[gate.wire2]!!))
-                    val node = nodes.firstOrNull { it == templateNode }
-
-                    if (node != null) {
-                        visitedGates[out] = node
+                    val carryLabel = if (it < maxZ) {
+                        "carry$i" // wjg
                     } else {
-                        println("${gate.operation} not found")
+                        "z${toLabel(maxZ)}" // z45
                     }
+
+                    bookkeeper.expect("and$i", "half$i", Operation.OR, carryLabel)
                 }
             }
         }
-         */
 
-        rename()
-        abc()
-        toGraph()
-
-        return bookkeeper.swapped.sorted().joinToString(",")
+        return bookkeeper.swapped.keys.sorted().joinToString(",")
     }
 
     private fun expectedValue(operation: String): Long {
@@ -129,7 +108,7 @@ data class Year2024Day24(
         }
 
         "ADD" -> buildMap {
-            (0..maxZ).forEach {
+            (0..maxZ - 1).forEach {
                 val i = toLabel(it)
                 val j = toLabel(it - 1)
 
@@ -143,11 +122,15 @@ data class Year2024Day24(
                     put("xor$i", xorI)
                     put("z$i", Gate(setOf("xor$i", "carry$j"), Operation.XOR)) // z01, zo2..
 
-                    if (it < maxZ) {
-                        put("half$i", Gate(setOf("xor$i", "carry$j"), Operation.AND)) // jrp
-                        put("and$i", andI) // dsm
-                        put("carry$i", Gate(setOf("and$i", "half$i"), Operation.OR)) // wjg
+                    put("half$i", Gate(setOf("xor$i", "carry$j"), Operation.AND)) // jrp
+                    put("and$i", andI) // dsm
+
+                    val carryLabel = if (it < maxZ) {
+                        "carry$i" // wjg
+                    } else {
+                        "z${toLabel(maxZ)}" // z45
                     }
+                    put(carryLabel, Gate(setOf("and$i", "half$i"), Operation.OR))
                 }
             }
         }
@@ -155,11 +138,11 @@ data class Year2024Day24(
         else -> emptyMap()
     }
 
-    private fun abc() {
+    private fun gatesByDestination(): SortedMap<String, MutableMap<String, Gate>> {
         val destinations = gates.keys
             .filter { it.startsWith('z') }
 
-        val gatesByDestination = destinations.associateWith {
+        return destinations.associateWith {
             val remaining = mutableListOf(it)
             val result = mutableMapOf<String, Gate>()
 
@@ -176,31 +159,6 @@ data class Year2024Day24(
             result
         }
             .toSortedMap()
-
-        val previousCommonGates = mutableMapOf<String, Gate>()
-
-        /*
-        for ((destination, gates) in gatesByDestination) {
-            val commonGates = gates.filter { !it.wire3.startsWith('z') }
-
-            if (commonGates.containsAll(previousCommonGates)) {
-                previousCommonGates += commonGates
-            } else {
-                println(destination)
-                // z19
-            }
-        }
-
-         */
-
-        val wires = wires()
-        gatesByDestination.map { (destination, gates) -> makeRelative(destination, gates, wires) }
-            .forEach { println(it) }
-
-        // z18 & z36
-        for (destination in destinations) {
-            val a = gates[destination]
-        }
     }
 
     fun wires(): SortedMap<String, Pair<Char, Int>> {
@@ -209,12 +167,6 @@ data class Year2024Day24(
             this += gates.keys.filter { it.startsWith('z') }.associateWith { toPair(it) }
         }
             .toSortedMap()
-    }
-
-    private fun makeRelative(destination: String, gates: Map<String, Gate>, wires: SortedMap<String, Pair<Char, Int>>) {
-        val (_, i) = wires[destination]!!
-
-        val remaining = gates.toMutableMap()
     }
 
     private fun calculate(): Map<String, Boolean> {
@@ -233,30 +185,6 @@ data class Year2024Day24(
         }
 
         return registers
-    }
-
-    private fun rename() {
-        val registers = inputs.keys.toMutableSet()
-        val remainingGates = gates.toMutableMap()
-        val a = inputs.keys.associateBy { it }.toMutableMap()
-
-        while (remainingGates.isNotEmpty()) {
-            for ((out, gate) in remainingGates.toMap()) {
-                if (registers.containsAll(gate.wires)) {
-                    remainingGates.remove(out)
-
-                    registers += out
-
-                    a.put(out, "(${gate.wires.first()} ${gate.operation} ${gate.wires.last()})")
-                }
-            }
-        }
-
-        // z18 & z36
-        val b = a.filter { it.key.startsWith('z') }.toSortedMap()
-
-        println(b)
-        //return registers
     }
 
     private fun toGraph() {
@@ -297,21 +225,43 @@ enum class Operation(
 data class Bookkeeper(
     val gateMap: Map<Gate, String>,
     val mapping: MutableMap<String, String>,
-    val swapped: MutableSet<String> = mutableSetOf(),
+    val swapped: MutableMap<String, String> = mutableMapOf(),
 ) {
+    fun swapIfNeeded(wire: String) = swapped[wire] ?: wire
+
     fun expect(
         wire1: String,
         wire2: String,
         operation: Operation,
         label: String
     ) {
-        val wires = setOf(mapping[wire1]!!, mapping[wire2]!!)
-        val gate = Gate(wires, operation)
-        val out = gateMap[gate]!!
-        mapping[label] = out
+        val mappedWire1 = swapIfNeeded(mapping[wire1]!!)
+        val mappedWire2 = swapIfNeeded(mapping[wire2]!!)
 
-        if (label.startsWith('z') && out != label) {
-            swapped += out
+        val wires = setOf(mappedWire1, mappedWire2)
+        val gate = Gate(wires, operation)
+        val out = gateMap[gate]
+
+        if (out == null) {
+            val candidates = gateMap.filter { !Collections.disjoint(it.key.wires, wires) }
+                .filter { it.key.operation == operation || it.value == label }
+
+            if (candidates.size == 1) {
+                val candidate = candidates.firstNotNullOf { it }
+
+                val difference = (wires difference candidate.key.wires).toList()
+                swapped += difference[0] to difference[1]
+                swapped += difference[1] to difference[0]
+
+                mapping[label] = candidate.value
+            } else {
+                throw IllegalArgumentException("Unexpected gate $gate")
+            }
+        } else if (label.startsWith('z') && out != label) {
+            swapped += label to out
+            swapped += out to label
+        } else {
+            mapping[label] = out
         }
     }
 
