@@ -1,6 +1,6 @@
 package aock2018
 
-import aock2015.Year2015Day1x
+
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -11,7 +11,7 @@ class Year2018Day1xSpecification extends Specification {
 
     def "partOne"() {
         when:
-        final long result = new Year2015Day1x(input).partOne()
+        final long result = new Year2018Day1x(input).partOne()
 
         then:
         result == expectedResult
@@ -25,7 +25,7 @@ class Year2018Day1xSpecification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2015Day1x(input).partTwo()
+        final long result = new Year2018Day1x(input).partTwo()
 
         then:
         result == expectedResult
