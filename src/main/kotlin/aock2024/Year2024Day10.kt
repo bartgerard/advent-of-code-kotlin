@@ -20,7 +20,7 @@ data class Year2024Day10(
     fun trailheads() = grid.findAll(TRAIL[0])
 
     fun findDestinationsStartingAt(point: Point2d): Set<Point2d> {
-        val previousPoints = mutableSetOf<Point2d>(point)
+        val previousPoints = mutableSetOf(point)
         val nextPoints = mutableSetOf<Point2d>()
 
         for (nextHeight in TRAIL.subList(1, TRAIL.size)) {

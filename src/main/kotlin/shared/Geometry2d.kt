@@ -176,6 +176,12 @@ data class Point2d(
 
     infix fun mod(d: Dimension) = Point2d(x.mod(d.width), y.mod(d.height))
 
+    infix fun modWidth(width: Int) = Point2d(x.mod(width), y)
+    infix fun modX(d: Dimension) = modWidth(d.width)
+
+    infix fun modHeight(height: Int) = Point2d(x, y.mod(height))
+    infix fun modY(d: Dimension) = modHeight(d.height)
+
     fun neighbours(directions: List<Vector2d>) = directions.map { this + it }
 
     fun neighbours(directions: List<Vector2d>, predicate: (Point2d) -> Boolean): List<Point2d> {
