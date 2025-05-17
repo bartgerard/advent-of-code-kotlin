@@ -1,6 +1,9 @@
 package shared
 
-import shared.Direction.*
+import shared.Direction.NORTH_EAST
+import shared.Direction.NORTH_WEST
+import shared.Direction.SOUTH_EAST
+import shared.Direction.SOUTH_WEST
 
 data class Dimension(
     val width: Int,

@@ -3,7 +3,6 @@ package shared
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 fun <T> Pair<T, T>.x() = first
 fun <T> Pair<T, T>.y() = second
@@ -210,17 +209,32 @@ data class Point2d(
 
 }
 
-data class Line2d(
+data class LineSegment2d(
     val p1: Point2d,
     val p2: Point2d
 ) {
     fun slope() = (p2.y - p1.y) / (p2.x - p1.x)
     fun yIntercept() = p1.y - slope() * p1.x
 
+    fun length() = p1.manhattan(p2)
+
     fun toFunction() = LinearFunction2d(slope(), yIntercept())
 
-    fun intersection(other: Line2d) = (toFunction() intersect other.toFunction())
-        .let { (x, y) -> Point2d(x.roundToInt(), y.roundToInt()) }
+    fun toLinearEquation(): LinearEquation2d {
+        val a = p2.y - p1.y
+        val b = p1.x - p2.x
+        val c = a * p1.x + b * p1.y
+        return LinearEquation2d(a, b, c)
+    }
+
+    fun intersect(other: LineSegment2d): Point2d? = toLinearEquation().intersect(other.toLinearEquation())
+        ?.let { (x, y) -> Point2d(x.toInt(), y.toInt()) }
+
+    fun contains(p: Point2d) = p.x in minOf(p1.x, p2.x)..maxOf(p1.x, p2.x)
+            && p.y in minOf(p1.y, p2.y)..maxOf(p1.y, p2.y)
+
+    fun intersectWithinSegment(other: LineSegment2d): Point2d? = intersect(other)
+        ?.let { if (contains(it) && other.contains(it)) it else null }
 }
 
 data class Circle(

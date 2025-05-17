@@ -77,7 +77,7 @@ class Dijkstra {
                 }
             }
 
-            return Solutions<E>(start, end, paths)
+            return Solutions(start, end, paths)
         }
     }
 

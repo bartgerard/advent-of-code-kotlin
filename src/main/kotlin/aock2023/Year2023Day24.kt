@@ -3,7 +3,13 @@ package aock2023
 import com.microsoft.z3.Context
 import com.microsoft.z3.IntNum
 import com.microsoft.z3.Status
-import shared.*
+import shared.Axis
+import shared.Box3d
+import shared.Point3d
+import shared.Ray3d
+import shared.Vector3d
+import shared.sanitize
+import shared.toDoubles
 import kotlin.math.roundToLong
 
 data class Year2023Day24(

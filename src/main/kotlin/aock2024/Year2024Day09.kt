@@ -1,6 +1,11 @@
 package aock2024
 
-import shared.*
+import shared.groupByIndexRemainder
+import shared.length
+import shared.merge
+import shared.mergeOne
+import shared.sanitize
+import shared.sum
 import kotlin.math.min
 
 data class Year2024Day09(

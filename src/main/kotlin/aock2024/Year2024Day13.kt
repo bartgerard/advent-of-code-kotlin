@@ -3,7 +3,11 @@ package aock2024
 import com.microsoft.z3.Context
 import com.microsoft.z3.IntNum
 import com.microsoft.z3.Status
-import shared.*
+import shared.sanitize
+import shared.splitByEmptyLine
+import shared.toLongs
+import shared.x
+import shared.y
 
 data class Year2024Day13(
     private val machines: List<Machine>

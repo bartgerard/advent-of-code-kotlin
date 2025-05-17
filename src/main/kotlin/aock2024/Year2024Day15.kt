@@ -1,6 +1,12 @@
 package aock2024
 
-import shared.*
+import shared.CharGrid
+import shared.Dimension
+import shared.Direction
+import shared.Point2d
+import shared.Vector2d
+import shared.sanitize
+import shared.splitByEmptyLine
 import java.util.*
 
 data class Year2024Day15(

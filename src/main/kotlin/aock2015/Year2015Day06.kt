@@ -1,6 +1,10 @@
 package aock2015
 
-import shared.*
+import shared.Dimension
+import shared.IntensityGrid
+import shared.ToggleGrid
+import shared.sanitize
+import shared.toRectangle
 import kotlin.math.max
 
 data class Year2015Day06(

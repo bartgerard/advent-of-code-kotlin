@@ -1,7 +1,10 @@
 package aock2024
 
-import shared.Direction.*
 import shared.CharGrid
+import shared.Direction.NORTH_EAST
+import shared.Direction.NORTH_WEST
+import shared.Direction.SOUTH_EAST
+import shared.Direction.SOUTH_WEST
 import shared.Vector2d
 
 data class Year2024Day04(

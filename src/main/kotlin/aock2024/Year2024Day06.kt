@@ -1,7 +1,7 @@
 package aock2024
 
-import shared.Direction
 import shared.CharGrid
+import shared.Direction
 import shared.Point2d
 
 

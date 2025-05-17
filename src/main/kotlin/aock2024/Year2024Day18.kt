@@ -1,6 +1,12 @@
 package aock2024
 
-import shared.*
+import shared.CharGrid
+import shared.Dijkstra
+import shared.Dimension
+import shared.Point2d
+import shared.Vector2d
+import shared.sanitize
+import shared.toIntegers
 
 data class Year2024Day18(
     private val start: Point2d,

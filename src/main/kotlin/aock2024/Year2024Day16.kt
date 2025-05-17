@@ -1,6 +1,10 @@
 package aock2024
 
-import shared.*
+import shared.CharGrid
+import shared.Dijkstra
+import shared.Direction
+import shared.Point2d
+import shared.Solutions
 
 data class Year2024Day16(
     private val grid: CharGrid

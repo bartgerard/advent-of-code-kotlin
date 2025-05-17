@@ -1,6 +1,12 @@
 package aock2024
 
-import shared.*
+import shared.CharGrid
+import shared.Vector2d
+import shared.allShortest
+import shared.combinations
+import shared.generate
+import shared.sanitize
+import shared.toIntegers
 import kotlin.math.absoluteValue
 
 data class Year2024Day21(
