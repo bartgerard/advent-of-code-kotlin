@@ -60,7 +60,7 @@ data class Vertices<V>(
     val vertices: MutableSet<V>
 ) {
     companion object {
-        fun <V> of(vertex: V) = Vertices<V>(mutableSetOf(vertex))
+        fun <V> of(vertex: V) = Vertices(mutableSetOf(vertex))
     }
 }
 

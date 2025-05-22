@@ -26,3 +26,28 @@ data class Leaf<N, L>(
 ) : Node<N, L> {
     override fun nodes() = emptySequence<Node<N, L>>()
 }
+
+data class TreeNode<T>(
+    val value: T,
+    var parent: TreeNode<T>? = null,
+) {
+    companion object {
+        fun <T> toNodes(links: Collection<Pair<T, T>>): Map<T, TreeNode<T>> {
+            val nodeMap = links.flatMap { listOf(it.first, it.second) }
+                .distinct()
+                .associateWith { TreeNode(it) }
+
+            for (link in links) {
+                nodeMap[link.second]?.parent = nodeMap[link.first]
+            }
+
+            return nodeMap
+        }
+    }
+
+    fun depth(): Long = if (parent == null) 0L else parent!!.depth() + 1
+
+    fun pathToRoot(): List<T> {
+        return if (parent == null) listOf(value) else parent!!.pathToRoot() + value
+    }
+}

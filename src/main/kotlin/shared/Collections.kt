@@ -39,3 +39,21 @@ fun List<String>.allShortest() = minOf { it.length }
     .let { min -> filter { it.length == min } }
 
 infix fun <T> Iterable<T>.difference(other: Iterable<T>) = (this union other) - (this intersect other)
+
+fun <T> Set<T>.permutations(): Sequence<List<T>> = this.toList().permutations()
+
+// advantage -> lazy evaluation!!
+// example: listOf(1, 2, 3, 4, 5).permutations().toList()
+fun <T> List<T>.permutations(): Sequence<List<T>> = sequence {
+    if (size == 1) {
+        yield(this@permutations)
+    } else {
+        for (index in indices) {
+            val element = this@permutations[index]
+            val remaining = this@permutations.withoutIndex(index)
+            for (permutations in remaining.permutations()) {
+                yield(listOf(element) + permutations)
+            }
+        }
+    }
+}
