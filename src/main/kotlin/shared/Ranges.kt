@@ -10,7 +10,7 @@ fun Collection<Long>.toRanges(): List<LongRange> {
     val sorted = this.sorted()
     val nonConsecutiveIndices = (1..<sorted.size).filter { sorted[it - 1] + 1 != sorted[it] }
 
-    val borderIndices = buildList<Int> {
+    val borderIndices = buildList {
         add(0)
         addAll(nonConsecutiveIndices)
         add(sorted.size)
@@ -25,7 +25,7 @@ fun allIntersections(ranges: Collection<LongRange>): List<LongRange> {
         return emptyList()
     }
 
-    val keyValues = buildList<Long> {
+    val keyValues = buildList {
         addAll(ranges.map { it.first })
         addAll(ranges.map { it.last + 1 })
     }
@@ -37,11 +37,11 @@ fun allIntersections(ranges: Collection<LongRange>): List<LongRange> {
     }
 
     return (0..<keyValues.size)
-        .zipWithNext { i, j -> keyValues[i]..(keyValues[j] - 1) }
+        .zipWithNext { i, j -> keyValues[i]..<keyValues[j] }
 }
 
 fun Collection<LongRange>.usedIntersections() = allIntersections(this)
-    .filter { intersection -> this.any { it.contains(intersection.start) } }
+    .filter { intersection -> this.any { it.contains(intersection.first) } }
 
 fun Collection<LongRange>.merge(): List<LongRange> {
     val sortedIntersections = this.usedIntersections()
@@ -55,7 +55,7 @@ fun Collection<LongRange>.merge(): List<LongRange> {
     val nonConsecutiveIndices = (1..<sortedIntersections.size)
         .filter { sortedIntersections[it - 1].last + 1 != sortedIntersections[it].first() }
 
-    val borderIndices = buildList<Int> {
+    val borderIndices = buildList {
         add(0)
         addAll(nonConsecutiveIndices)
         add(sortedIntersections.size)
@@ -67,18 +67,18 @@ fun Collection<LongRange>.merge(): List<LongRange> {
 
 fun MutableList<LongRange>.mergeOne(newRange: LongRange) {
     val overlappingRanges = buildList {
-        addAll(this@mergeOne.filter { (it.start - 1) in newRange || (it.last + 1) in newRange })
+        addAll(this@mergeOne.filter { (it.first - 1) in newRange || (it.last + 1) in newRange })
         add(newRange)
     }
     removeAll(overlappingRanges)
     add(overlappingRanges.minOf { it.first }..overlappingRanges.maxOf { it.last })
 
-    sortBy { it.start }
+    sortBy { it.first }
 }
 
 fun Collection<LongRange>.mergeOne(newRange: LongRange): List<LongRange> {
     val overlappingRanges = buildList {
-        addAll(this@mergeOne.filter { (it.start - 1) in newRange || (it.last + 1) in newRange })
+        addAll(this@mergeOne.filter { (it.first - 1) in newRange || (it.last + 1) in newRange })
         add(newRange)
     }
 
@@ -87,7 +87,7 @@ fun Collection<LongRange>.mergeOne(newRange: LongRange): List<LongRange> {
         removeAll(overlappingRanges)
         add(overlappingRanges.minOf { it.first }..overlappingRanges.maxOf { it.last })
     }
-        .sortedBy { it.start }
+        .sortedBy { it.first }
 }
 
 fun IntRange.length() = this.last - this.first + 1
@@ -99,3 +99,6 @@ fun main() {
     println(listOf((1L..5L), (3L..10L), (23L..40L)).merge())
     println(listOf((3L..10L), (23L..40L)).mergeOne(11L..39L))
 }
+
+operator fun LongRange.contains(other: LongRange) = this.contains(other.first) && this.contains(other.last)
+fun LongRange.overlaps(other: LongRange) = this.first <= other.last && other.first <= this.last

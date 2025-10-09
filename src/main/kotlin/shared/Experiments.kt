@@ -20,7 +20,7 @@ fun solveLinearWithCommonsMath() {
     val solver = LUDecomposition(coefficients).solver
     val solution = solver.solve(constants)
 
-    println("Solution: ${solution}")
+    println("Solution: $solution")
 }
 
 fun solveLinearWithJama() {
@@ -36,7 +36,7 @@ fun solveLinearWithJama() {
 
     val solution = matrixA.solve(matrixB)
 
-    println("Solution: ${solution}")
+    println("Solution: $solution")
 }
 
 fun main() {
