@@ -3,6 +3,7 @@ package shared
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.sign
 
 fun <T> Pair<T, T>.x() = first
 fun <T> Pair<T, T>.y() = second
@@ -74,6 +75,8 @@ data class Vector2d(
             else -> add(listOf(ZERO))
         }
     }
+
+    fun sign() = Vector2d(x.sign, y.sign)
 
 }
 
