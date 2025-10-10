@@ -9,12 +9,12 @@ data class Year2024Day12(
 ) {
     constructor(input: String) : this(CharGrid(input.sanitize()))
 
-    fun partOne() = grid.points()
+    fun partOne() = grid.dimension().points()
         .groupBy { grid.at(it) }
         .values.flatMap { Area2d.areas(it) }
         .sumOf { it.area() * it.perimeter() }
 
-    fun partTwo() = grid.points()
+    fun partTwo() = grid.dimension().points()
         .groupBy { grid.at(it) }
         .values.flatMap { Area2d.areas(it) }
         .sumOf { it.area() * it.sides().count() }

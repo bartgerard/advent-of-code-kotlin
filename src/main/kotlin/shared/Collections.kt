@@ -1,5 +1,7 @@
 package shared
 
+import java.util.Objects.isNull
+
 fun <T> union(sets: Collection<Set<T>>): Set<T> = sets.flatten().fold(emptySet()) { acc, set -> acc + set }
 
 fun <T> union(lists: List<List<T>>): List<T> = lists.flatten().fold(emptyList()) { acc, list -> acc + list }
@@ -56,4 +58,95 @@ fun <T> List<T>.permutations(): Sequence<List<T>> = sequence {
             }
         }
     }
+}
+
+fun <T : Comparable<T>> Iterable<T>.takeWhileIncreasing() = takeWhileIncreasingBy(naturalOrder())
+
+fun <T> Iterable<T>.takeWhileIncreasingBy(comparator: Comparator<T>) = takeWhileIncreasingBy(comparator) { it }
+
+fun <T, K : Comparable<K>> Iterable<T>.takeWhileIncreasingBy(selector: (T) -> K) = takeWhileIncreasingBy(naturalOrder(), selector)
+
+fun <T, K> Iterable<T>.takeWhileIncreasingBy(
+    comparator: Comparator<K>,
+    selector: (T) -> K,
+): List<T> {
+    var max: K? = null
+    val result = mutableListOf<T>()
+
+    for (element in this) {
+        val value = selector(element)
+
+        if (isNull(max) || comparator.compare(value, max) > 0) {
+            result += element
+            max = value
+        } else {
+            break
+        }
+    }
+
+    return result
+}
+
+fun <T : Comparable<T>> Iterable<T>.takeOnlyIncreasing() = takeOnlyIncreasingBy(naturalOrder())
+
+fun <T> Iterable<T>.takeOnlyIncreasingBy(comparator: Comparator<T>) = takeOnlyIncreasingBy(comparator) { it }
+
+fun <T, K : Comparable<K>> Iterable<T>.takeOnlyIncreasingBy(selector: (T) -> K) = takeOnlyIncreasingBy(naturalOrder(), selector)
+
+fun <T, K> Iterable<T>.takeOnlyIncreasingBy(
+    comparator: Comparator<K>,
+    selector: (T) -> K,
+): List<T> {
+    var max: K? = null
+    val result = mutableListOf<T>()
+
+    for (element in this) {
+        val value = selector(element)
+
+        if (isNull(max) || comparator.compare(value, max) > 0) {
+            result += element
+            max = value
+        }
+    }
+
+    return result
+}
+
+fun <T : Comparable<T>> Iterable<T>.takeVisibleFromHeight(height: T) = takeVisibleFromHeightBy(height, naturalOrder())
+
+fun <T> Iterable<T>.takeVisibleFromHeightBy(height: T, comparator: Comparator<T>) = takeVisibleFromHeightBy(height, comparator) { it }
+
+fun <T, K : Comparable<K>> Iterable<T>.takeVisibleFromHeightBy(
+    height: K,
+    selector: (T) -> K
+) = takeVisibleFromHeightBy(height, naturalOrder(), selector)
+
+/**
+ *                 6
+ * X           5   6
+ * 5       4   5   6
+ * 5       4   5   6
+ * 5   2   4   5   6
+ * 5 1 2 1 4 1 5 1 6
+ *
+ * [1,2,1,4,5] visible from X
+ * [1, 6] is not visible
+ */
+fun <T, K> Iterable<T>.takeVisibleFromHeightBy(
+    height: K,
+    comparator: Comparator<K>,
+    selector: (T) -> K,
+): List<T> {
+    val result = mutableListOf<T>()
+
+    for (element in this) {
+        val value = selector(element)
+
+        result += element
+        if (comparator.compare(value, height) >= 0) {
+            break
+        }
+    }
+
+    return result
 }

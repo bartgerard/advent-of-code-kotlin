@@ -20,6 +20,7 @@
         <kotlin.version>2.2.20</kotlin.version>
 
         <!-- utilities -->
+        <commons-lang3.version>3.19.0</commons-lang3.version> <!-- tmp -->
         <commons-collections4.version>4.5.0</commons-collections4.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
         <commons-io.version>2.18.0</commons-io.version>

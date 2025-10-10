@@ -5,34 +5,34 @@ import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
-class Year2022Day07Specification extends Specification {
+class Year2022Day09Specification extends Specification {
 
     def "partOne"() {
         when:
-        final Long result = new Year2022Day07(input).partOne()
+        final Long result = new Year2022Day09(input).partOne()
 
         then:
         result == expectedResult
 
         where:
         input                          | expectedResult | comment
-        readFile(2022, 7, "example_1") | 95437          | ""
+        readFile(2022, 9, "example_1") | 0              | ""
 
-        readFile(2022, 7)              | 1778099        | ""
+        readFile(2022, 9)              | 0              | ""
     }
 
     def "partTwo"() {
         when:
-        final Long result = new Year2022Day07(input).partTwo()
+        final Long result = new Year2022Day09(input).partTwo()
 
         then:
         result == expectedResult
 
         where:
         input                          | expectedResult | comment
-        readFile(2022, 7, "example_1") | 24933642       | ""
+        readFile(2022, 9, "example_1") | 0              | ""
 
-        readFile(2022, 7)              | 1623571        | ""
+        readFile(2022, 9)              | 0              | ""
     }
 
 }

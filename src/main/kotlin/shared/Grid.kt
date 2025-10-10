@@ -1,15 +1,21 @@
 package shared
 
+import shared.Direction.EAST
+import shared.Direction.NORTH
 import shared.Direction.NORTH_EAST
 import shared.Direction.NORTH_WEST
+import shared.Direction.SOUTH
 import shared.Direction.SOUTH_EAST
 import shared.Direction.SOUTH_WEST
+import shared.Direction.WEST
 
 data class Dimension(
     val width: Int,
     val height: Int
 ) {
     fun contains(p: Point2d): Boolean = p.x in 0..<width && p.y in 0..<height
+
+    fun points() = (0..<height).asSequence().flatMap { row -> (0..<width).map { column -> Point2d(column, row) } }
 
     fun quadrants() = buildMap {
         val midX = width / 2
@@ -23,6 +29,36 @@ data class Dimension(
 
     fun display(points: Collection<Point2d>) = List(height) { y -> List(width) { x -> points.contains(Point2d(x, y)) } }
         .joinToString("\n", "\n") { row -> row.joinToString("") { if (it) "#" else " " } }
+
+    fun outerPointsInDirection(direction: Direction) = when (direction) {
+        NORTH -> (0..<width).map { Point2d(it, 0) }
+        EAST -> (0..<height).map { Point2d(width - 1, it) }
+        SOUTH -> (0..<width).map { Point2d(it, height - 1) }
+        WEST -> (0..<height).map { Point2d(0, it) }
+        NORTH_EAST -> listOf(Point2d(width - 1, 0))
+        SOUTH_EAST -> listOf(Point2d(width - 1, height - 1))
+        SOUTH_WEST -> listOf(Point2d(0, height - 1))
+        NORTH_WEST -> listOf(Point2d(0, 0))
+    }
+
+    fun allOuterPointsInDirection(direction: Direction): List<Point2d> = when (direction) {
+        NORTH_EAST -> (0..<width).map { Point2d(it, 0) } + (1..<height).map { Point2d(width - 1, it) }
+        SOUTH_EAST -> (0..<width).map { Point2d(it, height - 1) } + (0..<height - 1).reversed().map { Point2d(width - 1, it) }
+        SOUTH_WEST -> (0..<height).map { Point2d(0, it) } + (1..<width).map { Point2d(it, height - 1) }
+        NORTH_WEST -> (1..<height).reversed().map { Point2d(0, it) } + (0..<width).map { Point2d(it, 0) }
+        else -> outerPointsInDirection(direction)
+    }
+
+    fun traverseInDirection(point: Point2d, direction: Vector2d) = generateSequence(0) { it + 1 }
+        .map { point + direction * it }
+        .takeWhile { contains(it) }
+
+    fun traverseInDirection(direction: Direction): List<List<Point2d>> {
+        val outerPoints = allOuterPointsInDirection(direction.inverse())
+        val vector = Vector2d.forDirection(direction)
+
+        return outerPoints.map { traverseInDirection(it, vector).toList() }
+    }
 }
 
 class ToggleGrid(
@@ -59,7 +95,7 @@ interface Grid<T> {
     fun dimension(): Dimension
     fun rowIndices(): IntRange
     fun columnIndices(): IntRange
-    fun points(): Sequence<Point2d>
+    fun points(): Sequence<Point2d> = dimension().points()
     fun contains(point: Point2d): Boolean
     fun at(row: Int, column: Int): T
     fun at(point: Point2d): T
@@ -87,7 +123,6 @@ data class CharGrid(
     override fun dimension() = Dimension(grid[0].size, grid.size)
     override fun rowIndices() = 0 until grid.size
     override fun columnIndices() = 0 until grid[0].size
-    override fun points() = rowIndices().asSequence().flatMap { row -> columnIndices().map { column -> Point2d(column, row) } }
 
     override fun contains(point: Point2d) = point.y in grid.indices && point.x in 0..<grid[point.y].size
 
@@ -112,10 +147,13 @@ data class CharGrid(
             .map { column -> Point2d(column, row) }
     }
 
-    fun sequenceInDirection(point: Point2d, direction: Vector2d) = generateSequence(0) { it + 1 }
-        .map { point + direction * it }
-        .takeWhile { contains(it) }
+    fun traverseInDirection(point: Point2d, direction: Vector2d) = dimension()
+        .traverseInDirection(point, direction)
         .map { at(it) }
+
+    fun traverseInDirection(direction: Direction) = dimension()
+        .traverseInDirection(direction)
+        .map { points -> points.map { at(it) } }
 
     fun frequenciesExcluding(blacklist: Set<Char>): Map<Char, List<Point2d>> = points()
         .map { point -> at(point) to point }
@@ -143,7 +181,7 @@ data class PushableGrid(
 
     fun push(p: Point2d, d: Direction): Boolean {
         val v = Vector2d.forDirection(d)
-        val sequence = grid.sequenceInDirection(p, v)
+        val sequence = grid.traverseInDirection(p, v)
             .takeWhile { !walls.contains(it) }
             .joinToString("")
         val firstEmptySpace = sequence.indexOfFirst { empty.contains(it) }

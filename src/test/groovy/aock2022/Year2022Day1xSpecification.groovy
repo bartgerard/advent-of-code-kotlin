@@ -7,11 +7,11 @@ import spock.lang.Specification
 import static shared.InputsKt.readFile
 
 @Ignore("template")
-class Year2022Day0xSpecification extends Specification {
+class Year2022Day1xSpecification extends Specification {
 
     def "partOne"() {
         when:
-        final long result = new Year2022Day0x(input).partOne()
+        final long result = new Year2022Day1x(input).partOne()
 
         then:
         result == expectedResult
@@ -25,7 +25,7 @@ class Year2022Day0xSpecification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2022Day0x(input).partTwo()
+        final long result = new Year2022Day1x(input).partTwo()
 
         then:
         result == expectedResult

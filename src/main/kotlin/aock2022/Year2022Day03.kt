@@ -2,6 +2,7 @@ package aock2022
 
 import shared.positionInAlphabet
 import shared.sanitize
+import shared.splitIn
 
 data class Year2022Day03(
     private val input: List<String>
@@ -13,10 +14,7 @@ data class Year2022Day03(
     constructor(input: String) : this(input.sanitize().lines())
 
     fun partOne() = input.sumOf {
-        val pockets = listOf(
-            it.substring(0, it.length / 2),
-            it.substring(it.length / 2)
-        )
+        val pockets = it.splitIn(2)
         score(pockets[0].first { c -> c in pockets[1] })
     }
 
