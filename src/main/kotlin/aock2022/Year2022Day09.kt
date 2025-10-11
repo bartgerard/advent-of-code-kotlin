@@ -14,32 +14,63 @@ data class Year2022Day09(
             .map { Direction.parse(it[0].first()) to it[1].toInt() }
     )
 
-    fun partOne(): Int {
-        val rope = Rope()
+    fun partOne() = uniqueTailPositionsAfterMotion()
+
+    fun partTwo() = uniqueTailPositionsAfterMotion(10)
+
+    private fun moves() = motions.asSequence()
+        .flatMap { (direction, length) -> generateSequence { direction }.take(length) }
+
+    private fun uniqueTailPositionsAfterMotion(ropeLength: Int = 1): Int {
+        val rope = Rope(length = ropeLength)
         return moves().map {
             rope.move(it)
-            rope.tail
+            rope.tail()
         }
             .toSet()
             .size
     }
-
-    fun partTwo() = 0L
-
-    private fun moves() = motions.asSequence()
-        .flatMap { (direction, length) -> generateSequence { direction }.take(length) }
 }
 
 data class Rope(
-    var head: Point2d = Point2d.ZERO,
-    var tail: Point2d = Point2d.ZERO,
+    val knots: MutableList<Point2d>,
 ) {
+    constructor(length: Int = 2) : this(
+        (0..<length)
+            .map { Point2d.ZERO }
+            .toMutableList()
+    )
+
+    fun head() = knots.first()
+    fun tail() = knots.last()
+
     fun move(direction: Direction) {
-        head += direction
+        knots[0] = knots[0] + direction
+        followHead()
+    }
+
+    private fun followHead() {
+        // TODO clean up / make immutable
+        //val res = knots.zipWithNext { head, tail -> nextTail(head, tail) }
+        (1..<knots.size).forEach { i ->
+            val difference = knots[i - 1] - knots[i]
+
+            if (abs(difference.x) > 1 || abs(difference.y) > 1) {
+                knots[i] = knots[i] + difference.sign()
+            }
+        }
+    }
+
+    private fun nextTail(
+        head: Point2d,
+        tail: Point2d
+    ): Point2d {
         val difference = head - tail
 
-        if (abs(difference.x) > 1 || abs(difference.y) > 1) {
-            tail += difference.sign()
+        return if (abs(difference.x) > 1 || abs(difference.y) > 1) {
+            tail + difference.sign()
+        } else {
+            tail
         }
     }
 }
