@@ -184,9 +184,14 @@ data class Point2d(
     infix fun modHeight(height: Int) = Point2d(x, y.mod(height))
     infix fun modY(d: Dimension) = modHeight(d.height)
 
-    fun neighbours(directions: List<Vector2d>) = directions.map { this + it }
+    fun neighbours(
+        directions: List<Vector2d> = ORTHOGONAL_ADJACENT
+    ) = directions.map { this + it }
 
-    fun neighbours(directions: List<Vector2d>, predicate: (Point2d) -> Boolean): List<Point2d> {
+    fun neighbours(
+        directions: List<Vector2d> = ORTHOGONAL_ADJACENT,
+        predicate: (Point2d) -> Boolean
+    ): List<Point2d> {
         val nextPoints = mutableListOf(this)
         val visited = mutableListOf<Point2d>()
 

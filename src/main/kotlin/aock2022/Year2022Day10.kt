@@ -15,10 +15,24 @@ data class Year2022Day10(
             .sumOf { it.first * it.second }
     }
 
-    fun partTwo() = 0L
+    fun partTwo(): Long {
+        val result = CPU().execute(instructions)
+            .drop(1)
+            .chunked(40)
+            .joinToString("\n") { line -> CPU.display(line.map { it.second }) }
+
+        println(result)
+        return 0L
+    }
 }
 
 class CPU {
+    companion object {
+        fun display(spritePositions: List<Long>): String = spritePositions
+            .mapIndexed { index, position -> if (position in index-1..index + 1) "#" else "." }
+            .joinToString("")
+    }
+
     fun execute(instructions: List<String>): List<Pair<Int, Long>> {
         var value = 1L
         var t = 0

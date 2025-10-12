@@ -31,9 +31,9 @@ class Year2022Day10Specification extends Specification {
 
         where:
         input                           | expectedResult | comment
-        readFile(2022, 10, "example_1") | 0              | ""
+        readFile(2022, 10, "example_1") | 0              | "???"
 
-        readFile(2022, 10)              | 2533           | ""
+        readFile(2022, 10)              | 0              | "ZFBFHGUP" // visual puzzle see output
     }
 
 }

@@ -20,7 +20,7 @@ class Dijkstra {
                 val currentEdge = currentVertex.destination
 
                 if (isEnd(currentEdge)) {
-                    return Solution<E>(start, currentEdge, path)
+                    return Solution(start, currentEdge, path)
                 }
 
                 val newVertices = neighbors(path, currentEdge)
@@ -31,7 +31,7 @@ class Dijkstra {
                 newVertices.forEach { path.put(it.destination, Step(currentEdge, it.cost)) }
             }
 
-            return Solution(start, null, path);
+            return Solution(start, null, path)
         }
 
         fun <E> findShortestPaths(
