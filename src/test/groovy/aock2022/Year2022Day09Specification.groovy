@@ -33,7 +33,7 @@ class Year2022Day09Specification extends Specification {
         readFile(2022, 9, "example_1") | 1              | ""
         readFile(2022, 9, "example_2") | 36             | ""
 
-        readFile(2022, 9)              | 0              | "<> 2197, 2333"
+        readFile(2022, 9)              | 2533           | ""
     }
 
 }
