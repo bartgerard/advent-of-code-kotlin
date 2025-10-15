@@ -13,7 +13,7 @@ data class Year2022Day02(
                 "A", "X" -> RoShamBo.ROCK
                 "B", "Y" -> RoShamBo.PAPER
                 "C", "Z" -> RoShamBo.SCISSORS
-                else -> throw IllegalArgumentException("invalid choice: $value")
+                else -> error("invalid choice: $value")
             }
         }
 
@@ -22,7 +22,7 @@ data class Year2022Day02(
                 "X" -> Outcome.LOSS
                 "Y" -> Outcome.DRAW
                 "Z" -> Outcome.WIN
-                else -> throw IllegalArgumentException("invalid outcome: $value")
+                else -> error("invalid outcome: $value")
             }
         }
 

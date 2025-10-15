@@ -133,7 +133,7 @@ data class Year2023Day24(
                     return x.int64 + y.int64 + z.int64
                 }
 
-                else -> throw IllegalStateException("No solution found!")
+                else -> error("No solution found!")
             }
         }
     }

@@ -2,7 +2,7 @@ package aock2024
 
 import shared.CharGrid
 import shared.Point2d
-import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
+import shared.at
 
 data class Year2024Day10(
     private val grid: CharGrid
@@ -41,6 +41,8 @@ data class Year2024Day10(
         nextPoints(point, trailTail[0]).sumOf { scoreForTrailStartingAt(it, trailTail.subList(1, trailTail.size)) }
     }
 
-    private fun nextPoints(previousPoint: Point2d, nextHeight: Char) = previousPoint.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) == nextHeight }
+    private fun nextPoints(previousPoint: Point2d, nextHeight: Char) = previousPoint.neighbours()
+        .filter { grid.contains(it) }
+        .filter { grid.at(it) == nextHeight }
 
 }

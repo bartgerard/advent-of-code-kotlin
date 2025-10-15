@@ -76,7 +76,7 @@ class GridSpecification extends Specification {
                 .toList()
 
         when:
-        final points = dimension.traverseInDirection(direction)
+        final points = dimension.pointsInDirection(direction)
 
         then:
         points == expectedPoints

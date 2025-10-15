@@ -5,7 +5,7 @@ import java.util.Collections.unmodifiableMap
 import kotlin.math.abs
 import kotlin.math.pow
 
-fun factorial(n: Long) = (1..n).fold(1, Long::times)
+fun factorial(n: Long) = (1..n).product()
 
 fun combinations(k: Long, n: Long): Long {
     isTrue(0 <= k, "k should be positive")
@@ -44,7 +44,7 @@ fun lcm(values: LongArray): Long {
         .mapValues { (_, values) -> values.maxOf { it.value } }
 
     return maxPowerByPrimeFactor.map { it.key.toDouble().pow(it.value).toLong() }
-        .fold(1L, Long::times)// { x: Long, y: Long -> x * y }
+        .product()// { x: Long, y: Long -> x * y }
 }
 
 // greatest common divisor

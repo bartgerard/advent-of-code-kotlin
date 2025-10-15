@@ -97,7 +97,7 @@ data class IntCodeExecution(
                 }
 
                 99 -> break
-                else -> throw IllegalArgumentException("Unknown opcode $opcode")
+                else -> error("Unknown opcode $opcode")
             }
         }
 

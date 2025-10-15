@@ -3,6 +3,7 @@ package aock2022
 import shared.CharGrid
 import shared.Dijkstra
 import shared.Point2d
+import shared.at
 
 data class Year2022Day12(
     private val grid: CharGrid,

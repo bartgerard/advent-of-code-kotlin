@@ -43,9 +43,7 @@ class IntCode {
         fun run(program: MutableList<Int>): List<Int> {
             var position = 0
             while (true) {
-                val opcode = program[position]
-
-                when (opcode) {
+                when (val opcode = program[position]) {
                     1 -> {
                         program[program[position + 3]] = program[program[position + 1]] + program[program[position + 2]]
                     }
@@ -55,10 +53,10 @@ class IntCode {
                     }
 
                     99 -> break
-                    else -> throw IllegalArgumentException("Unknown opcode $opcode")
+                    else -> error("Unknown opcode $opcode")
                 }
 
-                position = position + 4
+                position += 4
             }
 
             return program

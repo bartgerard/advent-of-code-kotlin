@@ -3,6 +3,8 @@ package shared
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sign
 
 fun <T> Pair<T, T>.x() = first
@@ -89,7 +91,7 @@ data class Area2d(
             val areas = mutableSetOf<List<Point2d>>()
 
             while (remaining.isNotEmpty()) {
-                val region2 = remaining.first().neighbours(ORTHOGONAL_ADJACENT) { remaining.contains(it) && remaining.remove(it) }
+                val region2 = remaining.first().allDirectAndIndirectNeighbours(ORTHOGONAL_ADJACENT) { remaining.contains(it) && remaining.remove(it) }
                 remaining.removeAll(region2)
                 areas += region2
             }
@@ -106,7 +108,7 @@ data class Area2d(
 
         return points.flatMap { point ->
             borders[point]!!.toList().map { direction ->
-                val visited = point.neighbours(ORTHOGONAL_ADJACENT) { points.contains(it) && borders[it]!!.contains(direction) }
+                val visited = point.allDirectAndIndirectNeighbours(ORTHOGONAL_ADJACENT) { points.contains(it) && borders[it]!!.contains(direction) }
                 visited.forEach { borders[it]!!.remove(direction) }
                 visited.size
             }
@@ -119,9 +121,16 @@ data class Rectangle2d(
     val x: IntRange,
     val y: IntRange
 ) {
+    companion object {
+        fun of(p1: Point2d, p2: Point2d) = Rectangle2d(
+            min(p1.x, p2.x)..max(p1.x, p2.x),
+            min(p1.y, p2.y)..max(p1.y, p2.y)
+        )
+    }
+
     fun area() = x.length() * y.length()
     fun perimeter() = 2 * (x.length() + y.length())
-    fun points() = x.flatMap { a -> y.map { b -> Point2d(a, b) } }
+    fun points() = x.asSequence().flatMap { a -> y.map { b -> Point2d(a, b) } }
     fun contains(p: Point2d) = p.x in x && p.y in y
 }
 
@@ -148,7 +157,7 @@ data class Point2d(
                     .takeWhile { it.all { remaining.contains(it) } }
                     .toList()
 
-                remaining -= rows.flatMap { it }
+                remaining -= rows.flatMap { it }.toSet()
                 regions += Rectangle2d(point.x..<(point.x + columns.size), point.y..<(point.y + rows.size))
             }
 
@@ -188,7 +197,7 @@ data class Point2d(
         directions: List<Vector2d> = ORTHOGONAL_ADJACENT
     ) = directions.map { this + it }
 
-    fun neighbours(
+    fun allDirectAndIndirectNeighbours(
         directions: List<Vector2d> = ORTHOGONAL_ADJACENT,
         predicate: (Point2d) -> Boolean
     ): List<Point2d> {
@@ -207,13 +216,17 @@ data class Point2d(
 
     fun towards(p: Point2d): Vector2d = Vector2d(p.x - x, p.y - y)
 
-    infix fun to(p: Point2d) = Rectangle2d(x..p.x, y..p.y)
+    infix fun to(p: Point2d) = Rectangle2d.of(this, p)
 
     fun on(axis: Axis) = when (axis) {
         Axis.X -> x
         Axis.Y -> y
-        Axis.Z -> throw IllegalArgumentException("Unsupported axis $axis")
+        Axis.Z -> error("Unsupported axis $axis")
     }
+
+    operator fun rangeTo(direction: Direction): Sequence<Point2d> = rangeTo(Vector2d.forDirection(direction))
+    operator fun rangeTo(v: Vector2d): Sequence<Point2d> = generateSequence(0) { it + 1 }
+        .map { this + v * it }
 
 }
 

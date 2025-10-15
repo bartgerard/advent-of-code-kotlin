@@ -21,7 +21,7 @@ data class Year2022Day09(
     private fun moves() = motions.asSequence()
         .flatMap { (direction, length) -> generateSequence { direction }.take(length) }
 
-    private fun uniqueTailPositionsAfterMotion(ropeLength: Int = 1): Int {
+    private fun uniqueTailPositionsAfterMotion(ropeLength: Int = 2): Int {
         val rope = Rope(length = ropeLength)
         return moves().map {
             rope.move(it)
@@ -35,7 +35,7 @@ data class Year2022Day09(
 data class Rope(
     val knots: MutableList<Point2d>,
 ) {
-    constructor(length: Int = 2) : this(
+    constructor(length: Int) : this(
         (0..<length)
             .map { Point2d.ZERO }
             .toMutableList()

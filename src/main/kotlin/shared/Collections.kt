@@ -37,6 +37,8 @@ fun List<Collection<CharSequence>>.generate(): List<String> = fold(listOf("")) {
 
 fun <T> Collection<T>.combinations() = flatMap { i -> map { j -> Pair(i, j) } }
 
+fun <T> Collection<T>.indicesOf(elements: Collection<T>) = elements.map { indexOf(it) }
+
 fun List<String>.allShortest() = minOf { it.length }
     .let { min -> filter { it.length == min } }
 
@@ -150,3 +152,11 @@ fun <T, K> Iterable<T>.takeVisibleFromHeightBy(
 
     return result
 }
+
+fun Iterable<Int>.product() = this.fold(1, Int::times)
+inline fun <T> Iterable<T>.productOf(selector: (T) -> Int): Int = this.map(selector).fold(1, Int::times)
+
+fun Iterable<Long>.product() = this.fold(1L, Long::times)
+@OptIn(kotlin.experimental.ExperimentalTypeInference::class)
+@OverloadResolutionByLambdaReturnType
+inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long = this.map(selector).fold(1L, Long::times)

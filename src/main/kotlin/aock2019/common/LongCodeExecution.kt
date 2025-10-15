@@ -109,7 +109,7 @@ data class LongCodeExecution(
                 }
 
                 99L -> break
-                else -> throw IllegalArgumentException("Unknown opcode $opcode")
+                else -> error("Unknown opcode $opcode")
             }
         }
 

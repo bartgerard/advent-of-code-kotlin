@@ -4,7 +4,7 @@ import shared.CharGrid
 import shared.Dijkstra
 import shared.Dimension
 import shared.Point2d
-import shared.Vector2d
+import shared.at
 import shared.sanitize
 import shared.toIntegers
 
@@ -35,8 +35,9 @@ data class Year2024Day18(
             { it == destination },
             { path, current ->
                 //val corruptedBytes = bytes.subList(0, min(path.fullPathTo(current).size - 1, max))
-                current.neighbours(Vector2d.ORTHOGONAL_ADJACENT)
-                    .filter { grid.contains(current) && grid.at(current) != CORRUPTED }
+                current.neighbours()
+                    .filter { grid.contains(it) }
+                    .filter { grid.at(it) != CORRUPTED }
             }
         )
 
@@ -56,10 +57,11 @@ data class Year2024Day18(
             val shortestPath = Dijkstra.findShortestPath(
                 start,
                 { it == destination },
-                { path, current ->
+                { _, current ->
                     //val corruptedBytes = bytes.subList(0, min(path.fullPathTo(current).size - 1, max))
-                    current.neighbours(Vector2d.ORTHOGONAL_ADJACENT)
-                        .filter { grid.contains(current) && grid.at(current) != CORRUPTED }
+                    current.neighbours()
+                        .filter { grid.contains(it) }
+                        .filter { grid.at(it) != CORRUPTED }
                 }
             )
 

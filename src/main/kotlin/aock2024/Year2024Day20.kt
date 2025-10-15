@@ -2,7 +2,7 @@ package aock2024
 
 import shared.CharGrid
 import shared.Dijkstra
-import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
+import shared.at
 
 data class Year2024Day20(
     private val grid: CharGrid
@@ -21,7 +21,7 @@ data class Year2024Day20(
         val solution = Dijkstra.findShortestPath(
             start,
             { point -> point == end },
-            { _, point -> point.neighbours(ORTHOGONAL_ADJACENT).filter { grid.contains(it) && grid.at(it) != WALL } }
+            { _, point -> point.neighbours().filter { grid.contains(it) }.filter { grid.at(it) != WALL } }
         )
 
         val shortestPath = solution.fullPath()
@@ -39,7 +39,7 @@ data class Year2024Day20(
                 }
             }
 
-            cheats = cheats + shortCuts.size
+            cheats += shortCuts.size
         }
 
         display(shortCuts)

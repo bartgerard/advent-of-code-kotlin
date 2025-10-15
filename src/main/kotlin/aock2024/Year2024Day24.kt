@@ -217,7 +217,7 @@ enum class Operation(
             "AND" -> AND
             "OR" -> OR
             "XOR" -> XOR
-            else -> throw IllegalArgumentException(value)
+            else -> error(value)
         }
     }
 }
@@ -255,7 +255,7 @@ data class Bookkeeper(
 
                 mapping[label] = candidate.value
             } else {
-                throw IllegalArgumentException("Unexpected gate $gate")
+                error("Unexpected gate $gate")
             }
         } else if (label.startsWith('z') && out != label) {
             swapped += label to out

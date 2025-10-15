@@ -3,6 +3,8 @@ package aock2022
 import shared.CharGrid
 import shared.Direction
 import shared.Vector2d
+import shared.at
+import shared.product
 import shared.takeOnlyIncreasingBy
 import shared.takeVisibleFromHeightBy
 
@@ -13,7 +15,7 @@ data class Year2022Day08(
 
     fun partOne() = Direction.CARDINAL_DIRECTIONS
         .flatMap { direction ->
-            grid.dimension().traverseInDirection(direction)
+            grid.dimension().pointsInDirection(direction)
                 .flatMap { path -> path.takeOnlyIncreasingBy { grid.at(it) } }
         }
         .toSet()
@@ -26,13 +28,13 @@ data class Year2022Day08(
             .maxOf { point ->
                 val treeHeight = grid.at(point)
                 val result = directions.map { direction ->
-                    dimension.traverseInDirection(point, direction)
+                    dimension.pointsInDirection(point, direction)
                         .drop(1)
                         .toList()
                         .takeVisibleFromHeightBy(treeHeight) { grid.at(it) }
                         .count()
                 }
-                    .fold(1, Int::times)
+                    .product()
 
                 result
             }

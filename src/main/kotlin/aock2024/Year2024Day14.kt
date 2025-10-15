@@ -4,6 +4,7 @@ import shared.Dimension
 import shared.Point2d
 import shared.Rectangle2d
 import shared.Vector2d
+import shared.product
 import shared.sanitize
 import shared.toIntegers
 
@@ -26,9 +27,9 @@ data class Year2024Day14(
 
     fun partOne(t: Long): Int = robotsByQuadrantAfter(t).filter { it.key >= 0 }
         .map { it.value.size }
-        .fold(1, Int::times)
+        .product()
 
-    fun partTwo(): Long = (0L..10_000L).asSequence()
+    fun partTwo(): Long = (0L..10_000L)
         .firstOrNull { t -> positionsAfter(t).let { dimension.display(it) }.contains(CHRISTMAS_TREE_DETECTOR) }
         ?.also { positionsAfter(it).let { dimension.display(it) }.run { println(this) } }
         ?: -1L

@@ -6,6 +6,7 @@ import shared.Direction.NORTH_WEST
 import shared.Direction.SOUTH_EAST
 import shared.Direction.SOUTH_WEST
 import shared.Vector2d
+import shared.at
 
 data class Year2024Day04(
     private val grid: CharGrid

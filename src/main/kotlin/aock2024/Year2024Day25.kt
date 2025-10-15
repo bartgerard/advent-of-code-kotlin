@@ -2,6 +2,7 @@ package aock2024
 
 import shared.CharGrid
 import shared.Dimension
+import shared.columns
 import shared.sanitize
 import shared.splitByEmptyLine
 
@@ -19,8 +20,8 @@ data class Year2024Day25(
 
     constructor(dimension: Dimension, grids: Pair<List<CharGrid>, List<CharGrid>>) : this(
         dimension,
-        grids.first.map { lock -> lock.columns().map { it.count { it == '#' } - 1 } },
-        grids.second.map { lock -> lock.columns().map { it.count { it == '#' } - 1 } }
+        grids.first.map { lock -> lock.columns().map { column -> column.count { it == '#' } - 1 } },
+        grids.second.map { lock -> lock.columns().map { column -> column.count { it == '#' } - 1 } }
     )
 
     fun partOne(): Long {

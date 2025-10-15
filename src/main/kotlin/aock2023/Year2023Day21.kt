@@ -4,7 +4,7 @@ import org.apache.commons.lang3.Validate.isTrue
 import org.apache.commons.math3.util.ArithmeticUtils.pow
 import shared.CharGrid
 import shared.Point2d
-import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
+import shared.at
 
 data class Year2023Day21(
     private val grid: CharGrid
@@ -73,8 +73,9 @@ data class Year2023Day21(
         var points = setOf(start)
 
         repeat(steps) {
-            points = points.flatMap { it.neighbours(ORTHOGONAL_ADJACENT) }
-                .filter { grid.contains(it) && grid.at(it) != WALL }
+            points = points.flatMap { it.neighbours() }
+                .filter { grid.contains(it) }
+                .filter { grid.at(it) != WALL }
                 .toSet()
         }
 
@@ -86,7 +87,7 @@ data class Year2023Day21(
         var points = setOf(start)
 
         repeat(steps) {
-            points = points.flatMap { it.neighbours(ORTHOGONAL_ADJACENT) }
+            points = points.flatMap { it.neighbours() }
                 .filter { grid.at(it.mod(dimension)) != WALL }
                 .toSet()
         }

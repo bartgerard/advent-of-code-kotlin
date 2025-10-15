@@ -13,6 +13,9 @@ data class Dimension(
     val width: Int,
     val height: Int
 ) {
+    fun rowIndices() = 0 until height
+    fun columnIndices() = 0 until width
+
     fun contains(p: Point2d): Boolean = p.x in 0..<width && p.y in 0..<height
 
     fun points() = (0..<height).asSequence().flatMap { row -> (0..<width).map { column -> Point2d(column, row) } }
@@ -49,15 +52,15 @@ data class Dimension(
         else -> outerPointsInDirection(direction)
     }
 
-    fun traverseInDirection(point: Point2d, direction: Vector2d) = generateSequence(0) { it + 1 }
+    fun pointsInDirection(point: Point2d, direction: Vector2d) = generateSequence(0) { it + 1 }
         .map { point + direction * it }
         .takeWhile { contains(it) }
 
-    fun traverseInDirection(direction: Direction): List<List<Point2d>> {
+    fun pointsInDirection(direction: Direction): List<List<Point2d>> {
         val outerPoints = allOuterPointsInDirection(direction.inverse())
         val vector = Vector2d.forDirection(direction)
 
-        return outerPoints.map { traverseInDirection(it, vector).toList() }
+        return outerPoints.map { pointsInDirection(it, vector).toList() }
     }
 }
 
@@ -93,18 +96,19 @@ class IntensityGrid(
 
 interface Grid<T> {
     fun dimension(): Dimension
-    fun rowIndices(): IntRange
-    fun columnIndices(): IntRange
-    fun points(): Sequence<Point2d> = dimension().points()
-    fun contains(point: Point2d): Boolean
+
+    fun contains(point: Point2d): Boolean = dimension().contains(point)
+
     fun at(row: Int, column: Int): T
-    fun at(point: Point2d): T
+
     fun firstRow(): List<T>
     fun lastRow(): List<T>
-    fun columns(): List<List<T>>
+
     fun set(point: Point2d, value: T)
-    fun setInDirection(point: Point2d, direction: Vector2d, values: List<T>)
+
     fun findAll(value: T): List<Point2d>
+
+    fun points(): Sequence<Point2d> = dimension().points()
     fun values(): Set<T> = points().map { at(it) }.toSet()
 }
 
@@ -121,39 +125,20 @@ data class CharGrid(
     fun copy() = CharGrid(grid.map { it.toMutableList() }.toMutableList())
 
     override fun dimension() = Dimension(grid[0].size, grid.size)
-    override fun rowIndices() = 0 until grid.size
-    override fun columnIndices() = 0 until grid[0].size
-
-    override fun contains(point: Point2d) = point.y in grid.indices && point.x in 0..<grid[point.y].size
 
     override fun at(row: Int, column: Int) = grid[row][column]
-    override fun at(point: Point2d) = grid[point.y][point.x]
 
     override fun firstRow() = grid.first()
     override fun lastRow() = grid.last()
 
-    override fun columns() = columnIndices().map { column -> rowIndices().map { row -> at(row, column) } }
-
     override fun set(point: Point2d, value: Char) {
         grid[point.y][point.x] = value
-    }
-
-    override fun setInDirection(point: Point2d, direction: Vector2d, values: List<Char>) {
-        values.forEachIndexed { i, value -> set(point + direction * i, value) }
     }
 
     override fun findAll(value: Char) = grid.flatMapIndexed { row, line ->
         line.indices.filter { line[it] == value }
             .map { column -> Point2d(column, row) }
     }
-
-    fun traverseInDirection(point: Point2d, direction: Vector2d) = dimension()
-        .traverseInDirection(point, direction)
-        .map { at(it) }
-
-    fun traverseInDirection(direction: Direction) = dimension()
-        .traverseInDirection(direction)
-        .map { points -> points.map { at(it) } }
 
     fun frequenciesExcluding(blacklist: Set<Char>): Map<Char, List<Point2d>> = points()
         .map { point -> at(point) to point }
@@ -168,7 +153,30 @@ data class CharGrid(
     }
 
     override fun toString() = grid.joinToString("\n") { it.joinToString("") }
+}
 
+data class OffsetCharGrid(
+    val grid: CharGrid,
+    val offset: Vector2d
+) : Grid<Char> {
+    override fun dimension(): Dimension = grid.dimension()
+
+    override fun contains(point: Point2d): Boolean = grid.contains(point - offset)
+    override fun at(row: Int, column: Int): Char = grid.at(row - offset.y, column - offset.x)
+
+    override fun firstRow(): List<Char> = grid.firstRow()
+    override fun lastRow(): List<Char> = grid.lastRow()
+
+    override fun set(point: Point2d, value: Char) {
+        grid.set(point - offset, value)
+    }
+
+    override fun findAll(value: Char): List<Point2d> = grid.findAll(value).map { it + offset }
+
+    override fun points(): Sequence<Point2d> = grid.points().map { it - offset }
+    override fun values(): Set<Char> = grid.values()
+
+    override fun toString(): String = grid.toString()
 }
 
 data class PushableGrid(
@@ -181,7 +189,7 @@ data class PushableGrid(
 
     fun push(p: Point2d, d: Direction): Boolean {
         val v = Vector2d.forDirection(d)
-        val sequence = grid.traverseInDirection(p, v)
+        val sequence = grid.valuesInDirection(p, v)
             .takeWhile { !walls.contains(it) }
             .joinToString("")
         val firstEmptySpace = sequence.indexOfFirst { empty.contains(it) }
@@ -202,3 +210,27 @@ data class PushableGrid(
     }
 
 }
+
+fun <T> Grid<T>.rowIndices(): IntRange = dimension().rowIndices()
+fun <T> Grid<T>.columnIndices(): IntRange = dimension().columnIndices()
+fun <T> Grid<T>.columns(): List<List<T>> = columnIndices().map { column -> rowIndices().map { row -> at(row, column) } }
+fun <T> Grid<T>.at(point: Point2d): T = at(point.y, point.x)
+fun <T> Grid<T>.setInDirection(point: Point2d, direction: Vector2d, values: List<T>) {
+    values.forEachIndexed { i, value -> set(point + direction * i, value) }
+}
+
+fun <T> Grid<T>.fill(rectangle: Rectangle2d, value: T) {
+    rectangle.points().forEach { set(it, value) }
+}
+
+fun <T> Grid<T>.fill(rectangles: Collection<Rectangle2d>, value: T) {
+    rectangles.forEach { fill(it, value) }
+}
+
+fun <T> Grid<T>.valuesInDirection(point: Point2d, direction: Vector2d): Sequence<T> = dimension()
+    .pointsInDirection(point, direction)
+    .map { at(it) }
+
+fun <T> Grid<T>.valuesInDirection(direction: Direction): List<List<T>> = dimension()
+    .pointsInDirection(direction)
+    .map { points -> points.map { at(it) } }

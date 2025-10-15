@@ -1,5 +1,7 @@
 package aock2022
 
+import shared.product
+import shared.productOf
 import shared.sanitize
 import shared.splitByEmptyLine
 import shared.toLongs
@@ -58,10 +60,9 @@ data class Monkeys(
     fun levelOfMonkeyBusiness() = monkeyBusiness.values
         .sortedDescending()
         .take(2)
-        .fold(1L, Long::times)
+        .product()
 
-    fun reliefDivisor() = monkeys.map { it.testDivisor }
-        .fold(1, Long::times)
+    fun reliefDivisor() = monkeys.productOf { it.testDivisor }
 }
 
 data class Monkey(

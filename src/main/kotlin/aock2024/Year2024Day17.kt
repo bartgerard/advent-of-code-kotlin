@@ -85,7 +85,7 @@ data class Year2024Day17(
         4 -> registers[A].toInt()
         5 -> registers[B].toInt()
         6 -> registers[C].toInt()
-        else -> throw IllegalArgumentException("invalid operand: $literalOperand")
+        else -> error("invalid operand: $literalOperand")
     }.mod(8)
 
     fun findCopyGeneratingInput(): Long {
@@ -127,7 +127,7 @@ enum class Instruction(
             5 -> OUT
             6 -> BDV
             7 -> CDV
-            else -> throw IllegalArgumentException("invalid opcode: $opcode")
+            else -> error("invalid opcode: $opcode")
         }
     }
 }

@@ -2,6 +2,7 @@ package aock2023
 
 import shared.ContractableGraph
 import shared.Edge
+import shared.productOf
 import shared.sanitize
 
 data class Year2023Day25(
@@ -17,10 +18,7 @@ data class Year2023Day25(
             })
     )
 
-    fun partOne(groups: Int): Long {
-        val split = findSplit(groups)
-        return split.map { it.size }.fold(1L, Long::times)
-    }
+    fun partOne(groups: Int) = findSplit(groups).productOf { it.size }
 
     private fun findSplit(groups: Int): Set<Set<String>> {
         repeat(100) {

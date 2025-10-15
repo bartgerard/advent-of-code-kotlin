@@ -2,6 +2,7 @@ package aock2024
 
 import shared.Area2d
 import shared.CharGrid
+import shared.at
 import shared.sanitize
 
 data class Year2024Day12(
