@@ -10,9 +10,11 @@ import shared.at
 import shared.fill
 import shared.sanitize
 import shared.toIntegers
+import kotlin.math.max
+import kotlin.math.min
 
 data class Year2022Day14(
-    private val reservoir: RegolithReservoir
+    private val lines: List<Rectangle2d>
 ) {
     constructor(input: String) : this(
         input.sanitize().lines()
@@ -21,12 +23,11 @@ data class Year2022Day14(
                     .map { Point2d(it) }
                     .zipWithNext { p1, p2 -> p1 to p2 }
             }
-            .let { RegolithReservoir.of(it) }
     )
 
-    fun partOne() = reservoir.countDrops()
+    fun partOne() = RegolithReservoir.of(lines).countUnitsOfSand()
 
-    fun partTwo() = 0L
+    fun partTwo() = RegolithReservoir.of(lines, true).countUnitsOfSandUntilSourceBlocked()
 }
 
 data class RegolithReservoir(
@@ -54,10 +55,27 @@ data class RegolithReservoir(
             Vector2d.SOUTH_EAST
         )
 
-        fun of(lines: List<Rectangle2d>): RegolithReservoir {
+        fun of(
+            lines: List<Rectangle2d>,
+            simulateInfiniteFloor: Boolean = false
+        ): RegolithReservoir {
             val minX = lines.minOf { it.x.min() }
             val maxX = lines.maxOf { it.x.max() }
             val maxY = lines.maxOf { it.y.max() }
+
+            if (simulateInfiniteFloor) {
+                val floorY = maxY + 2
+                val floorMinX = min(
+                    SAND_SOURCE.x - floorY,
+                    lines.minOf { it.x.min() - floorY + it.y.min() }
+                )
+                val floorMaxX = max(
+                    SAND_SOURCE.x + floorY,
+                    lines.maxOf { it.x.max() + floorY - it.y.min() }
+                )
+                val simulatedInfiniteFloor = Point2d(floorMinX, floorY) to Point2d(floorMaxX, floorY)
+                return of(lines + simulatedInfiniteFloor)
+            }
 
             val offset = Vector2d(minX, 0)
 
@@ -72,11 +90,16 @@ data class RegolithReservoir(
         }
     }
 
-    fun countDrops(): Int {
+    fun countUnitsOfSand() = countUnitsOfSandWhile { true }
+
+    fun countUnitsOfSandUntilSourceBlocked() = countUnitsOfSandWhile { !isSandSourceBlocked() } + 1 /* include source itself */
+
+    fun countUnitsOfSandWhile(endCondition: (Point2d) -> Boolean): Int {
         val sediments = generateSequence {
             dropSand(SAND_SOURCE)
                 ?.also { grid.set(it, SAND) }
         }
+            .takeWhile(endCondition)
             .toList()
 
         println(grid)
@@ -105,4 +128,6 @@ data class RegolithReservoir(
     fun isFinalRestingSpot(point: Point2d) = BELOW_DIRECTIONS
         .map { point + it }
         .all { grid.contains(it) && grid.at(it) in SUPPORTING_FOUNDATION }
+
+    fun isSandSourceBlocked() = grid.at(SAND_SOURCE) != SOURCE
 }
