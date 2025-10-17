@@ -38,8 +38,8 @@ data class Year2017Day03(
             .map { point ->
                 (point to point.neighbours(Vector2d.SURROUNDING)
                     .sumOf { neighbour -> valueByPoint[neighbour] ?: 0L })
-                    .also { valueByPoint += it }
             }
+            .onEach { valueByPoint += it }
             .dropWhile { it.second <= value }
             .first()
             .second

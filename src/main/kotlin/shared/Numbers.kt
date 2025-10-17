@@ -34,7 +34,3 @@ class Spiral {
 
     }
 }
-
-fun main() {
-    val a = Spiral.generatePoints().take(20).toList()
-}
