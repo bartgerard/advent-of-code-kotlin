@@ -11,6 +11,11 @@ enum class Axis {
     }
 }
 
+enum class Turn {
+    LEFT,
+    RIGHT
+}
+
 enum class Direction {
     NORTH,
     EAST,
@@ -62,15 +67,9 @@ enum class Direction {
         NORTH_WEST -> SOUTH_EAST
     }
 
-    fun rotateRight() = when (this) {
-        NORTH -> EAST
-        EAST -> SOUTH
-        SOUTH -> WEST
-        WEST -> NORTH
-        NORTH_EAST -> SOUTH_EAST
-        SOUTH_EAST -> SOUTH_WEST
-        SOUTH_WEST -> NORTH_WEST
-        NORTH_WEST -> NORTH_EAST
+    fun rotate(turn: Turn) = when (turn) {
+        Turn.LEFT -> rotateLeft()
+        Turn.RIGHT -> rotateRight()
     }
 
     fun rotateLeft() = when (this) {
@@ -82,6 +81,17 @@ enum class Direction {
         SOUTH_EAST -> NORTH_EAST
         SOUTH_WEST -> SOUTH_EAST
         NORTH_WEST -> SOUTH_WEST
+    }
+
+    fun rotateRight() = when (this) {
+        NORTH -> EAST
+        EAST -> SOUTH
+        SOUTH -> WEST
+        WEST -> NORTH
+        NORTH_EAST -> SOUTH_EAST
+        SOUTH_EAST -> SOUTH_WEST
+        SOUTH_WEST -> NORTH_WEST
+        NORTH_WEST -> NORTH_EAST
     }
 
     fun flipVertical() = when (this) {

@@ -11,7 +11,7 @@ class Year2022Day1xSpecification extends Specification {
 
     def "partOne"() {
         when:
-        final long result = new Year2022Day1x(input).partOne()
+        final long result = new Year2022Day25(input).partOne()
 
         then:
         result == expectedResult
@@ -26,7 +26,7 @@ class Year2022Day1xSpecification extends Specification {
 
     def "partTwo"() {
         when:
-        final long result = new Year2022Day1x(input).partTwo()
+        final long result = new Year2022Day25(input).partTwo()
 
         then:
         result == expectedResult

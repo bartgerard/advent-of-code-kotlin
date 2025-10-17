@@ -1,6 +1,7 @@
 package shared
 
 import java.util.Objects.isNull
+import java.util.function.IntFunction
 
 fun <T> union(sets: Collection<Set<T>>): Set<T> = sets.flatten().fold(emptySet()) { acc, set -> acc + set }
 

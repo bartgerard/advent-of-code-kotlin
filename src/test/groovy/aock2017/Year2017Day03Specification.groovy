@@ -16,25 +16,22 @@ class Year2017Day03Specification extends Specification {
         where:
         input             | expectedResult | comment
         "2"               | 1              | ""
-        "11"              | 2              | ""
+        "3"               | 2              | ""
+        "4"               | 1              | ""
+        "5"               | 2              | ""
+        "9"               | 2              | ""
 
         "1"               | 0              | ""
         "12"              | 3              | ""
         "23"              | 2              | ""
         "1024"            | 31             | ""
 
-        "2"               | 1              | ""
-        "3"               | 2              | ""
-        "4"               | 1              | ""
-        "5"               | 2              | ""
-        "9"               | 2              | ""
-
         "11"              | 2              | ""
         "15"              | 2              | ""
         "16"              | 3              | ""
         "25"              | 4              | ""
 
-        readFile(2017, 3) | 0              | ""
+        readFile(2017, 3) | 480            | ""
     }
 
     def "partTwo"() {
@@ -46,9 +43,7 @@ class Year2017Day03Specification extends Specification {
 
         where:
         input             | expectedResult | comment
-        "1"               | 0              | ""
-
-        readFile(2017, 3) | 0              | ""
+        readFile(2017, 3) | 349975         | ""
     }
 
 }
