@@ -1,7 +1,7 @@
 package shared
 
 import kotlin.math.PI
-import kotlin.math.abs
+import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
 fun <T> Triple<T, T, T>.x() = first
@@ -64,7 +64,7 @@ data class Point3d(
 
     operator fun times(p: Point3d) = Point3d(x * p.x, y * p.y, z * p.z)
 
-    fun manhattan(p: Point3d) = abs(x - p.x) + abs(y - p.y) + abs(z - p.z)
+    fun manhattan(p: Point3d) = (x - p.x).absoluteValue + (y - p.y).absoluteValue + (z - p.z).absoluteValue
 
     infix fun to(p: Point3d) = Box3d(x..p.x, y..p.y, z..p.z)
 

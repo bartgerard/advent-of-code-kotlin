@@ -2,7 +2,7 @@ package aock2017
 
 import shared.Point2d
 import shared.sanitize
-import kotlin.math.abs
+import kotlin.math.absoluteValue
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -30,7 +30,7 @@ data class Year2017Day03(
         val lengthSideToCorner = lengthOnRing % side
 
         val lengthSideToAccessPort = lowerRingId - 1
-        val lengthToMiddle = abs(lengthSideToCorner - middle)
+        val lengthToMiddle = (lengthSideToCorner - middle).absoluteValue
 
         return lengthSideToAccessPort + lengthToMiddle
 

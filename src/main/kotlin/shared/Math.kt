@@ -2,7 +2,7 @@ package shared
 
 import org.apache.commons.lang3.Validate.isTrue
 import java.util.Collections.unmodifiableMap
-import kotlin.math.abs
+import kotlin.math.absoluteValue
 import kotlin.math.pow
 
 fun factorial(n: Long) = (1..n).product()
@@ -21,7 +21,7 @@ fun triangular(n: Long) = n * (n + 1) / 2
 fun primeFactors(value: Long): Map<Long, Int> {
     val powerByPrimeFactor: MutableMap<Long, Int> = HashMap()
 
-    var absNumber = abs(value)
+    var absNumber = value.absoluteValue
 
     var factor = 2L
     while (factor <= absNumber) {

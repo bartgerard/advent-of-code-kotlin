@@ -2,7 +2,7 @@ package shared
 
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
-import kotlin.math.abs
+import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
@@ -126,6 +126,16 @@ data class Rectangle2d(
             min(p1.x, p2.x)..max(p1.x, p2.x),
             min(p1.y, p2.y)..max(p1.y, p2.y)
         )
+
+        fun surrounding(points: Collection<Point2d>): Rectangle2d {
+            val (minX, maxX) = points.map { it.x }.minMaxOrNull()!!
+            val (minY, maxY) = points.map { it.y }.minMaxOrNull()!!
+
+            return Rectangle2d(
+                minX..maxX,
+                minY..maxY,
+            )
+        }
     }
 
     fun area() = x.length() * y.length()
@@ -173,7 +183,7 @@ data class Point2d(
 
     operator fun times(p: Point2d) = Point2d(x * p.x, y * p.y)
 
-    fun manhattan(p: Point2d) = abs(x - p.x) + abs(y - p.y)
+    fun manhattan(p: Point2d) = (x - p.x).absoluteValue + (y - p.y).absoluteValue
 
     operator fun plus(v: Vector2d) = Point2d(x + v.x, y + v.y)
 
@@ -215,8 +225,6 @@ data class Point2d(
     }
 
     fun towards(p: Point2d): Vector2d = Vector2d(p.x - x, p.y - y)
-
-    infix fun to(p: Point2d) = Rectangle2d.of(this, p)
 
     fun on(axis: Axis) = when (axis) {
         Axis.X -> x

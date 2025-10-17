@@ -4,7 +4,7 @@ import shared.frequencies
 import shared.sanitize
 import shared.table
 import shared.transpose
-import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 data class Year2024Day01(
     private val firstList: List<Long>,
@@ -23,7 +23,7 @@ data class Year2024Day01(
 
     constructor(lists: List<List<Long>>) : this(lists[0], lists[1])
 
-    fun distanceBetweenLists(): Long = firstList.indices.sumOf { abs(firstList[it] - secondList[it]) }
+    fun distanceBetweenLists(): Long = firstList.indices.sumOf { (firstList[it] - secondList[it]).absoluteValue }
 
     fun similarityScore(): Long = secondList.frequencies()
         .let { frequenciesByNumber ->

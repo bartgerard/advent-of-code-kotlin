@@ -40,8 +40,20 @@ fun allIntersections(ranges: Collection<LongRange>): List<LongRange> {
         .zipWithNext { i, j -> keyValues[i]..<keyValues[j] }
 }
 
-fun Collection<LongRange>.usedIntersections() = allIntersections(this)
+fun Collection<LongRange>.usedIntersections(): List<LongRange> = allIntersections(this)
     .filter { intersection -> this.any { it.contains(intersection.first) } }
+
+fun Collection<LongRange>.gaps(): List<LongRange> {
+    val sortedIntersections = this.usedIntersections()
+
+    if (sortedIntersections.isEmpty() || sortedIntersections.size == 1) {
+        return emptyList()
+    }
+
+    return sortedIntersections.zipWithNext()
+        .filter { it.first.last + 1 != it.second.first }
+        .map { it.first.last + 1..<it.second.first }
+}
 
 fun Collection<LongRange>.merge(): List<LongRange> {
     val sortedIntersections = this.usedIntersections()
@@ -90,8 +102,60 @@ fun Collection<LongRange>.mergeOne(newRange: LongRange): List<LongRange> {
         .sortedBy { it.first }
 }
 
+fun LongRange.containsRange(other: LongRange) = this.first <= other.first && other.last <= this.last
+
+fun LongRange.overlaps(other: LongRange) = this.first <= other.last && other.first <= this.last
+
+fun LongRange.without(subtrahend: LongRange): List<LongRange> {
+    if (this == subtrahend) {
+        return emptyList()
+    } else if (!overlaps(subtrahend)) {
+        return listOf(this)
+    }
+
+    val sequence1 = if (this.first < subtrahend.first) {
+        sequenceOf(this.first..<subtrahend.first)
+    } else {
+        emptySequence()
+    }
+    val sequence2 = if (subtrahend.last < this.last) {
+        sequenceOf(subtrahend.last + 1..this.last)
+    } else {
+        emptySequence()
+    }
+
+    return sequenceOf(sequence1, sequence2)
+        .flatten()
+        .toList()
+}
+
+fun LongRange.without(subtrahends: Collection<LongRange>): List<LongRange> {
+    val intersectingSubtrahends = subtrahends.filter { overlaps(it) }
+
+    if (intersectingSubtrahends.isEmpty()) {
+        return listOf(this)
+    } else if (intersectingSubtrahends.size == 1) {
+        return without(intersectingSubtrahends.first())
+    }
+
+    val innerGaps = intersectingSubtrahends.gaps().filter { overlaps(it) }
+    val min: Long = intersectingSubtrahends.minOfOrNull { it.first } ?: Long.MIN_VALUE
+    val max: Long = intersectingSubtrahends.maxOfOrNull { it.last } ?: Long.MAX_VALUE
+
+    val outerGaps = without(min..max)
+
+    return sequenceOf(innerGaps, outerGaps)
+        .flatten()
+        .sortedBy { it.first }
+        .toList()
+}
+
+fun Collection<LongRange>.without(subtrahends: Collection<LongRange>): List<LongRange> = this.merge().flatMap { it.without(subtrahends) }
+
 fun IntRange.length() = this.last - this.first + 1
 fun LongRange.length() = this.last - this.first + 1
+
+fun IntRange.toLongRange() = first.toLong()..last.toLong()
 
 fun main() {
     println((1L..5L).length())
@@ -101,4 +165,3 @@ fun main() {
 }
 
 operator fun LongRange.contains(other: LongRange) = this.contains(other.first) && this.contains(other.last)
-fun LongRange.overlaps(other: LongRange) = this.first <= other.last && other.first <= this.last

@@ -21,7 +21,7 @@ data class Year2022Day14(
             .flatMap { line ->
                 line.toIntegers().chunked(2)
                     .map { Point2d(it) }
-                    .zipWithNext { p1, p2 -> p1 to p2 }
+                    .zipWithNext { p1, p2 -> Rectangle2d.of(p1, p2) }
             }
     )
 
@@ -73,7 +73,10 @@ data class RegolithReservoir(
                     SAND_SOURCE.x + floorY,
                     lines.maxOf { it.x.max() + floorY - it.y.min() }
                 )
-                val simulatedInfiniteFloor = Point2d(floorMinX, floorY) to Point2d(floorMaxX, floorY)
+                val simulatedInfiniteFloor = Rectangle2d.of(
+                    Point2d(floorMinX, floorY),
+                    Point2d(floorMaxX, floorY)
+                )
                 return of(lines + simulatedInfiniteFloor)
             }
 

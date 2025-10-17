@@ -3,7 +3,7 @@ package aock2022
 import shared.Direction
 import shared.Point2d
 import shared.sanitize
-import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 data class Year2022Day09(
     private val motions: List<Pair<Direction, Int>>
@@ -55,7 +55,7 @@ data class Rope(
         (1..<knots.size).forEach { i ->
             val difference = knots[i - 1] - knots[i]
 
-            if (abs(difference.x) > 1 || abs(difference.y) > 1) {
+            if (difference.x.absoluteValue > 1 || difference.y.absoluteValue > 1) {
                 knots[i] = knots[i] + difference.sign()
             }
         }
@@ -67,7 +67,7 @@ data class Rope(
     ): Point2d {
         val difference = head - tail
 
-        return if (abs(difference.x) > 1 || abs(difference.y) > 1) {
+        return if (difference.x.absoluteValue > 1 || difference.y.absoluteValue > 1) {
             tail + difference.sign()
         } else {
             tail

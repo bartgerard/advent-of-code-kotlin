@@ -157,6 +157,36 @@ fun Iterable<Int>.product() = this.fold(1, Int::times)
 inline fun <T> Iterable<T>.productOf(selector: (T) -> Int): Int = this.map(selector).fold(1, Int::times)
 
 fun Iterable<Long>.product() = this.fold(1L, Long::times)
+
 @OptIn(kotlin.experimental.ExperimentalTypeInference::class)
 @OverloadResolutionByLambdaReturnType
 inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long = this.map(selector).fold(1L, Long::times)
+
+fun <T : Comparable<T>> Iterable<T>.minMaxOrNull(): Pair<T, T>? = minMaxByOrNull { it }
+
+fun <T, K : Comparable<K>> Iterable<T>.minMaxByOrNull(selector: (T) -> K): Pair<T, T>? {
+    val iterator = iterator()
+
+    if (!iterator.hasNext()) {
+        return null
+    }
+
+    var minElement = iterator.next()
+    var maxElement = minElement
+    var minValue = selector(minElement)
+    var maxValue = minValue
+
+    for (element in iterator()) {
+        val value = selector(element)
+
+        if (value < minValue) {
+            minElement = element
+            minValue = value
+        } else if (maxValue < value) {
+            maxElement = element
+            maxValue = value
+        }
+    }
+
+    return minElement to maxElement
+}

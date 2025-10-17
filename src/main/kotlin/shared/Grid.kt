@@ -104,17 +104,20 @@ interface Grid<T> {
     fun firstRow(): List<T>
     fun lastRow(): List<T>
 
-    fun set(point: Point2d, value: T)
-
     fun findAll(value: T): List<Point2d>
 
     fun points(): Sequence<Point2d> = dimension().points()
     fun values(): Set<T> = points().map { at(it) }.toSet()
 }
 
+interface MutableGrid<T> : Grid<T> {
+
+    fun set(point: Point2d, value: T)
+}
+
 data class CharGrid(
     val grid: MutableList<MutableList<Char>>
-) : Grid<Char> {
+) : MutableGrid<Char> {
     constructor(
         dimension: Dimension,
         defaultValue: Char
@@ -158,7 +161,7 @@ data class CharGrid(
 data class OffsetCharGrid(
     val grid: CharGrid,
     val offset: Vector2d
-) : Grid<Char> {
+) : MutableGrid<Char> {
     override fun dimension(): Dimension = grid.dimension()
 
     override fun contains(point: Point2d): Boolean = grid.contains(point - offset)
@@ -183,7 +186,7 @@ data class PushableGrid(
     val grid: CharGrid,
     val walls: Set<Char>,
     val empty: Set<Char>
-) : Grid<Char> by grid {
+) : MutableGrid<Char> by grid {
 
     constructor(input: String, walls: Set<Char>, empty: Set<Char>) : this(CharGrid(input), walls, empty)
 
@@ -215,17 +218,6 @@ fun <T> Grid<T>.rowIndices(): IntRange = dimension().rowIndices()
 fun <T> Grid<T>.columnIndices(): IntRange = dimension().columnIndices()
 fun <T> Grid<T>.columns(): List<List<T>> = columnIndices().map { column -> rowIndices().map { row -> at(row, column) } }
 fun <T> Grid<T>.at(point: Point2d): T = at(point.y, point.x)
-fun <T> Grid<T>.setInDirection(point: Point2d, direction: Vector2d, values: List<T>) {
-    values.forEachIndexed { i, value -> set(point + direction * i, value) }
-}
-
-fun <T> Grid<T>.fill(rectangle: Rectangle2d, value: T) {
-    rectangle.points().forEach { set(it, value) }
-}
-
-fun <T> Grid<T>.fill(rectangles: Collection<Rectangle2d>, value: T) {
-    rectangles.forEach { fill(it, value) }
-}
 
 fun <T> Grid<T>.valuesInDirection(point: Point2d, direction: Vector2d): Sequence<T> = dimension()
     .pointsInDirection(point, direction)
@@ -234,3 +226,15 @@ fun <T> Grid<T>.valuesInDirection(point: Point2d, direction: Vector2d): Sequence
 fun <T> Grid<T>.valuesInDirection(direction: Direction): List<List<T>> = dimension()
     .pointsInDirection(direction)
     .map { points -> points.map { at(it) } }
+
+fun <T> MutableGrid<T>.setInDirection(point: Point2d, direction: Vector2d, values: List<T>) {
+    values.forEachIndexed { i, value -> set(point + direction * i, value) }
+}
+
+fun <T> MutableGrid<T>.fill(rectangle: Rectangle2d, value: T) {
+    rectangle.points().forEach { set(it, value) }
+}
+
+fun <T> MutableGrid<T>.fill(rectangles: Collection<Rectangle2d>, value: T) {
+    rectangles.forEach { fill(it, value) }
+}
