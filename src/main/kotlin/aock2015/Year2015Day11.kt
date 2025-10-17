@@ -24,12 +24,9 @@ class PasswordGenerator() {
 
         fun generate(password: String) = generateSequence(password) { next(it) }
 
-        fun next(s: String): String {
-            val next = next(s.last())
-            return when (next) {
-                'a' -> next(s.substring(0, s.length - 1)) + next
-                else -> s.substring(0, s.length - 1) + next
-            }
+        fun next(s: String): String = when (val next = next(s.last())) {
+            'a' -> next(s.dropLast(1)) + next
+            else -> s.dropLast(1) + next
         }
 
         fun next(c: Char) = when (c) {

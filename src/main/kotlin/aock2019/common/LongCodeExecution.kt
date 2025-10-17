@@ -1,16 +1,19 @@
 package aock2019.common
 
+import java.util.concurrent.BlockingQueue
+import java.util.concurrent.LinkedBlockingQueue
+
 data class LongCodeExecution(
     val program: MutableList<Long>,
-    val input: MutableList<Long>,
-    val output: MutableList<Long> = mutableListOf(),
+    val input: BlockingQueue<Long>,
+    val output: BlockingQueue<Long> = LinkedBlockingQueue(),
     var instructionPointer: Int = 0,
     var relativeBase: Int = 0,
 ) {
 
     constructor(program: List<Long>, input: List<Long>) : this(
         program.toMutableList(),
-        input.toMutableList()
+        LinkedBlockingQueue(input.toMutableList())
     )
 
     fun get(index: Int) = program.getOrElse(index) { 0L }
@@ -27,9 +30,10 @@ data class LongCodeExecution(
 
     fun opCode() = get(instructionPointer) % 100L
 
-    fun modes() = ParameterMode.Companion.toModes(get(instructionPointer))
+    fun modes() = ParameterMode.toModes(get(instructionPointer))
 
-    fun input() = input.removeFirstOrNull()
+    fun input(): Long = input.take()
+    //.removeFirstOrNull()
 
     fun output(value: Long) {
         output += value
@@ -45,9 +49,7 @@ data class LongCodeExecution(
 
     fun run(): LongCodeExecution {
         while (true) {
-            val opcode = opCode()
-
-            when (opcode) {
+            when (val opcode = opCode()) {
                 1L -> {
                     // ADD
                     set(3, parameter(1) + parameter(2))
@@ -62,7 +64,7 @@ data class LongCodeExecution(
 
                 3L -> {
                     // INPUT
-                    set(1, input() ?: break)
+                    set(1, input())
                     instructionPointer += 2
                 }
 

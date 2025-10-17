@@ -19,6 +19,7 @@
         <java.version>21</java.version>
         <kotlin.version>2.2.20</kotlin.version>
         <kotlin-serialization.version>1.9.0</kotlin-serialization.version>
+        <kotlin-coroutines.version>1.10.2</kotlin-coroutines.version>
 
         <!-- utilities -->
         <commons-lang3.version>3.19.0</commons-lang3.version> <!-- tmp -->
@@ -138,6 +139,10 @@
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-serialization-json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
         </dependency>
 
         <!-- utilities -->
