@@ -1,5 +1,7 @@
 package shared
 
+import kotlin.math.absoluteValue
+
 class Spiral {
     companion object {
 
@@ -32,5 +34,47 @@ class Spiral {
             }
         }
 
+    }
+}
+
+fun Int.factorize(): List<Int> {
+    var remaining = this.absoluteValue
+
+    if (remaining == 0) {
+        return emptyList()
+    } else if (remaining == 1) {
+        return listOf(this)
+    }
+
+    return sequence {
+        if (this@factorize < 0) {
+            yield(-1)
+        }
+
+        var divisor = 2
+
+        while (divisor * divisor <= remaining) {
+            while (remaining % divisor == 0) {
+                yield(divisor)
+                remaining /= divisor
+            }
+            divisor++
+        }
+
+        if (remaining > 1) {
+            yield(remaining)
+        }
+    }
+        .toList()
+}
+
+data class IntFraction(
+    val numerator: Int,
+    val denominator: Int
+) {
+    fun simplify(): IntFraction {
+        val gcd = gcd(numerator.absoluteValue, denominator.absoluteValue)
+        val sign = if (denominator < 0) -1 else 1
+        return IntFraction(sign * numerator / gcd, sign * denominator / gcd)
     }
 }

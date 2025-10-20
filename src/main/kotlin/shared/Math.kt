@@ -58,6 +58,16 @@ tailrec fun gcd(x: Long, y: Long): Long = when {
     }
 }
 
+tailrec fun gcd(x: Int, y: Int): Int = when {
+    x == 0 -> y
+    y == 0 -> x
+    else -> {
+        val max = maxOf(x, y)
+        val min = minOf(x, y)
+        gcd(min, max % min)
+    }
+}
+
 fun sum(range: IntRange) = sum(range.min().toLong()..range.max().toLong())
 
 fun sum(range: LongRange): Long = (range.min() + range.max()) * range.length() / 2

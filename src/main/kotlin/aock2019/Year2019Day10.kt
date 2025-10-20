@@ -14,7 +14,12 @@ data class Year2019Day10(
 
     fun partTwo() = 0L
 
-    fun countVisibleAsteroidsFrom(point: Point2d): Long {
-        return 0L
-    }
+    fun countVisibleAsteroidsFrom(point: Point2d): Int = asteroids
+        .filter { it != point }
+        .associateBy {
+            with(it - point) {
+                side() to slope()
+            }
+        }
+        .size
 }

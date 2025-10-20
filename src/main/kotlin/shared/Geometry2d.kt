@@ -6,6 +6,7 @@ import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
+import kotlin.math.sqrt
 
 fun <T> Pair<T, T>.x() = first
 fun <T> Pair<T, T>.y() = second
@@ -80,6 +81,19 @@ data class Vector2d(
 
     fun sign() = Vector2d(x.sign, y.sign)
 
+    fun slope() = this.y.toDouble() / this.x.toDouble()
+
+    fun side() = when {
+        this.x < 0 -> "left"
+        this.x > 0 -> "right"
+        else -> when {
+            this.y > 0 -> "top"
+            this.y < 0 -> "bottom"
+            else -> "center"
+        }
+    }
+
+    fun magnitude() = sqrt((this.x * this.x + this.y * this.y).toDouble())
 }
 
 data class Area2d(

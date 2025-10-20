@@ -22,7 +22,7 @@ class Year2019Day10Specification extends Specification {
         readFile(2019, 10, "example_4") | 41             | "(6,3)"
         readFile(2019, 10, "example_5") | 210            | "(11,13)"
 
-        readFile(2019, 10)              | -1              | ""
+        readFile(2019, 10)              | 319            | ""
     }
 
     def "partTwo"() {
