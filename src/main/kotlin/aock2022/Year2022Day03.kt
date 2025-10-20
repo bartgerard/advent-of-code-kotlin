@@ -1,6 +1,6 @@
 package aock2022
 
-import shared.positionInAlphabet
+import shared.Alphabet
 import shared.sanitize
 import shared.splitIn
 
@@ -8,7 +8,7 @@ data class Year2022Day03(
     private val input: List<String>
 ) {
     companion object {
-        fun score(c: Char) = positionInAlphabet(c) + if (c.isLowerCase()) 0 else 26
+        fun score(c: Char) = Alphabet.positionOf(c) + if (c.isLowerCase()) 0 else 26
     }
 
     constructor(input: String) : this(input.sanitize().lines())

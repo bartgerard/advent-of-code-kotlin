@@ -19,21 +19,19 @@ class Year2015Day11Specification extends Specification {
         "abcdefgh"         | "abcdffaa"     | ""
         "ghijklmn"         | "ghjaabcc"     | ""
 
-        readFile(2015, 11) | 0              | ""
+        readFile(2015, 11) | "hxbxxyzz"     | ""
     }
 
     def "partTwo"() {
         when:
-        final long result = new Year2015Day11(input).partTwo()
+        final String result = new Year2015Day11(input).partTwo()
 
         then:
         result == expectedResult
 
         where:
         input              | expectedResult | comment
-        ""                 | 0              | ""
-
-        readFile(2015, 11) | 0              | ""
+        readFile(2015, 11) | "hxcaabcc"     | ""
     }
 
 }

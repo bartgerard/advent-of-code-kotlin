@@ -1,7 +1,6 @@
 package shared
 
 import java.util.Objects.isNull
-import java.util.function.IntFunction
 
 fun <T> union(sets: Collection<Set<T>>): Set<T> = sets.flatten().fold(emptySet()) { acc, set -> acc + set }
 
@@ -28,6 +27,8 @@ data class CyclicList<T>(val list: List<T>) : List<T> by list {
     override operator fun get(index: Int): T = list[index % list.size]
 }
 
+fun <T> List<T>.zipWithNextCyclical() = zipWithNext() + (last() to first())
+
 /**
  * Generate Strings based on available options at each segment.
  * [["A"], ["B", "C"], ["D"]] -> ["ABD","ACD"]
@@ -36,7 +37,7 @@ fun List<Collection<CharSequence>>.generate(): List<String> = fold(listOf("")) {
     acc.flatMap { previous -> options.map { previous + it } }
 }
 
-fun <T> Collection<T>.combinations() = flatMap { i -> map { j -> Pair(i, j) } }
+fun <T> Collection<T>.combinations() = asSequence().flatMap { i -> map { j -> Pair(i, j) } }
 
 fun <T> Collection<T>.indicesOf(elements: Collection<T>) = elements.map { indexOf(it) }
 
