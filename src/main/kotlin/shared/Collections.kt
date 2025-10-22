@@ -37,9 +37,31 @@ fun List<Collection<CharSequence>>.generate(): List<String> = fold(listOf("")) {
     acc.flatMap { previous -> options.map { previous + it } }
 }
 
-fun <T> Collection<T>.combinations() = asSequence().flatMap { i -> map { j -> Pair(i, j) } }
+fun <T> Iterable<T>.combinations() = asSequence().flatMap { i -> map { j -> Pair(i, j) } }
 
-fun <T> Collection<T>.indicesOf(elements: Collection<T>) = elements.map { indexOf(it) }
+fun <T> Iterable<T>.distinctPairs() = sequence {
+    val list = this@distinctPairs.toList()
+
+    for (i in 0..list.size) {
+        for (j in i + 1..<list.size) {
+            yield(list[i] to list[j])
+        }
+    }
+}
+
+fun <T> Iterable<T>.allPairs(includeSelf: Boolean = false) = sequence {
+    val list = this@allPairs.toList()
+
+    for (i in list.indices) {
+        for (j in list.indices) {
+            if (includeSelf || i != j) {
+                yield(list[i] to list[j])
+            }
+        }
+    }
+}
+
+fun <T> Iterable<T>.indicesOf(elements: Collection<T>) = elements.map { indexOf(it) }
 
 fun List<String>.allShortest() = minOf { it.length }
     .let { min -> filter { it.length == min } }

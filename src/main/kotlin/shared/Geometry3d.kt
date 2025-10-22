@@ -18,7 +18,9 @@ data class Vector3d(
     }
 
     constructor(values: List<Double>) : this(values[0], values[1], values[2])
+    constructor(values: Map<Axis, Double>) : this(values[Axis.X] ?: 0.0, values[Axis.Y] ?: 0.0, values[Axis.Z] ?: 0.0)
 
+    operator fun plus(v: Vector3d) = Vector3d(x + v.x, y + v.y, z + v.z)
     operator fun minus(v: Vector3d) = Vector3d(x - v.x, y - v.y, z - v.z)
 
     operator fun times(scalar: Int) = Vector3d(x * scalar, y * scalar, z * scalar)

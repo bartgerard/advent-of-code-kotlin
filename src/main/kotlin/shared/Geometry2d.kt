@@ -3,6 +3,8 @@ package shared
 import shared.Vector2d.Companion.ORTHOGONAL_ADJACENT
 import kotlin.math.PI
 import kotlin.math.absoluteValue
+import kotlin.math.acos
+import kotlin.math.atan2
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
@@ -52,6 +54,8 @@ data class Vector2d(
         }
     }
 
+    constructor(coordinates: List<Int>) : this(coordinates[0], coordinates[1])
+
     operator fun times(scalar: Int) = Vector2d(x * scalar, y * scalar)
 
     fun orthogonal() = buildSet {
@@ -87,13 +91,42 @@ data class Vector2d(
         this.x < 0 -> "left"
         this.x > 0 -> "right"
         else -> when {
-            this.y > 0 -> "top"
-            this.y < 0 -> "bottom"
+            this.y < 0 -> "top"
+            this.y > 0 -> "bottom"
             else -> "center"
         }
     }
 
-    fun magnitude() = sqrt((this.x * this.x + this.y * this.y).toDouble())
+    fun length() = sqrt((this.x * this.x + this.y * this.y).toDouble())
+
+    infix fun dot(v: Vector2d) = x * v.x + y * v.y
+
+    infix fun cross(v: Vector2d) = x * v.y - y * v.x // fictional z
+
+    fun angleTo(v: Vector2d): Angle {
+        val lengths = this.length() * v.length()
+
+        if (lengths == 0.0) {
+            return Angle(0.0)
+        }
+
+        val cosTheta = (this.dot(v) / lengths).coerceIn(-1.0, 1.0)
+
+        return Angle(acos(cosTheta))
+    }
+
+    fun signedAnleTo(v: Vector2d): Angle {
+        val lengths = this.length() * v.length()
+
+        if (lengths == 0.0) {
+            return Angle(0.0)
+        }
+
+        val cosTheta = (this.dot(v) / lengths).coerceIn(-1.0, 1.0)
+        val sinTheta = this.cross(v) / lengths
+
+        return Angle(atan2(sinTheta, cosTheta))
+    }
 }
 
 data class Area2d(
@@ -287,4 +320,38 @@ data class Circle(
     fun diameter(): Double = radius * 2
 
     fun area(): Double = PI * radius * radius
+}
+
+data class Angle(
+    private val radians: Double
+) {
+    companion object {
+        const val TAU = 2 * PI
+        val ZERO = Angle(0.0)
+    }
+
+    fun radians() = radians
+    fun degrees() = Math.toDegrees(radians)
+
+    fun toDegrees360(turn: Turn = Turn.COUNTER_CLOCKWISE) = degrees()
+        .let { degrees -> ((degrees % 360) + 360) % 360 }
+        .let { normalized ->
+            when (turn) {
+                Turn.COUNTER_CLOCKWISE -> normalized
+                Turn.CLOCKWISE -> (360 - normalized) % 360
+            }
+        }
+
+    fun toRadians2Pi(turn: Turn = Turn.COUNTER_CLOCKWISE) = (((radians % TAU) + TAU) % TAU)
+        .let { normalized ->
+            when (turn) {
+                Turn.COUNTER_CLOCKWISE -> normalized
+                Turn.CLOCKWISE -> (TAU - normalized) % TAU
+            }
+        }
+
+    operator fun plus(other: Angle) = Angle(radians + other.radians)
+    operator fun minus(other: Angle) = Angle(radians - other.radians)
+    operator fun times(factor: Double) = Angle(radians * factor)
+    operator fun div(divisor: Double) = Angle(radians / divisor)
 }

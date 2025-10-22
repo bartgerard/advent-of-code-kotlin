@@ -6,14 +6,24 @@ enum class Axis {
     Z;
 
     companion object {
-        val TWO_DIMENSIONAL = setOf(X, Y)
-        val THREE_DIMENSIONAL = setOf(X, Y, Z)
+        val TWO_DIMENSIONAL = listOf(X, Y)
+        val THREE_DIMENSIONAL = listOf(X, Y, Z)
     }
 }
 
 enum class Turn {
-    LEFT,
-    RIGHT
+    CLOCKWISE,
+    COUNTER_CLOCKWISE;
+
+    companion object {
+        val LEFT = COUNTER_CLOCKWISE
+        val RIGHT = CLOCKWISE
+    }
+
+    fun inverse() = when (this) {
+        CLOCKWISE -> COUNTER_CLOCKWISE
+        COUNTER_CLOCKWISE -> CLOCKWISE
+    }
 }
 
 enum class Direction {
@@ -68,8 +78,8 @@ enum class Direction {
     }
 
     fun rotate(turn: Turn) = when (turn) {
-        Turn.LEFT -> rotateLeft()
-        Turn.RIGHT -> rotateRight()
+        Turn.COUNTER_CLOCKWISE -> rotateLeft()
+        Turn.CLOCKWISE -> rotateRight()
     }
 
     fun rotateLeft() = when (this) {

@@ -1,6 +1,11 @@
 package shared
 
 import Jama.Matrix
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.apache.commons.math3.linear.Array2DRowRealMatrix
 import org.apache.commons.math3.linear.ArrayRealVector
 import org.apache.commons.math3.linear.LUDecomposition
@@ -40,6 +45,28 @@ fun solveLinearWithJama() {
 }
 
 fun main() {
-    solveLinearWithCommonsMath()
-    solveLinearWithJama()
+    //solveLinearWithCommonsMath()
+    //solveLinearWithJama()
+    runBlocking {
+        test()
+    }
+}
+
+suspend fun test() = coroutineScope {
+    val channel = Channel<String>()
+
+    launch {
+        println("Channel Sent data 1 to channel")
+        channel.send("Data 1")
+        println("Channel Sent data 2 to channel")
+        channel.send("Data 2")
+        channel.close() // we're done sending so channel should be closed
+    }
+
+    launch {
+        channel.consumeEach {
+            println("Channel Received: $it")
+        }
+        println("Done!")
+    }
 }

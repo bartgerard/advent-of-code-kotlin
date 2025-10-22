@@ -33,10 +33,8 @@ class Year2019Day10Specification extends Specification {
         result == expectedResult
 
         where:
-        input                           | expectedResult | comment
-        readFile(2019, 10, "example_1") | 0              | ""
-
-        readFile(2019, 10)              | 0              | ""
+        input              | expectedResult | comment
+        readFile(2019, 10) | 517            | ""
     }
 
 }
