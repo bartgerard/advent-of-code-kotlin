@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue
 
 data class LongCodeExecution(
     val program: MutableList<Long>,
-    val input: BlockingQueue<Long>,
+    val input: BlockingQueue<Long> = LinkedBlockingQueue(),
     val output: BlockingQueue<Long> = LinkedBlockingQueue(),
     var instructionPointer: Int = 0,
     var relativeBase: Int = 0,

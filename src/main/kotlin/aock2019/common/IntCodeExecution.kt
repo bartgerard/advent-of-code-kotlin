@@ -2,7 +2,7 @@ package aock2019.common
 
 data class IntCodeExecution(
     val program: MutableList<Int>,
-    val input: MutableList<Int>,
+    val input: MutableList<Int> = mutableListOf(),
     val output: MutableList<Int> = mutableListOf(),
     var instructionPointer: Int = 0,
     var relativeBase: Int = 0,
@@ -15,7 +15,7 @@ data class IntCodeExecution(
 
     fun opCode() = program[instructionPointer] % 100
 
-    fun modes() = ParameterMode.Companion.toModes(program[instructionPointer])
+    fun modes() = ParameterMode.toModes(program[instructionPointer])
 
     fun input() = input.removeFirstOrNull()
 
@@ -33,9 +33,7 @@ data class IntCodeExecution(
 
     fun run(): IntCodeExecution {
         while (true) {
-            val opcode = opCode()
-
-            when (opcode) {
+            when (val opcode = opCode()) {
                 1 -> {
                     // ADD
                     program[program[instructionPointer + 3]] = parameter(1) + parameter(2)
