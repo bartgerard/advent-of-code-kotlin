@@ -71,3 +71,8 @@ tailrec fun gcd(x: Int, y: Int): Int = when {
 fun sum(range: IntRange) = sum(range.min().toLong()..range.max().toLong())
 
 fun sum(range: LongRange): Long = (range.min() + range.max()) * range.length() / 2
+
+/**
+ * Identical to ceil(a / b.toDouble()).toLong(), but without the need to switch to doubles.
+ */
+fun ceilDiv(a: Long, b: Long) = (a + b - 1) / b

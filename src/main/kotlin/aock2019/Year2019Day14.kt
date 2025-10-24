@@ -1,7 +1,8 @@
 package aock2019
 
+import shared.ceilDiv
 import shared.sanitize
-import kotlin.math.ceil
+import kotlin.math.max
 
 data class Year2019Day14(
     private val reactions: List<Reaction>
@@ -13,35 +14,43 @@ data class Year2019Day14(
 
     constructor(input: String) : this(input.sanitize().lines().map { Reaction.parse(it) })
 
-    fun partOne(): Long {
-        val remainingReactions = reactions.toMutableList()
-        val remaining = mutableMapOf(FUEL to 1L)
+    fun partOne(targetAmountOfFuel: Long) = findRequiredAmountOfOreFor(targetAmountOfFuel)
 
-        while (remaining.size != 1 || !remaining.contains(ORE)) {
+    fun partTwo(unitsOfOre: Long): Long {
+        val lowerBound = findRequiredAmountOfOreFor(1L)
+
+        val estimatedAmountOfFuel = unitsOfOre / lowerBound
+        val increment = max((estimatedAmountOfFuel - lowerBound) / lowerBound, 1L)
+
+        val upperBound = generateSequence(estimatedAmountOfFuel) { it + increment }
+            .dropWhile { findRequiredAmountOfOreFor(it) < unitsOfOre }
+            .first()
+
+        return generateSequence(upperBound) { it - 1L }
+            .dropWhile { findRequiredAmountOfOreFor(it) > unitsOfOre }
+            .first()
+    }
+
+    private fun findRequiredAmountOfOreFor(targetAmountOfFuel: Long): Long {
+        val unusedReactions = reactions.toMutableList()
+        val remaining = mutableMapOf(FUEL to targetAmountOfFuel)
+
+        while (remaining.keys != setOf(ORE)) {
             // the first chemical that is not needed by any other reactions
-            val requiredChemical = remaining.keys.first { chemical -> remainingReactions.none { reaction -> reaction.inputs.any { it.chemical == chemical } } }
-            val requireQuantity = remaining.remove(requiredChemical)!!
+            val requiredChemical = remaining.keys.first { chemical -> unusedReactions.none { reaction -> reaction.inputs.any { it.chemical == chemical } } }
+            val requiredQuantity = remaining.remove(requiredChemical)!!
 
-            val reaction = remainingReactions.first { it.output.chemical == requiredChemical }
-            remainingReactions -= reaction
+            val reaction = unusedReactions.first { it.output.chemical == requiredChemical }
+                .also { unusedReactions.remove(it) }
 
-            val requiredQuantity = ceil(requireQuantity / reaction.output.quantity.toDouble()).toLong()
-            val requirements = reaction.inputs.map { it * requiredQuantity }
+            val batches = ceilDiv(requiredQuantity, reaction.output.quantity)
 
-            requirements.forEach { (quantity, chemical) ->
-                if (remaining.containsKey(chemical)) {
-                    remaining[chemical] = remaining[chemical]!! + quantity
-                } else {
-                    remaining[chemical] = quantity
-                }
+            reaction.inputs.forEach { (quantity, chemical) ->
+                remaining[chemical] = remaining.getOrDefault(chemical, 0L) + quantity * batches
             }
         }
 
-        return remaining[ORE]!!
-    }
-
-    fun partTwo(unitsOfOre: Long): Long {
-        return 0L
+        return remaining[ORE] ?: 0L
     }
 }
 
@@ -70,7 +79,4 @@ data class Reactant(
             return Reactant(quantity.toLong(), chemical)
         }
     }
-
-    operator fun plus(operand: Long) = Reactant(quantity + operand, chemical)
-    operator fun times(factor: Long) = Reactant(quantity * factor, chemical)
 }
