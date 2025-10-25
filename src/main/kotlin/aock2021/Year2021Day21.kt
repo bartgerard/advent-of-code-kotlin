@@ -2,7 +2,7 @@ package aock2021
 
 import shared.sanitize
 
-data class Year2021Day0x(
+data class Year2021Day21(
     private val input: List<String>
 ) {
     constructor(input: String) : this(input.sanitize().lines())
