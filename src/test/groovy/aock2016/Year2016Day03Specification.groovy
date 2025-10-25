@@ -7,11 +7,11 @@ import spock.lang.Specification
 import static shared.InputsKt.readFile
 
 @Ignore("template")
-class Year2016Day1xSpecification extends Specification {
+class Year2016Day03Specification extends Specification {
 
     def "partOne"() {
         when:
-        final long result = new Year2016Day1x(input).partOne()
+        final long result = new Year2016Day03(input).partOne()
 
         then:
         result == expectedResult
@@ -20,12 +20,12 @@ class Year2016Day1xSpecification extends Specification {
         input             | expectedResult | comment
         ""                | 0              | ""
 
-        readFile(2016, 0) | 0              | ""
+        readFile(2016, 3) | 0              | ""
     }
 
     def "partTwo"() {
         when:
-        final long result = new Year2016Day1x(input).partTwo()
+        final long result = new Year2016Day03(input).partTwo()
 
         then:
         result == expectedResult
@@ -34,7 +34,7 @@ class Year2016Day1xSpecification extends Specification {
         input             | expectedResult | comment
         ""                | 0              | ""
 
-        readFile(2016, 0) | 0              | ""
+        readFile(2016, 3) | 0              | ""
     }
 
 }

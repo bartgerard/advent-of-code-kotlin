@@ -68,6 +68,30 @@ fun List<String>.allShortest() = minOf { it.length }
 
 infix fun <T> Iterable<T>.difference(other: Iterable<T>) = (this union other) - (this intersect other)
 
+fun <T> Iterable<T>.firstRepeated(): T? {
+    val seen = mutableSetOf<T>()
+
+    for (element in this) {
+        if (!seen.add(element)) {
+            return element
+        }
+    }
+
+    return null
+}
+
+fun <T> Sequence<T>.firstRepeated(): T? {
+    val seen = mutableSetOf<T>()
+
+    for (element in this) {
+        if (!seen.add(element)) {
+            return element
+        }
+    }
+
+    return null
+}
+
 fun <T> Set<T>.permutations(): Sequence<List<T>> = this.toList().permutations()
 
 // advantage -> lazy evaluation!!

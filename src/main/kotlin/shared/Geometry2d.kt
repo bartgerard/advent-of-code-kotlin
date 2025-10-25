@@ -285,6 +285,17 @@ data class Point2d(
 
 }
 
+data class Ray2d(
+    val point: Point2d = Point2d.ZERO,
+    val direction: Vector2d
+)
+
+// Pose?
+data class OrientedPoint(
+    val point: Point2d = Point2d.ZERO,
+    val direction: Direction
+)
+
 data class LineSegment2d(
     val p1: Point2d,
     val p2: Point2d
