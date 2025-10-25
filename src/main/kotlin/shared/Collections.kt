@@ -27,6 +27,8 @@ data class CyclicList<T>(val list: List<T>) : List<T> by list {
     override operator fun get(index: Int): T = list[index % list.size]
 }
 
+fun <T> List<T>.repeatForever(): Sequence<T> = generateSequence { this }.flatten()
+
 fun <T> List<T>.zipWithNextCyclical() = zipWithNext() + (last() to first())
 
 /**
@@ -85,6 +87,34 @@ fun <T> Sequence<T>.firstRepeated(): T? {
 
     for (element in this) {
         if (!seen.add(element)) {
+            return element
+        }
+    }
+
+    return null
+}
+
+fun <T> Iterable<T>.firstRepeated(frequency: Int): T? {
+    val seen = mutableMapOf<T, Int>()
+
+    for (element in this) {
+        seen[element] = (seen[element] ?: 0) + 1
+
+        if (seen[element] == frequency) {
+            return element
+        }
+    }
+
+    return null
+}
+
+fun <T> Sequence<T>.firstRepeated(frequency: Int): T? {
+    val seen = mutableMapOf<T, Int>()
+
+    for (element in this) {
+        seen[element] = (seen[element] ?: 0) + 1
+
+        if (seen[element] == frequency) {
             return element
         }
     }
