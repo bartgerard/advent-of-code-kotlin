@@ -13,8 +13,8 @@ fun <T> List<T>.groupByIndexRemainder(divisor: Int): List<List<T>> = this.indice
 fun <T> List<List<T>>.transpose() = this[0].indices.map { column -> this.indices.map { row -> this[row][column] } }
 
 //fun <T> List<T>.frequencies() = this.groupBy { it }.mapValues { it.value.size }
-fun <T> List<T>.frequencies() = this.groupingBy { it }.eachCount()
-
+fun <T> Iterable<T>.frequencies() = this.groupingBy { it }.eachCount()
+fun <T> Sequence<T>.frequencies() = this.groupingBy { it }.eachCount()
 
 fun <T> List<T>.withoutIndex(index: Int) = this.filterIndexed { i, _ -> i != index }
 

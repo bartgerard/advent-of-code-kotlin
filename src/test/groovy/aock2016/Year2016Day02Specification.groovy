@@ -1,12 +1,10 @@
 package aock2016
 
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
-@Ignore("template")
 class Year2016Day02Specification extends Specification {
 
     def "partOne"() {
@@ -17,10 +15,11 @@ class Year2016Day02Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                          | expectedResult | comment
+        readFile(2016, 2, "example_1") | 1985           | ""
 
-        readFile(2016, 2) | 0              | ""
+
+        readFile(2016, 2)              | 0              | ""
     }
 
     def "partTwo"() {
