@@ -1,0 +1,3 @@
+Nexzal,Ozaneth,Vaneon,Ulmarlon,Zynroth,Drethtal,Silkyris,Darthel,Urithpyr,Naldsar,Ulmarfal,Raljor,Rahral,Valilor,Arakvalir,Elttyr,Phyrzion,Zraalaris,Cragix,Cragadarin,Talquor,Morbryn,Lazirvoran,Ulmarfelix,Nyrixthar,Hyravor,Braeaxar,Jalvoran,Thymnyn,Eldenvash
+
+L48,R48,L40,R36,L48,R14,L28,R26,L8,R27,L13,R40,L40,R12,L47,R18,L15,R18,L32,R12,L5,R23,L5,R28,L5,R49,L5,R25,L5,R12,L5,R42,L5,R18,L5,R47,L5,R29,L5,R24,L19,R6,L29,R30,L43,R9,L16,R45,L10,R7,L21,R43,L21,R30,L5,R34,L24,R36,L35

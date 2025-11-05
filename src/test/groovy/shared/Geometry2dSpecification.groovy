@@ -72,8 +72,8 @@ class Geometry2dSpecification extends Specification {
         final Angle angle = new Vector2d(v1).angleTo(new Vector2d(v2))
 
         then:
-        assertThat(angle.radians()).isCloseTo(expectedRadians as Double, withPrecision(0.0000001d))
-        assertThat(angle.degrees()).isCloseTo(expectedDegrees, withPrecision(0.1d))
+        assertThat(angle.radians).isCloseTo(expectedRadians as Double, withPrecision(0.0000001d))
+        assertThat(angle.degrees).isCloseTo(expectedDegrees, withPrecision(0.1d))
 
         where:
         v1     | v2      | expectedRadians | expectedDegrees | comment
@@ -93,8 +93,8 @@ class Geometry2dSpecification extends Specification {
         final Angle angle = new Vector2d(v1).signedAnleTo(new Vector2d(v2))
 
         then:
-        assertThat(angle.radians()).isCloseTo(expectedRadians as Double, withPrecision(0.0000001d))
-        assertThat(angle.degrees()).isCloseTo(expectedDegrees, withPrecision(0.1d))
+        assertThat(angle.radians).isCloseTo(expectedRadians as Double, withPrecision(0.0000001d))
+        assertThat(angle.degrees).isCloseTo(expectedDegrees, withPrecision(0.1d))
 
         where:
         v1     | v2      | expectedRadians  | expectedDegrees | comment

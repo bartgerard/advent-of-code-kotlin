@@ -78,3 +78,33 @@ data class IntFraction(
         return IntFraction(sign * numerator / gcd, sign * denominator / gcd)
     }
 }
+
+data class ComplexNumber(
+    val real: Long,
+    val imaginary: Long
+) {
+    companion object {
+        val ZERO = ComplexNumber(0, 0)
+
+        @JvmStatic
+        fun parse(value: String): ComplexNumber = value.toLongs()
+            .let { (real, imaginary) -> ComplexNumber(real, imaginary) }
+    }
+
+    operator fun plus(other: ComplexNumber) = ComplexNumber(
+        real + other.real,
+        imaginary + other.imaginary
+    )
+
+    operator fun times(other: ComplexNumber) = ComplexNumber(
+        real * other.real - imaginary * other.imaginary,
+        real * other.imaginary + imaginary * other.real
+    )
+
+    operator fun div(other: ComplexNumber) = ComplexNumber(
+        real / other.real,
+        imaginary / other.imaginary
+    )
+
+    override fun toString(): String = "[$real,${imaginary}]"
+}

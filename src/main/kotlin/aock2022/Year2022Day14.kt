@@ -6,7 +6,6 @@ import shared.OffsetCharGrid
 import shared.Point2d
 import shared.Rectangle2d
 import shared.Vector2d
-import shared.at
 import shared.fill
 import shared.sanitize
 import shared.toIntegers

@@ -4,7 +4,6 @@ import org.apache.commons.lang3.Validate.isTrue
 import org.apache.commons.math3.util.ArithmeticUtils.pow
 import shared.CharGrid
 import shared.Point2d
-import shared.at
 
 data class Year2023Day21(
     private val grid: CharGrid

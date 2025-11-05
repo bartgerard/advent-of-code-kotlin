@@ -3,7 +3,6 @@ package aock2020
 import shared.CharGrid
 import shared.Point2d
 import shared.Vector2d
-import shared.at
 
 data class Year2020Day03(
     private val grid: CharGrid

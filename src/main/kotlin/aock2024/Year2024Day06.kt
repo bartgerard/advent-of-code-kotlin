@@ -3,7 +3,6 @@ package aock2024
 import shared.CharGrid
 import shared.Direction
 import shared.Point2d
-import shared.at
 
 
 data class Year2024Day06(

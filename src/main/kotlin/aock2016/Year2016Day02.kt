@@ -3,7 +3,6 @@ package aock2016
 import shared.CharGrid
 import shared.Direction
 import shared.Point2d
-import shared.at
 import shared.sanitize
 
 data class Year2016Day02(

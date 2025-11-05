@@ -76,3 +76,5 @@ fun sum(range: LongRange): Long = (range.min() + range.max()) * range.length() /
  * Identical to ceil(a / b.toDouble()).toLong(), but without the need to switch to doubles.
  */
 fun ceilDiv(a: Long, b: Long) = (a + b - 1) / b
+
+fun Int.floorMod(divisor: Int): Int = Math.floorMod(this, divisor)

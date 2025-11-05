@@ -1,0 +1,3 @@
+Zarathverax,Quorurath,Vyrltor,Rythgaz,Vaelfal,Brivgarath,Sylxar,Balthaxar,Aerthar,Felmarasis
+
+L6,R2,L3,R6,L1,R9,L2,R7,L2,R7,L8

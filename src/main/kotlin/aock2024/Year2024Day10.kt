@@ -2,7 +2,6 @@ package aock2024
 
 import shared.CharGrid
 import shared.Point2d
-import shared.at
 
 data class Year2024Day10(
     private val grid: CharGrid

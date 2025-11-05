@@ -147,8 +147,8 @@ data class Area2d(
         }
     }
 
-    fun area() = points.size
-    fun perimeter() = sides().sum()
+    val area get() = points.size
+    val perimeter get() = sides().sum()
 
     fun sides(): List<Int> {
         val borders: Map<Point2d, MutableSet<Direction>> = points.associateWith { point -> Direction.ORTHOGONAL.filter { !points.contains(point + it) }.toMutableSet() }
@@ -185,8 +185,9 @@ data class Rectangle2d(
         }
     }
 
-    fun area() = x.length() * y.length()
-    fun perimeter() = 2 * (x.length() + y.length())
+    val area get() = x.length() * y.length()
+    val perimeter get() = 2 * (x.length() + y.length())
+
     fun points() = x.asSequence().flatMap { a -> y.map { b -> Point2d(a, b) } }
     fun contains(p: Point2d) = p.x in x && p.y in y
 }
@@ -322,29 +323,46 @@ data class LineSegment2d(
 
     fun intersectWithinSegment(other: LineSegment2d): Point2d? = intersect(other)
         ?.let { if (contains(it) && other.contains(it)) it else null }
+
+    fun isVertical() = p1.x == p2.x && p1.y != p2.y
+
+    fun intersectDiscrete(other: LineSegment2d): List<Point2d> {
+        if (!isVertical() && !other.isVertical()
+            && slope() == other.slope()
+            && yIntercept() == other.yIntercept()
+        ) {
+            // TODO
+            return (p1.x..p2.x).intersect(other.p1.x..other.p2.x)
+                .map { Point2d(it, yIntercept()) }
+        } else if (isVertical() && other.isVertical() && p1.x == other.p1.x) {
+            // TODO
+            return (p1.y..p2.y).intersect(other.p1.y..p2.y).map { Point2d(p1.x, it) }
+        }
+
+        return intersect(other)?.let { listOf(it) } ?: emptyList()
+    }
 }
 
 data class Circle(
     private val center: Point2d = Point2d.ZERO,
     private val radius: Double
 ) {
-    fun diameter(): Double = radius * 2
+    val diameter get(): Double = radius * 2
 
-    fun area(): Double = PI * radius * radius
+    val area get(): Double = PI * radius * radius
 }
 
 data class Angle(
-    private val radians: Double
+    val radians: Double
 ) {
     companion object {
         const val TAU = 2 * PI
         val ZERO = Angle(0.0)
     }
 
-    fun radians() = radians
-    fun degrees() = Math.toDegrees(radians)
+    val degrees get() = Math.toDegrees(radians)
 
-    fun toDegrees360(turn: Turn = Turn.COUNTER_CLOCKWISE) = degrees()
+    fun toDegrees360(turn: Turn = Turn.COUNTER_CLOCKWISE) = degrees
         .let { degrees -> ((degrees % 360) + 360) % 360 }
         .let { normalized ->
             when (turn) {

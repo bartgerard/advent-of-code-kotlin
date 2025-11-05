@@ -2,7 +2,6 @@ package aock2024
 
 import shared.Area2d
 import shared.CharGrid
-import shared.at
 import shared.sanitize
 
 data class Year2024Day12(
@@ -13,11 +12,11 @@ data class Year2024Day12(
     fun partOne() = grid.dimension().points()
         .groupBy { grid.at(it) }
         .values.flatMap { Area2d.areas(it) }
-        .sumOf { it.area() * it.perimeter() }
+        .sumOf { it.area * it.perimeter }
 
     fun partTwo() = grid.dimension().points()
         .groupBy { grid.at(it) }
         .values.flatMap { Area2d.areas(it) }
-        .sumOf { it.area() * it.sides().count() }
+        .sumOf { it.area * it.sides().count() }
 
 }

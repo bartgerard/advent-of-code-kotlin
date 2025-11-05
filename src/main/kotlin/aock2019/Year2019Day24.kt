@@ -2,7 +2,6 @@ package aock2019
 
 import shared.CharGrid
 import shared.Dimension
-import shared.at
 
 data class Year2019Day24(
     private val grid: CharGrid

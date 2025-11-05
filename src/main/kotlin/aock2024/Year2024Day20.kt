@@ -2,7 +2,6 @@ package aock2024
 
 import shared.CharGrid
 import shared.Dijkstra
-import shared.at
 
 data class Year2024Day20(
     private val grid: CharGrid

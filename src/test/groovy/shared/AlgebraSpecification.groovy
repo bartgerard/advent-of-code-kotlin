@@ -27,8 +27,8 @@ class AlgebraSpecification extends Specification {
         final equation = new LinearEquation2d(a, b, c)
 
         when:
-        final double slope = equation.slope()
-        final double yIntercept = equation.intercept()
+        final double slope = equation.slope
+        final double yIntercept = equation.intercept
 
         then:
         slope == expectedSlope
@@ -77,8 +77,8 @@ class AlgebraSpecification extends Specification {
         final function = new LinearFunction2d(m as double, y0 as double)
 
         when:
-        final double slope = function.slope()
-        final double yIntercept = function.intercept()
+        final double slope = function.slope
+        final double yIntercept = function.intercept
 
         then:
         slope == expectedSlope

@@ -1,0 +1,3 @@
+Gavaris,Raelvalir,Orahxaril,Selksor,Mornjorath,Lithjor,Rynfroth,Fyndcarth,Grimrovan,Irynkryth,Nyrixxith,Azmarsarix,Vyrlzar,Caelcyth,Torlith,Dorthyn,Drethnarith,Oronzyph,Arakiral,Zarox
+
+L12,R11,L8,R18,L15,R10,L13,R5,L6,R19,L5,R5,L5,R15,L5,R9,L5,R14,L5,R12,L11,R12,L15,R19,L6,R11,L9,R15,L16

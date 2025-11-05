@@ -95,16 +95,21 @@ class IntensityGrid(
 }
 
 interface Grid<T> {
-    fun dimension(): Dimension
+    fun grid(): List<List<T>>
+    fun dimension(): Dimension = Dimension(grid()[0].size, grid().size)
 
     fun contains(point: Point2d): Boolean = dimension().contains(point)
 
-    fun at(row: Int, column: Int): T
+    fun at(row: Int, column: Int): T = grid()[row][column]
+    fun at(point: Point2d): T = at(point.y, point.x)
 
-    fun firstRow(): List<T>
-    fun lastRow(): List<T>
+    fun firstRow(): List<T> = grid().first()
+    fun lastRow(): List<T> = grid().last()
 
-    fun findAll(value: T): List<Point2d>
+    fun findAll(value: T): List<Point2d> = grid().flatMapIndexed { row, line ->
+        line.indices.filter { line[it] == value }
+            .map { column -> Point2d(column, row) }
+    }
 
     fun points(): Sequence<Point2d> = dimension().points()
     fun values(): Set<T> = points().map { at(it) }.toSet()
@@ -115,8 +120,22 @@ interface MutableGrid<T> : Grid<T> {
     fun set(point: Point2d, value: T)
 }
 
+data class IntGrid(
+    val grid: List<MutableList<Int>>
+) : MutableGrid<Int> {
+    constructor(input: String) : this(input.sanitize().lines().map { it.toIntegers().toMutableList() }.toMutableList())
+
+    override fun grid(): List<List<Int>> = grid
+
+    override fun set(point: Point2d, value: Int) {
+        grid[point.y][point.x] = value
+    }
+
+    override fun toString() = grid.joinToString("\n") { it.joinToString("\t") }
+}
+
 data class CharGrid(
-    val grid: MutableList<MutableList<Char>>
+    val grid: List<MutableList<Char>>
 ) : MutableGrid<Char> {
     constructor(
         dimension: Dimension,
@@ -127,20 +146,10 @@ data class CharGrid(
 
     fun copy() = CharGrid(grid.map { it.toMutableList() }.toMutableList())
 
-    override fun dimension() = Dimension(grid[0].size, grid.size)
-
-    override fun at(row: Int, column: Int) = grid[row][column]
-
-    override fun firstRow() = grid.first()
-    override fun lastRow() = grid.last()
+    override fun grid(): List<List<Char>> = grid
 
     override fun set(point: Point2d, value: Char) {
         grid[point.y][point.x] = value
-    }
-
-    override fun findAll(value: Char) = grid.flatMapIndexed { row, line ->
-        line.indices.filter { line[it] == value }
-            .map { column -> Point2d(column, row) }
     }
 
     fun frequenciesExcluding(blacklist: Set<Char>): Map<Char, List<Point2d>> = points()
@@ -162,13 +171,10 @@ data class OffsetCharGrid(
     val grid: CharGrid,
     val offset: Vector2d
 ) : MutableGrid<Char> {
-    override fun dimension(): Dimension = grid.dimension()
+    override fun grid(): List<List<Char>> = grid.grid()
 
     override fun contains(point: Point2d): Boolean = grid.contains(point - offset)
     override fun at(row: Int, column: Int): Char = grid.at(row - offset.y, column - offset.x)
-
-    override fun firstRow(): List<Char> = grid.firstRow()
-    override fun lastRow(): List<Char> = grid.lastRow()
 
     override fun set(point: Point2d, value: Char) {
         grid.set(point - offset, value)
@@ -180,6 +186,41 @@ data class OffsetCharGrid(
     override fun values(): Set<Char> = grid.values()
 
     override fun toString(): String = grid.toString()
+}
+
+data class BingoGrid(
+    val grid: IntGrid,
+    val marked: MutableList<Point2d> = mutableListOf()
+) : Grid<Int> {
+    constructor(input: String) : this(IntGrid(input))
+
+    override fun grid(): List<List<Int>> = grid.grid()
+
+    fun mark(number: Int): Point2d? {
+        val point = grid.findAll(number).firstOrNull()
+        return point?.also { marked.add(it) }
+    }
+
+    val markedNumbers get() = marked.map { at(it) }
+
+    val lastMarked get() = at(marked.last())
+}
+
+data class BingoVerifier(
+    val winningCombinations: Set<Set<Point2d>>
+) {
+    companion object {
+        fun forDimension(dimension: Dimension, includeDiagonal: Boolean = false): BingoVerifier = BingoVerifier(buildSet {
+            addAll(dimension.pointsInDirection(EAST).map { it.toSet() })
+            addAll(dimension.pointsInDirection(SOUTH).map { it.toSet() })
+            if (includeDiagonal) {
+                add(dimension.pointsInDirection(Point2d.ZERO, Vector2d.forDirection(SOUTH_EAST)).toSet())
+                add(dimension.pointsInDirection(Point2d(0, dimension.height - 1), Vector2d.forDirection(NORTH_EAST)).toSet())
+            }
+        })
+    }
+
+    fun containsBingo(grid: BingoGrid): Boolean = winningCombinations.any { grid.marked.containsAll(it) }
 }
 
 data class PushableGrid(
@@ -217,7 +258,6 @@ data class PushableGrid(
 fun <T> Grid<T>.rowIndices(): IntRange = dimension().rowIndices()
 fun <T> Grid<T>.columnIndices(): IntRange = dimension().columnIndices()
 fun <T> Grid<T>.columns(): List<List<T>> = columnIndices().map { column -> rowIndices().map { row -> at(row, column) } }
-fun <T> Grid<T>.at(point: Point2d): T = at(point.y, point.x)
 
 fun <T> Grid<T>.valuesInDirection(point: Point2d, direction: Vector2d): Sequence<T> = dimension()
     .pointsInDirection(point, direction)

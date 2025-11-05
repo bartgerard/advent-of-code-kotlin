@@ -27,10 +27,10 @@ data class LinearEquation2d(
     // y = (- a x - c) / b
     fun at(x: Double) = (-a * x - c) / b
 
-    fun slope() = -a / b
-    fun intercept() = -c / b
+    val slope get() = -a / b
+    val intercept get() = -c / b
 
-    fun toLinearFunction() = LinearFunction2d(slope(), intercept())
+    fun toLinearFunction() = LinearFunction2d(slope, intercept)
 
     infix fun intersect(eq: LinearEquation2d) = intersect(this, eq)
 }
@@ -59,8 +59,8 @@ data class LinearFunction2d(
     // y = (c - a x) / b
     fun at(x: Double) = m * x + y0
 
-    fun slope() = m
-    fun intercept() = y0
+    val slope get() = m
+    val intercept get() = y0
 
     fun toGeneralForm() = LinearEquation2d(m, 1.0, -y0)
 

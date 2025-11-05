@@ -3,7 +3,6 @@ package aock2022
 import shared.CharGrid
 import shared.Direction
 import shared.Vector2d
-import shared.at
 import shared.product
 import shared.takeOnlyIncreasingBy
 import shared.takeVisibleFromHeightBy
