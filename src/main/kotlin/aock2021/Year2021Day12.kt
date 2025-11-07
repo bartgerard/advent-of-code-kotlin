@@ -27,17 +27,15 @@ data class Year2021Day12(
             cave == "start" -> false
             cave.isBig() -> true
             cave !in path -> true
-            else -> !path.hasDoubleSmallCave()
+            else -> !path.containsDoubleSmallCave()
         }
     }
-        // TODO: hasDoubleSmallCave should not be needed, but the function above produces some duplicates
-        .filter { it.filter { it.isBig().not() }.let { it.size - 1 <= it.toSet().size } }
         .count()
 }
 
 private fun String.isBig() = all { it.isUpperCase() }
 
-fun List<String>.hasDoubleSmallCave(): Boolean {
+fun List<String>.containsDoubleSmallCave(): Boolean {
     val seen = mutableSetOf<String>()
     return filter { it.isBig().not() }.any { !seen.add(it) }
 }

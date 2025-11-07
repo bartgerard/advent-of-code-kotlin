@@ -25,14 +25,16 @@ data class Graph<T>(
         val results = mutableListOf<List<T>>()
 
         fun visit(current: T, path: List<T>) {
+            val nextPath = path + current
+
             if (current == end) {
-                results += path + current
+                results += nextPath
                 return
             }
 
             nodes[current]?.forEach { neighbor ->
-                if (canVisit(neighbor, path)) {
-                    visit(neighbor, path + current)
+                if (canVisit(neighbor, nextPath)) {
+                    visit(neighbor, nextPath)
                 }
             }
         }
