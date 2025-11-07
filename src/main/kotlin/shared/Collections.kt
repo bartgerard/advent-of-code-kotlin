@@ -231,10 +231,26 @@ fun <T, K> Iterable<T>.takeVisibleFromHeightBy(
     return result
 }
 
+fun Sequence<Int>.product() = this.fold(1, Int::times)
 fun Iterable<Int>.product() = this.fold(1, Int::times)
 inline fun <T> Iterable<T>.productOf(selector: (T) -> Int): Int = this.map(selector).fold(1, Int::times)
 
 fun Iterable<Long>.product() = this.fold(1L, Long::times)
+
+fun Iterable<Long>.median(): Long = this.sorted().let {
+    if (it.size % 2 == 0) {
+        (it[it.size / 2 - 1] + it[it.size / 2]) / 2
+    } else {
+        it[it.size / 2]
+    }
+}
+
+fun <T> List<T>.middle(): T = this[size / 2]
+
+fun <T> List<T>.hasDoubles(): Boolean {
+    val seen = mutableSetOf<T>()
+    return any { !seen.add(it) }
+}
 
 @OptIn(kotlin.experimental.ExperimentalTypeInference::class)
 @OverloadResolutionByLambdaReturnType

@@ -106,10 +106,12 @@ interface Grid<T> {
     fun firstRow(): List<T> = grid().first()
     fun lastRow(): List<T> = grid().last()
 
-    fun findAll(value: T): List<Point2d> = grid().flatMapIndexed { row, line ->
-        line.indices.filter { line[it] == value }
+    fun findAll(predicate: Predicate<T>): List<Point2d> = grid().flatMapIndexed { row, line ->
+        line.indices.filter { predicate.invoke(line[it]) }
             .map { column -> Point2d(column, row) }
     }
+
+    fun findAll(value: T): List<Point2d> = findAll { it == value }
 
     fun points(): Sequence<Point2d> = dimension().points()
     fun values(): Set<T> = points().map { at(it) }.toSet()
@@ -123,12 +125,21 @@ interface MutableGrid<T> : Grid<T> {
 data class IntGrid(
     val grid: List<MutableList<Int>>
 ) : MutableGrid<Int> {
-    constructor(input: String) : this(input.sanitize().lines().map { it.toIntegers().toMutableList() }.toMutableList())
+
+    constructor(input: String) : this(
+        input.sanitize().lines()
+            .map { line -> line.asSequence().map { it.digitToInt() }.toMutableList() }
+            .toMutableList()
+    )
 
     override fun grid(): List<List<Int>> = grid
 
     override fun set(point: Point2d, value: Int) {
         grid[point.y][point.x] = value
+    }
+
+    operator fun plus(increment: Int) = points().forEach { point ->
+        grid[point.y][point.x] += increment
     }
 
     override fun toString() = grid.joinToString("\n") { it.joinToString("\t") }
@@ -192,7 +203,7 @@ data class BingoGrid(
     val grid: IntGrid,
     val marked: MutableList<Point2d> = mutableListOf()
 ) : Grid<Int> {
-    constructor(input: String) : this(IntGrid(input))
+    constructor(input: String) : this(IntGrid(input.sanitize().lines().map { it.toIntegers().toMutableList() }.toMutableList()))
 
     override fun grid(): List<List<Int>> = grid.grid()
 

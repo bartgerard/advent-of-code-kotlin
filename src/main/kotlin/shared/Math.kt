@@ -16,6 +16,7 @@ fun combinations(k: Long, n: Long): Long {
 
 fun simplex(k: Long, n: Long) = combinations(k, n + k)
 
+fun triangular(n: Int) = n * (n + 1) / 2
 fun triangular(n: Long) = n * (n + 1) / 2
 
 fun primeFactors(value: Long): Map<Long, Int> {

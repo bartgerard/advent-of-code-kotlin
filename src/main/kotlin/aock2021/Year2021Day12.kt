@@ -1,12 +1,43 @@
 package aock2021
 
+import shared.Graph
 import shared.sanitize
 
 data class Year2021Day12(
-    private val input: List<String>
+    private val graph: Graph<String>
 ) {
-    constructor(input: String) : this(input.sanitize().lines())
+    constructor(input: String) : this(
+        Graph(
+            input.sanitize()
+                .lines()
+                .map { line ->
+                    line.split("-")
+                        .let { it[0] to it[1] }
+                }
+        )
+    )
 
-    fun partOne() = 0L
-    fun partTwo() = 0L
+    fun partOne() = graph.findAllPaths("start", "end") { cave, path ->
+        cave.isBig() || cave !in path
+    }
+        .count()
+
+    fun partTwo() = graph.findAllPaths("start", "end") { cave, path ->
+        when {
+            cave == "start" -> false
+            cave.isBig() -> true
+            cave !in path -> true
+            else -> !path.hasDoubleSmallCave()
+        }
+    }
+        // TODO: hasDoubleSmallCave should not be needed, but the function above produces some duplicates
+        .filter { it.filter { it.isBig().not() }.let { it.size - 1 <= it.toSet().size } }
+        .count()
+}
+
+private fun String.isBig() = all { it.isUpperCase() }
+
+fun List<String>.hasDoubleSmallCave(): Boolean {
+    val seen = mutableSetOf<String>()
+    return filter { it.isBig().not() }.any { !seen.add(it) }
 }

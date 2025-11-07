@@ -7,7 +7,7 @@ import spock.lang.Specification
 import static shared.InputsKt.readFile
 
 @Ignore("template")
-class Year2021Day0xSpecification extends Specification {
+class Year2021Day1xSpecification extends Specification {
 
     def "partOne"() {
         when:

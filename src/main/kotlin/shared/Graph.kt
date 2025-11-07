@@ -1,76 +1,44 @@
 package shared
 
-// Karger
-// https://en.wikipedia.org/wiki/Karger%27s_algorithm
-data class ContractableGraph(
-    val vertices: MutableMap<String, Vertices<String>>,
-    val edges: MutableList<Edge<String>>
+data class Graph<T>(
+    val nodes: MutableMap<T, MutableSet<T>> = mutableMapOf()
 ) {
-    constructor(edges: List<Edge<String>>) : this(
-        edges.asSequence()
-            .flatMap { it.vertices() }
-            .distinct()
-            .associateWith { Vertices.of(it) }
-            .toMutableMap(),
-        edges.toMutableList()
-    )
-
-    private fun contract(edge: Edge<String>) {
-        val (v1, v2) = edge
-
-        vertices[v1]!!.vertices.addAll(vertices[v2]!!.vertices)
-        vertices -= v2
-
-        val impactedEdges = edges.filter { it.contains(v2) }
-        edges.removeAll(impactedEdges)
-
-        val newEdges = impactedEdges.flatMap { it.vertices() }
-            .filter { it != v1 && it != v2 }
-            .map { Edge(v1, it) }
-
-        edges += newEdges
+    constructor(edges: List<Pair<T, T>>) : this() {
+        edges.forEach { addEdge(it) }
     }
 
-    // Karger's algorithm
-    fun kargerMinimumCut() {
-        while (vertices.keys.size > 2) {
-            val edge = edges.random()
-            contract(edge)
+    fun addNode(value: T): MutableSet<T> = nodes.computeIfAbsent(value) { mutableSetOf() }
+
+    fun addEdge(edge: Pair<T, T>) {
+        val node1 = addNode(edge.first)
+        val node2 = addNode(edge.second)
+
+        node1 += edge.second
+        node2 += edge.first
+    }
+
+    fun findAllPaths(
+        start: T,
+        end: T,
+        canVisit: (T, List<T>) -> Boolean,
+    ): List<List<T>> {
+        val results = mutableListOf<List<T>>()
+
+        fun visit(current: T, path: List<T>) {
+            if (current == end) {
+                results += path + current
+                return
+            }
+
+            nodes[current]?.forEach { neighbor ->
+                if (canVisit(neighbor, path)) {
+                    visit(neighbor, path + current)
+                }
+            }
         }
+
+        visit(start, emptyList())
+        return results
     }
 
-    fun between(v1: String, v2: String) {
-        val remaining = mutableListOf(v1)
-        mutableSetOf<Edge<String>>()
-
-        while (remaining.isNotEmpty()) {
-            vertices[remaining.removeFirst()]
-            //vertex.edges
-        }
-    }
-
-    fun findEdgesFor(vertex: String) = edges.filter { it.contains(vertex) }
-    fun findNeighbours(vertex: String) = findEdgesFor(vertex)
-        .map { it.vertices().filter { it != vertex }.first() }
-
-    fun toInputString() = edges.joinToString("\n") { it.toString() }
 }
-
-data class Vertices<V>(
-    val vertices: MutableSet<V>
-) {
-    companion object {
-        fun <V> of(vertex: V) = Vertices(mutableSetOf(vertex))
-    }
-}
-
-data class Edge<V>(
-    val v1: V,
-    val v2: V
-) {
-    fun contains(vertex: V) = v1 == vertex || v2 == vertex
-    fun vertices() = sequenceOf(v1, v2)
-
-    override fun toString() = "$v1, $v2"
-}
-

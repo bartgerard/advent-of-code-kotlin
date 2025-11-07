@@ -1,12 +1,23 @@
 package aock2021
 
+import shared.median
 import shared.sanitize
+import shared.toLongs
+import shared.triangular
+import kotlin.math.abs
 
 data class Year2021Day07(
-    private val input: List<String>
+    private val input: List<Long>
 ) {
-    constructor(input: String) : this(input.sanitize().lines())
+    constructor(input: String) : this(input.sanitize().toLongs())
 
-    fun partOne() = 0L
-    fun partTwo() = 0L
+    fun partOne() = input.sumOf { abs(it - input.median()) }
+
+    fun partTwo() = (input.min()..input.max())
+        .minOf { position ->
+            input.sumOf { crab ->
+                triangular(abs(crab - position))
+            }
+        }
+
 }
