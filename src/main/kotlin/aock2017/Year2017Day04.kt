@@ -9,5 +9,5 @@ data class Year2017Day04(
     constructor(input: String) : this(input.sanitize().lines().map { it.split(" ") })
 
     fun partOne() = input.count { line -> line.size == line.toSet().size }
-    fun partTwo() = input.count { line -> line.size == line.map { it.asSequence().frequencies() }.toSet().size }
+    fun partTwo() = input.count { line -> line.size == line.map { it.frequencies() }.toSet().size }
 }

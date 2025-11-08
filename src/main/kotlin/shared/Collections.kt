@@ -15,6 +15,7 @@ fun <T> List<List<T>>.transpose() = this[0].indices.map { column -> this.indices
 //fun <T> List<T>.frequencies() = this.groupBy { it }.mapValues { it.value.size }
 fun <T> Iterable<T>.frequencies() = this.groupingBy { it }.eachCount()
 fun <T> Sequence<T>.frequencies() = this.groupingBy { it }.eachCount()
+fun String.frequencies() = this.groupingBy { it }.eachCount()
 
 fun <T> List<T>.withoutIndex(index: Int) = this.filterIndexed { i, _ -> i != index }
 

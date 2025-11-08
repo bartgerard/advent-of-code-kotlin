@@ -9,7 +9,7 @@ data class Year2018Day02(
 ) {
     constructor(input: String) : this(input.sanitize().lines())
 
-    fun partOne() = input.map { it.asSequence().frequencies() }
+    fun partOne() = input.map { it.frequencies() }
         .let { frequenciesByLine ->
             frequenciesByLine.count { it.containsValue(2) } * frequenciesByLine.count { it.containsValue(3) }
         }
