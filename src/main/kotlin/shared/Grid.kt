@@ -62,6 +62,10 @@ data class Dimension(
 
         return outerPoints.map { pointsInDirection(it, vector).toList() }
     }
+
+    operator fun times(factor: Int) = Dimension(width * factor, height * factor)
+
+    fun bottomRight(): Point2d = Point2d(width - 1, height - 1)
 }
 
 class ToggleGrid(

@@ -26,4 +26,5 @@ data class BinaryNumber(
 
 fun main() {
     println(BinaryNumber.parse("011001").inverse())
+    println(BinaryNumber.parse("011111100101").intValue) // 2021
 }

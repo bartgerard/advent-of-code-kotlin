@@ -35,7 +35,7 @@ data class Year2024Day16(
         val shortestPath = Dijkstra.findShortestPaths(
             start to Direction.EAST,
             { (point, _) -> point == end },
-            { it ->
+            {
                 buildList {
                     add(it.first + it.second to it.second)
                     add(it.first to it.second.rotateLeft())
