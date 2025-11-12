@@ -21,7 +21,7 @@ class Year2021Day18Specification extends Specification {
         where:
         number                                  || expectedResult                  | comment
         "[[[[[9,8],1],2],3],4]"                 || "[[[[0,9],2],3],4]"             | ""
-        "[[[[0,9],2],3],4]"                     || "[7,[6,[5,[7,0]]]]"             | ""
+        "[7,[6,[5,[4,[3,2]]]]]"                 || "[7,[6,[5,[7,0]]]]"             | ""
         "[[6,[5,[4,[3,2]]]],1]"                 || "[[6,[5,[7,0]]],3]"             | ""
         "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]" || "[[3,[2,[8,0]]],[9,[5,[7,0]]]]" | ""
     }
@@ -37,7 +37,7 @@ class Year2021Day18Specification extends Specification {
         input                           || expectedResult | comment
         readFile(2021, 18, "example_1") || 4140           | ""
 
-        readFile(2021, 18)              || -1             | ""
+        readFile(2021, 18)              || 3216           | ""
     }
 
     def "partTwo"() {
@@ -49,9 +49,9 @@ class Year2021Day18Specification extends Specification {
 
         where:
         input                           || expectedResult | comment
-        readFile(2021, 18, "example_1") || -1             | ""
+        readFile(2021, 18, "example_1") || 3993           | ""
 
-        readFile(2021, 18)              || -1             | ""
+        readFile(2021, 18)              || 4643           | ""
     }
 
 }
