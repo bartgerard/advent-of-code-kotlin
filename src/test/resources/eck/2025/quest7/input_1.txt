@@ -1,0 +1,15 @@
+Azkyr,Zarmirath,Azhal,Zarhal,Jaerhal,Jaerkyr,Azmirath,Jaermirath,Zarkyr
+
+y > r
+m > i
+e > r
+A > z
+k > y
+J > a
+t > h
+a > t,l,b
+i > r
+Z > a
+h > a
+r > a,k,h,m
+z > m,b

@@ -87,4 +87,23 @@ class CollectionsSpecification extends Specification {
         5      | [4, 1, 3, 2, 5] | [4, 1, 3, 2, 5] | ""
     }
 
+    def "prefixes"() {
+        when:
+        final Set<String> result = CollectionsKt.prefixes(input)
+
+        then:
+        assertThat(result).containsExactlyElementsOf(expected)
+
+        where:
+        input                              || expected              | comment
+        ["a", "ab", "abc", "b", "bc", "c"] || ["a", "b", "c"]       | ""
+        ["abc", "ab", "a"]                 || ["a"]                 | ""
+        ["foo", "foobar", "bar", "baz"]    || ["foo", "bar", "baz"] | ""
+        ["foo", "fo", "f"]                 || ["f"]                 | ""
+        ["apple", "app", "apricot", "a"]   || ["a"]                 | ""
+        ["dog", "cat", "do", "ca"]         || ["do", "ca"]          | ""
+        ["one", "on", "o", "two", "t"]     || ["o", "t"]            | ""
+        []                                 || []                    | ""
+    }
+
 }

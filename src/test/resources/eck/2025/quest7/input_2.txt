@@ -1,0 +1,27 @@
+Lirxeth,Brivalar,Vantyr,Jalmyr,Lirgoril,Jaltyr,Nyadarin,Ulmaralar,Lirtyr,Liralar,Vanmyr,Feradarin,Ulmarilor,Nyxeth,Quarnadarin,Vanalar,Jalaelor,Vangoril,Brivxeth,Brivadarin,Rahalar,Rahxeth,Naradarin,Brivtyr,Quarnalar,Nygoril,Lirxeth,Rahmyr,Jalxeth,Naralar,Ulmarxeth,Quarnxeth,Nartyr,Brivmyr,Narilor,Vanilor,Lirilor,Quarnaelor,Narxeth,Jalxeth,Ulmarxeth,Nargoril,Brivxeth,Vanxeth,Rahxeth,Fergoril,Ulmarxeth,Quarngoril,Feralar,Rahtyr,Vanaelor,Nyxeth,Rahaelor,Lirmyr,Nyxeth,Narmyr,Narxeth,Jalxeth,Narxeth,Quarnilor,Fermyr,Quarnxeth,Quarntyr,Rahilor,Rahgoril,Brivxeth,Naraelor,Rahxeth,Brivilor,Lirxeth,Ulmargoril,Nyaelor,Ferilor,Brivgoril,Ulmaraelor,Fertyr,Feraelor,Nymyr,Liradarin,Nyilor,Quarnxeth,Ferxeth,Jaladarin,Jalgoril,Liraelor,Ulmartyr,Rahadarin,Ulmarmyr,Jalalar,Jalilor,Brivaelor,Nytyr,Quarnmyr,Ferxeth,Ulmaradarin,Nyalar,Ferxeth,Vanxeth,Vanadarin,Vanxeth
+
+i > n,l,v
+V > a
+U > l
+g > o
+m > y,a
+N > y,a
+Q > u
+y > a,r,v
+r > i,a,t,x,g,m,v,n
+L > i
+d > a
+n > a,t,i,x,g,m
+F > e
+a > d,r,v,l,e
+e > t,l,v
+R > a
+o > r
+B > r
+x > e
+h > a,t,i,x,g,m
+v > a,t,i,x,g,m
+u > v
+t > y,h
+l > a,o,t,i,x,g,m,v
+J > a

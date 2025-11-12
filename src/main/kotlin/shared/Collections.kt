@@ -285,3 +285,15 @@ fun <T, K : Comparable<K>> Iterable<T>.minMaxByOrNull(selector: (T) -> K): Pair<
 
     return minElement to maxElement
 }
+
+fun Collection<String>.prefixes(): Set<String> {
+    val sorted = this.distinct().sortedBy { it.length }
+
+    return buildSet {
+        sorted.forEach { value ->
+            if (none { value.startsWith(it) }) {
+                add(value)
+            }
+        }
+    }
+}
