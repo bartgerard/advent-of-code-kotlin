@@ -2,7 +2,7 @@ package ec2025
 
 import shared.sanitize
 
-data class Year2025Quest0x(
+data class Year2025Quest10(
     private val input: List<String>
 ) {
     constructor(input: String) : this(input.sanitize().lines())
