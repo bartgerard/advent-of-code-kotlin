@@ -1,9 +1,8 @@
 package eck.eck2025
 
-
-import templates.Year202xQuest1x
 import spock.lang.Ignore
 import spock.lang.Specification
+import templates.Year202xQuest1x
 
 import static shared.InputsKt.readFile
 
@@ -18,10 +17,10 @@ class Year2025Quest0xSpecification extends Specification {
         result == expectedResult
 
         where:
-        input                                   | expectedResult | comment
-        ""                                      | 0              | ""
+        input                                   || expectedResult | comment
+        ""                                      || 0              | ""
 
-        readFile("eck/2025/questX/input_1.txt") | 0              | ""
+        readFile("eck/2025/questX/input_1.txt") || 0              | ""
     }
 
     def "partTwo"() {
@@ -32,10 +31,10 @@ class Year2025Quest0xSpecification extends Specification {
         result == expectedResult
 
         where:
-        input                                   | expectedResult | comment
-        ""                                      | 0              | ""
+        input                                   || expectedResult | comment
+        ""                                      || 0              | ""
 
-        readFile("eck/2025/questX/input_2.txt") | 0              | ""
+        readFile("eck/2025/questX/input_2.txt") || 0              | ""
     }
 
     def "partThree"() {
@@ -46,10 +45,10 @@ class Year2025Quest0xSpecification extends Specification {
         result == expectedResult
 
         where:
-        input                                   | expectedResult | comment
-        ""                                      | 0              | ""
+        input                                   || expectedResult | comment
+        ""                                      || 0              | ""
 
-        readFile("eck/2025/questX/input_3.txt") | 0              | ""
+        readFile("eck/2025/questX/input_3.txt") || 0              | ""
     }
 
 }
