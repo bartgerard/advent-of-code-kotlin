@@ -19,15 +19,15 @@ class GridSpecification extends Specification {
         points == expectedPoints
 
         where:
-        width | height | direction            | expectedResult   | comment
-        2     | 2      | Direction.NORTH      | [[0, 0], [1, 0]] | ""
-        2     | 2      | Direction.EAST       | [[1, 0], [1, 1]] | ""
-        2     | 2      | Direction.SOUTH      | [[0, 1], [1, 1]] | ""
-        2     | 2      | Direction.WEST       | [[0, 0], [0, 1]] | ""
-        2     | 2      | Direction.NORTH_EAST | [[1, 0]]         | ""
-        2     | 2      | Direction.SOUTH_EAST | [[1, 1]]         | ""
-        2     | 2      | Direction.SOUTH_WEST | [[0, 1]]         | ""
-        2     | 2      | Direction.NORTH_WEST | [[0, 0]]         | ""
+        width | height | direction            || expectedResult   | comment
+        2     | 2      | Direction.NORTH      || [[0, 0], [1, 0]] | ""
+        2     | 2      | Direction.EAST       || [[1, 0], [1, 1]] | ""
+        2     | 2      | Direction.SOUTH      || [[0, 1], [1, 1]] | ""
+        2     | 2      | Direction.WEST       || [[0, 0], [0, 1]] | ""
+        2     | 2      | Direction.NORTH_EAST || [[1, 0]]         | ""
+        2     | 2      | Direction.SOUTH_EAST || [[1, 1]]         | ""
+        2     | 2      | Direction.SOUTH_WEST || [[0, 1]]         | ""
+        2     | 2      | Direction.NORTH_WEST || [[0, 0]]         | ""
     }
 
     def "all outer points in direction"() {
@@ -44,24 +44,24 @@ class GridSpecification extends Specification {
         points == expectedPoints
 
         where:
-        width | height | direction            | expectedResult                           | comment
-        2     | 2      | Direction.NORTH      | [[0, 0], [1, 0]]                         | ""
-        2     | 2      | Direction.EAST       | [[1, 0], [1, 1]]                         | ""
-        2     | 2      | Direction.SOUTH      | [[0, 1], [1, 1]]                         | ""
-        2     | 2      | Direction.WEST       | [[0, 0], [0, 1]]                         | ""
-        2     | 2      | Direction.NORTH_EAST | [[0, 0], [1, 0], [1, 1]]                 | ""
-        2     | 2      | Direction.SOUTH_EAST | [[0, 1], [1, 1], [1, 0]]                 | ""
-        2     | 2      | Direction.SOUTH_WEST | [[0, 0], [0, 1], [1, 1]]                 | ""
-        2     | 2      | Direction.NORTH_WEST | [[0, 1], [0, 0], [1, 0]]                 | ""
+        width | height | direction            || expectedResult                           | comment
+        2     | 2      | Direction.NORTH      || [[0, 0], [1, 0]]                         | ""
+        2     | 2      | Direction.EAST       || [[1, 0], [1, 1]]                         | ""
+        2     | 2      | Direction.SOUTH      || [[0, 1], [1, 1]]                         | ""
+        2     | 2      | Direction.WEST       || [[0, 0], [0, 1]]                         | ""
+        2     | 2      | Direction.NORTH_EAST || [[0, 0], [1, 0], [1, 1]]                 | ""
+        2     | 2      | Direction.SOUTH_EAST || [[0, 1], [1, 1], [1, 0]]                 | ""
+        2     | 2      | Direction.SOUTH_WEST || [[0, 0], [0, 1], [1, 1]]                 | ""
+        2     | 2      | Direction.NORTH_WEST || [[0, 1], [0, 0], [1, 0]]                 | ""
 
-        3     | 3      | Direction.NORTH      | [[0, 0], [1, 0], [2, 0]]                 | ""
-        3     | 3      | Direction.EAST       | [[2, 0], [2, 1], [2, 2]]                 | ""
-        3     | 3      | Direction.SOUTH      | [[0, 2], [1, 2], [2, 2]]                 | ""
-        3     | 3      | Direction.WEST       | [[0, 0], [0, 1], [0, 2]]                 | ""
-        3     | 3      | Direction.NORTH_EAST | [[0, 0], [1, 0], [2, 0], [2, 1], [2, 2]] | ""
-        3     | 3      | Direction.SOUTH_EAST | [[0, 2], [1, 2], [2, 2], [2, 1], [2, 0]] | ""
-        3     | 3      | Direction.SOUTH_WEST | [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2]] | ""
-        3     | 3      | Direction.NORTH_WEST | [[0, 2], [0, 1], [0, 0], [1, 0], [2, 0]] | ""
+        3     | 3      | Direction.NORTH      || [[0, 0], [1, 0], [2, 0]]                 | ""
+        3     | 3      | Direction.EAST       || [[2, 0], [2, 1], [2, 2]]                 | ""
+        3     | 3      | Direction.SOUTH      || [[0, 2], [1, 2], [2, 2]]                 | ""
+        3     | 3      | Direction.WEST       || [[0, 0], [0, 1], [0, 2]]                 | ""
+        3     | 3      | Direction.NORTH_EAST || [[0, 0], [1, 0], [2, 0], [2, 1], [2, 2]] | ""
+        3     | 3      | Direction.SOUTH_EAST || [[0, 2], [1, 2], [2, 2], [2, 1], [2, 0]] | ""
+        3     | 3      | Direction.SOUTH_WEST || [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2]] | ""
+        3     | 3      | Direction.NORTH_WEST || [[0, 2], [0, 1], [0, 0], [1, 0], [2, 0]] | ""
     }
 
     def "traverse in direction"() {
@@ -82,15 +82,15 @@ class GridSpecification extends Specification {
         points == expectedPoints
 
         where:
-        width | height | direction            | expectedResult                         | comment
-        2     | 2      | Direction.NORTH      | [[[0, 1], [0, 0]], [[1, 1], [1, 0]]]   | ""
-        2     | 2      | Direction.EAST       | [[[0, 0], [1, 0]], [[0, 1], [1, 1]]]   | ""
-        2     | 2      | Direction.SOUTH      | [[[0, 0], [0, 1]], [[1, 0], [1, 1]]]   | ""
-        2     | 2      | Direction.WEST       | [[[1, 0], [0, 0]], [[1, 1], [0, 1]]]   | ""
-        2     | 2      | Direction.NORTH_EAST | [[[0, 0]], [[0, 1], [1, 0]], [[1, 1]]] | ""
-        2     | 2      | Direction.SOUTH_EAST | [[[0, 1]], [[0, 0], [1, 1]], [[1, 0]]] | ""
-        2     | 2      | Direction.SOUTH_WEST | [[[0, 0]], [[1, 0], [0, 1]], [[1, 1]]] | ""
-        2     | 2      | Direction.NORTH_WEST | [[[0, 1]], [[1, 1], [0, 0]], [[1, 0]]] | ""
+        width | height | direction            || expectedResult                         | comment
+        2     | 2      | Direction.NORTH      || [[[0, 1], [0, 0]], [[1, 1], [1, 0]]]   | ""
+        2     | 2      | Direction.EAST       || [[[0, 0], [1, 0]], [[0, 1], [1, 1]]]   | ""
+        2     | 2      | Direction.SOUTH      || [[[0, 0], [0, 1]], [[1, 0], [1, 1]]]   | ""
+        2     | 2      | Direction.WEST       || [[[1, 0], [0, 0]], [[1, 1], [0, 1]]]   | ""
+        2     | 2      | Direction.NORTH_EAST || [[[0, 0]], [[0, 1], [1, 0]], [[1, 1]]] | ""
+        2     | 2      | Direction.SOUTH_EAST || [[[0, 1]], [[0, 0], [1, 1]], [[1, 0]]] | ""
+        2     | 2      | Direction.SOUTH_WEST || [[[0, 0]], [[1, 0], [0, 1]], [[1, 1]]] | ""
+        2     | 2      | Direction.NORTH_WEST || [[[0, 1]], [[1, 1], [0, 0]], [[1, 0]]] | ""
     }
 
 }

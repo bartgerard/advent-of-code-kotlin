@@ -104,8 +104,8 @@ data class RegolithReservoir(
             .takeWhile(endCondition)
             .toList()
 
-        println(grid)
-        println()
+        //println(grid)
+        //println()
 
         return sediments.count()
     }

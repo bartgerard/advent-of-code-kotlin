@@ -1,5 +1,6 @@
 package ec2025
 
+import shared.distinctPairs
 import shared.sanitize
 import shared.toIntegers
 import java.util.*
@@ -15,6 +16,7 @@ data class Year2025Quest08(
     )
 
     fun partOne(nails: Int) = threads.count { (a, b) -> b - a == nails / 2 }
+
     fun partTwo() = threads.withIndex()
         .drop(1)
         .sumOf { (index, thread1) ->
@@ -25,5 +27,16 @@ data class Year2025Quest08(
                 }
         }
 
-    fun partThree() = 0L
+    fun partThree(nails: Int) = (1..nails).distinctPairs()
+        .maxOf { (x, y) ->
+            threads.sumOf { (a, b) ->
+                when {
+                    a == x && b == y -> 1 // same as cut
+                    a == x || a == y || b == x || b == y -> 0
+                    (a in (x + 1)..<y) xor (b in (x + 1)..<y) -> 1
+                    else -> 0
+                }
+            }
+        }
+
 }

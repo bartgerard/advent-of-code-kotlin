@@ -22,20 +22,20 @@ class Geometry2dSpecification extends Specification {
         result == expectedPoint
 
         where:
-        l1p1    | l1p2   | l2p1   | l2p2    | expectedResult | comment
-        [0, 0]  | [1, 0] | [0, 1] | [1, 1]  | null           | "parallel"
-        [0, 0]  | [1, 0] | [0, 0] | [1, 0]  | null           | "coinciding"
+        l1p1    | l1p2   | l2p1   | l2p2    || expectedResult | comment
+        [0, 0]  | [1, 0] | [0, 1] | [1, 1]  || null           | "parallel"
+        [0, 0]  | [1, 0] | [0, 0] | [1, 0]  || null           | "coinciding"
 
-        [0, 0]  | [1, 0] | [0, 1] | [1, 0]  | [1, 0]         | ""
-        [0, 0]  | [2, 2] | [0, 2] | [2, 0]  | [1, 1]         | ""
-        [0, 0]  | [1, 1] | [0, 1] | [1, -1] | [0, 0]         | ""
-        [-1, 0] | [1, 0] | [0, 1] | [0, -1] | [0, 0]         | ""
+        [0, 0]  | [1, 0] | [0, 1] | [1, 0]  || [1, 0]         | ""
+        [0, 0]  | [2, 2] | [0, 2] | [2, 0]  || [1, 1]         | ""
+        [0, 0]  | [1, 1] | [0, 1] | [1, -1] || [0, 0]         | ""
+        [-1, 0] | [1, 0] | [0, 1] | [0, -1] || [0, 0]         | ""
 
-        [1, 0]  | [1, 1] | [0, 1] | [1, 1]  | [1, 1]         | ""
-        [0, 0]  | [1, 1] | [0, 1] | [1, 1]  | [1, 1]         | ""
+        [1, 0]  | [1, 1] | [0, 1] | [1, 1]  || [1, 1]         | ""
+        [0, 0]  | [1, 1] | [0, 1] | [1, 1]  || [1, 1]         | ""
 
-        [2, 0]  | [2, 1] | [0, 2] | [1, 2]  | [2, 2]         | ""
-        [0, 0]  | [1, 1] | [0, 2] | [1, 2]  | [2, 2]         | ""
+        [2, 0]  | [2, 1] | [0, 2] | [1, 2]  || [2, 2]         | ""
+        [0, 0]  | [1, 1] | [0, 2] | [1, 2]  || [2, 2]         | ""
     }
 
     def "intersect lines within segment"() {
@@ -51,20 +51,20 @@ class Geometry2dSpecification extends Specification {
         result == expectedPoint
 
         where:
-        l1p1    | l1p2   | l2p1   | l2p2    | expectedResult | comment
-        [0, 0]  | [1, 0] | [0, 1] | [1, 1]  | null           | "parallel"
-        [0, 0]  | [1, 0] | [0, 0] | [1, 0]  | null           | "coinciding"
+        l1p1    | l1p2   | l2p1   | l2p2    || expectedResult | comment
+        [0, 0]  | [1, 0] | [0, 1] | [1, 1]  || null           | "parallel"
+        [0, 0]  | [1, 0] | [0, 0] | [1, 0]  || null           | "coinciding"
 
-        [0, 0]  | [1, 0] | [0, 1] | [1, 0]  | [1, 0]         | ""
-        [0, 0]  | [2, 2] | [0, 2] | [2, 0]  | [1, 1]         | ""
-        [0, 0]  | [1, 1] | [0, 1] | [1, -1] | [0, 0]         | ""
-        [-1, 0] | [1, 0] | [0, 1] | [0, -1] | [0, 0]         | ""
+        [0, 0]  | [1, 0] | [0, 1] | [1, 0]  || [1, 0]         | ""
+        [0, 0]  | [2, 2] | [0, 2] | [2, 0]  || [1, 1]         | ""
+        [0, 0]  | [1, 1] | [0, 1] | [1, -1] || [0, 0]         | ""
+        [-1, 0] | [1, 0] | [0, 1] | [0, -1] || [0, 0]         | ""
 
-        [1, 0]  | [1, 1] | [0, 1] | [1, 1]  | [1, 1]         | ""
-        [0, 0]  | [1, 1] | [0, 1] | [1, 1]  | [1, 1]         | ""
+        [1, 0]  | [1, 1] | [0, 1] | [1, 1]  || [1, 1]         | ""
+        [0, 0]  | [1, 1] | [0, 1] | [1, 1]  || [1, 1]         | ""
 
-        [2, 0]  | [2, 1] | [0, 2] | [1, 2]  | null           | ""
-        [0, 0]  | [1, 1] | [0, 2] | [1, 2]  | null           | ""
+        [2, 0]  | [2, 1] | [0, 2] | [1, 2]  || null           | ""
+        [0, 0]  | [1, 1] | [0, 2] | [1, 2]  || null           | ""
     }
 
     def "angle to"() {
@@ -76,16 +76,16 @@ class Geometry2dSpecification extends Specification {
         assertThat(angle.degrees).isCloseTo(expectedDegrees, withPrecision(0.1d))
 
         where:
-        v1     | v2      | expectedRadians | expectedDegrees | comment
-        [0, 1] | [0, 1]  | 0.0d            | 0.0d            | ""
-        [0, 1] | [1, 0]  | Math.PI / 2     | 90.0d           | ""
-        [0, 1] | [-1, 0] | Math.PI / 2     | 90.0d           | ""
-        [0, 1] | [0, -1] | Math.PI         | 180.0d          | ""
+        v1     | v2      || expectedRadians | expectedDegrees | comment
+        [0, 1] | [0, 1]  || 0.0d            | 0.0d            | ""
+        [0, 1] | [1, 0]  || Math.PI / 2     | 90.0d           | ""
+        [0, 1] | [-1, 0] || Math.PI / 2     | 90.0d           | ""
+        [0, 1] | [0, -1] || Math.PI         | 180.0d          | ""
 
-        [1, 0] | [0, 1]  | Math.PI / 2     | 90.0d           | ""
+        [1, 0] | [0, 1]  || Math.PI / 2     | 90.0d           | ""
 
-        [0, 1] | [1, 1]  | Math.PI / 4     | 45.0d           | ""
-        [0, 1] | [1, -1] | Math.PI * 3 / 4 | 135.0d          | ""
+        [0, 1] | [1, 1]  || Math.PI / 4     | 45.0d           | ""
+        [0, 1] | [1, -1] || Math.PI * 3 / 4 | 135.0d          | ""
     }
 
     def "signed angle to"() {
@@ -97,16 +97,16 @@ class Geometry2dSpecification extends Specification {
         assertThat(angle.degrees).isCloseTo(expectedDegrees, withPrecision(0.1d))
 
         where:
-        v1     | v2      | expectedRadians  | expectedDegrees | comment
-        [0, 1] | [0, 1]  | 0.0d             | 0.0d            | ""
-        [0, 1] | [1, 0]  | -Math.PI / 2     | -90.0d          | ""
-        [0, 1] | [-1, 0] | Math.PI / 2      | 90.0d           | ""
-        [0, 1] | [0, -1] | Math.PI          | 180.0d          | ""
+        v1     | v2      || expectedRadians  | expectedDegrees | comment
+        [0, 1] | [0, 1]  || 0.0d             | 0.0d            | ""
+        [0, 1] | [1, 0]  || -Math.PI / 2     | -90.0d          | ""
+        [0, 1] | [-1, 0] || Math.PI / 2      | 90.0d           | ""
+        [0, 1] | [0, -1] || Math.PI          | 180.0d          | ""
 
-        [1, 0] | [0, 1]  | Math.PI / 2      | 90.0d           | ""
+        [1, 0] | [0, 1]  || Math.PI / 2      | 90.0d           | ""
 
-        [0, 1] | [1, 1]  | -Math.PI / 4     | -45.0d          | ""
-        [0, 1] | [1, -1] | -Math.PI * 3 / 4 | -135.0d         | ""
+        [0, 1] | [1, 1]  || -Math.PI / 4     | -45.0d          | ""
+        [0, 1] | [1, -1] || -Math.PI * 3 / 4 | -135.0d         | ""
     }
 
     def "to degrees 360"() {
@@ -117,21 +117,21 @@ class Geometry2dSpecification extends Specification {
         assertThat(angle.toDegrees360(turn)).isCloseTo(expectedResult, withPrecision(0.01d))
 
         where:
-        radians         | turn                   | expectedResult | comment
-        Math.PI / 4     | Turn.COUNTER_CLOCKWISE | 45.0d          | ""
-        Math.PI / 4     | Turn.CLOCKWISE         | 315.0d         | ""
-        Math.PI / 2     | Turn.COUNTER_CLOCKWISE | 90.0d          | ""
-        Math.PI / 2     | Turn.CLOCKWISE         | 270.0d         | ""
-        Math.PI * 3 / 4 | Turn.COUNTER_CLOCKWISE | 135.0d         | ""
-        Math.PI * 3 / 4 | Turn.CLOCKWISE         | 225.0d         | ""
-        Math.PI         | Turn.COUNTER_CLOCKWISE | 180.0d         | ""
-        Math.PI         | Turn.CLOCKWISE         | 180.0d         | ""
-        2 * Math.PI     | Turn.COUNTER_CLOCKWISE | 0.0d           | ""
-        2 * Math.PI     | Turn.CLOCKWISE         | 0.0d           | ""
-        3 * Math.PI     | Turn.COUNTER_CLOCKWISE | 180.0d         | ""
-        3 * Math.PI     | Turn.CLOCKWISE         | 180.0d         | ""
-        4 * Math.PI     | Turn.COUNTER_CLOCKWISE | 0.0d           | ""
-        4 * Math.PI     | Turn.CLOCKWISE         | 0.0d           | ""
+        radians         | turn                   || expectedResult | comment
+        Math.PI / 4     | Turn.COUNTER_CLOCKWISE || 45.0d          | ""
+        Math.PI / 4     | Turn.CLOCKWISE         || 315.0d         | ""
+        Math.PI / 2     | Turn.COUNTER_CLOCKWISE || 90.0d          | ""
+        Math.PI / 2     | Turn.CLOCKWISE         || 270.0d         | ""
+        Math.PI * 3 / 4 | Turn.COUNTER_CLOCKWISE || 135.0d         | ""
+        Math.PI * 3 / 4 | Turn.CLOCKWISE         || 225.0d         | ""
+        Math.PI         | Turn.COUNTER_CLOCKWISE || 180.0d         | ""
+        Math.PI         | Turn.CLOCKWISE         || 180.0d         | ""
+        2 * Math.PI     | Turn.COUNTER_CLOCKWISE || 0.0d           | ""
+        2 * Math.PI     | Turn.CLOCKWISE         || 0.0d           | ""
+        3 * Math.PI     | Turn.COUNTER_CLOCKWISE || 180.0d         | ""
+        3 * Math.PI     | Turn.CLOCKWISE         || 180.0d         | ""
+        4 * Math.PI     | Turn.COUNTER_CLOCKWISE || 0.0d           | ""
+        4 * Math.PI     | Turn.CLOCKWISE         || 0.0d           | ""
     }
 
 }

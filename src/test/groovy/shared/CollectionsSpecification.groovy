@@ -15,11 +15,11 @@ class CollectionsSpecification extends Specification {
         result == expectedResult
 
         where:
-        values           | expectedResult | comment
-        [[1]]            | [1]            | ""
-        [[1], [2]]       | [1, 2]         | ""
-        [[1, 2], [3]]    | [1, 2, 3]      | ""
-        [[1, 2], [3, 4]] | [1, 2, 3, 4]   | ""
+        values           || expectedResult | comment
+        [[1]]            || [1]            | ""
+        [[1], [2]]       || [1, 2]         | ""
+        [[1, 2], [3]]    || [1, 2, 3]      | ""
+        [[1, 2], [3, 4]] || [1, 2, 3, 4]   | ""
     }
 
     def "transpose list of lists"() {
@@ -30,9 +30,9 @@ class CollectionsSpecification extends Specification {
         assertThat(result).containsExactlyElementsOf(expectedResult)
 
         where:
-        values           | expectedResult   | comment
-        [[1], [2], [3]]  | [[1, 2, 3]]      | ""
-        [[1, 2], [3, 4]] | [[1, 3], [2, 4]] | ""
+        values           || expectedResult   | comment
+        [[1], [2], [3]]  || [[1, 2, 3]]      | ""
+        [[1, 2], [3, 4]] || [[1, 3], [2, 4]] | ""
     }
 
     def "take while increasing"() {
@@ -43,11 +43,11 @@ class CollectionsSpecification extends Specification {
         assertThat(result).containsExactlyElementsOf(expectedResult)
 
         where:
-        values       | expectedResult | comment
-        [1, 2, 3]    | [1, 2, 3]      | ""
-        [1, 3, 2]    | [1, 3]         | ""
-        [1, 1, 3, 2] | [1]            | ""
-        [4, 1, 3, 2] | [4]            | ""
+        values       || expectedResult | comment
+        [1, 2, 3]    || [1, 2, 3]      | ""
+        [1, 3, 2]    || [1, 3]         | ""
+        [1, 1, 3, 2] || [1]            | ""
+        [4, 1, 3, 2] || [4]            | ""
     }
 
     def "take only increasing"() {
@@ -58,11 +58,11 @@ class CollectionsSpecification extends Specification {
         assertThat(result).containsExactlyElementsOf(expectedResult)
 
         where:
-        values       | expectedResult | comment
-        [1, 2, 3]    | [1, 2, 3]      | ""
-        [1, 3, 2]    | [1, 3]         | ""
-        [1, 1, 3, 2] | [1, 3]         | ""
-        [4, 1, 3, 2] | [4]            | ""
+        values       || expectedResult | comment
+        [1, 2, 3]    || [1, 2, 3]      | ""
+        [1, 3, 2]    || [1, 3]         | ""
+        [1, 1, 3, 2] || [1, 3]         | ""
+        [4, 1, 3, 2] || [4]            | ""
     }
 
     def "take only visible from height"() {
@@ -73,18 +73,18 @@ class CollectionsSpecification extends Specification {
         assertThat(result).containsExactlyElementsOf(expectedResult)
 
         where:
-        height | values          | expectedResult  | comment
-        5      | [1, 2, 3]       | [1, 2, 3]       | ""
-        5      | [1, 3, 2]       | [1, 3, 2]       | ""
-        5      | [1, 1, 3, 2]    | [1, 1, 3, 2]    | ""
-        5      | [4, 1, 3, 2]    | [4, 1, 3, 2]    | ""
+        height | values          || expectedResult  | comment
+        5      | [1, 2, 3]       || [1, 2, 3]       | ""
+        5      | [1, 3, 2]       || [1, 3, 2]       | ""
+        5      | [1, 1, 3, 2]    || [1, 1, 3, 2]    | ""
+        5      | [4, 1, 3, 2]    || [4, 1, 3, 2]    | ""
 
-        5      | [1, 2, 5, 3]    | [1, 2, 5]       | ""
-        5      | [1, 2, 6, 3]    | [1, 2, 6]       | ""
-        5      | [5, 1, 3, 2]    | [5]             | ""
-        5      | [6, 1, 3, 2]    | [6]             | ""
-        5      | [1, 1, 3, 9, 2] | [1, 1, 3, 9]    | ""
-        5      | [4, 1, 3, 2, 5] | [4, 1, 3, 2, 5] | ""
+        5      | [1, 2, 5, 3]    || [1, 2, 5]       | ""
+        5      | [1, 2, 6, 3]    || [1, 2, 6]       | ""
+        5      | [5, 1, 3, 2]    || [5]             | ""
+        5      | [6, 1, 3, 2]    || [6]             | ""
+        5      | [1, 1, 3, 9, 2] || [1, 1, 3, 9]    | ""
+        5      | [4, 1, 3, 2, 5] || [4, 1, 3, 2, 5] | ""
     }
 
     def "prefixes"() {

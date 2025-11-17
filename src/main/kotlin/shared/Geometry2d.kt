@@ -42,6 +42,13 @@ data class Vector2d(
 
         val SURROUNDING = ORTHOGONAL_ADJACENT + DIAGONAL_ADJACENT
 
+        val KNIGHT_MOVES = listOf(
+            Vector2d(-2, -1), Vector2d(-1, -2), // NW combinations
+            Vector2d(1, -2), Vector2d(2, -1),   // NE combinations
+            Vector2d(2, 1), Vector2d(1, 2),     // SE combinations
+            Vector2d(-1, 2), Vector2d(-2, 1)    // SW combinations
+        )
+
         fun forDirection(direction: Direction): Vector2d = when (direction) {
             Direction.NORTH_WEST -> NORTH_WEST
             Direction.NORTH -> NORTH

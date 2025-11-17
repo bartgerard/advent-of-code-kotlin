@@ -4,6 +4,9 @@ data class BinaryNumber(
     private val bits: String
 ) {
     companion object {
+        val REGEX = "[01]+".toRegex()
+
+        @JvmStatic
         fun parse(value: String) = BinaryNumber(value)
         fun parse(value: Int) = BinaryNumber(value.toString(2))
         fun parse(value: Int, length: Int) = BinaryNumber(value.toString(2).padStart(length, '0'))
@@ -13,7 +16,7 @@ data class BinaryNumber(
     }
 
     init {
-        require(bits.all { it == '0' || it == '1' }) { "invalid binary number $bits" }
+        require(bits.matches(REGEX)) { "invalid binary number $bits" }
     }
 
     val intValue: Int get() = bits.toInt(2)
@@ -21,10 +24,4 @@ data class BinaryNumber(
     fun inverse(): BinaryNumber = parse(mask(bits.length) and intValue.inv(), bits.length)
 
     override fun toString(): String = bits
-}
-
-
-fun main() {
-    println(BinaryNumber.parse("011001").inverse())
-    println(BinaryNumber.parse("011111100101").intValue) // 2021
 }

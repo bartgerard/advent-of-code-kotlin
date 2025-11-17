@@ -297,3 +297,12 @@ fun Collection<String>.prefixes(): Set<String> {
         }
     }
 }
+
+fun <T> zip(vararg lists: List<T>) = zip(*lists) { it }
+
+fun <T, V> zip(vararg lists: List<T>, transform: (List<T>) -> V): List<V> {
+    val minSize = lists.minOfOrNull(List<T>::size) ?: 0
+
+    return (0..<minSize)
+        .map { index -> transform(lists.map { it[index] }) }
+}

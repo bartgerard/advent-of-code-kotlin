@@ -293,3 +293,11 @@ fun <T> MutableGrid<T>.fill(rectangle: Rectangle2d, value: T) {
 fun <T> MutableGrid<T>.fill(rectangles: Collection<Rectangle2d>, value: T) {
     rectangles.forEach { fill(it, value) }
 }
+
+data class DifferenceGrid(
+    val grid: List<MutableList<Long>>
+) : Grid<Long> {
+    constructor(size: Int) : this(MutableList(size) { MutableList(size) { 0L } })
+
+    override fun grid(): List<List<Long>> = grid
+}

@@ -16,10 +16,10 @@ class AlgebraSpecification extends Specification {
         result == expectedResult
 
         where:
-        a  | b | c  | x  | expectedResult | comment
-        -2 | 1 | -3 | 5  | 13             | ""
-        4  | 1 | -7 | -2 | 15             | ""
-        -1 | 2 | 2  | 4  | 1              | ""
+        a  | b | c  | x  || expectedResult | comment
+        -2 | 1 | -3 | 5  || 13             | ""
+        4  | 1 | -7 | -2 || 15             | ""
+        -1 | 2 | 2  | 4  || 1              | ""
     }
 
     def "calculate slope and y-intercept for linear equation"() {
@@ -35,10 +35,10 @@ class AlgebraSpecification extends Specification {
         yIntercept == expectedIntercept
 
         where:
-        a  | b | c  | expectedSlope | expectedIntercept | comment
-        -2 | 1 | -3 | 2             | 3                 | ""
-        4  | 1 | -7 | -4            | 7                 | ""
-        -1 | 2 | 2  | 0.5           | -1                | ""
+        a  | b | c  || expectedSlope | expectedIntercept | comment
+        -2 | 1 | -3 || 2             | 3                 | ""
+        4  | 1 | -7 || -4            | 7                 | ""
+        -1 | 2 | 2  || 0.5           | -1                | ""
     }
 
     def "intersect two linear equations"() {
@@ -50,9 +50,9 @@ class AlgebraSpecification extends Specification {
         intersection.second == expectedResult.second
 
         where:
-        eq1                                | eq2                                | expectedResult       | comment
-        new LinearEquation2d(94, 22, 8400) | new LinearEquation2d(34, 67, 5400) | new Pair(80.0, 40.0) | ""
-        new LinearEquation2d(17, 84, 7870) | new LinearEquation2d(86, 37, 6450) | new Pair(38.0, 86.0) | ""
+        eq1                                | eq2                                || expectedResult       | comment
+        new LinearEquation2d(94, 22, 8400) | new LinearEquation2d(34, 67, 5400) || new Pair(80.0, 40.0) | ""
+        new LinearEquation2d(17, 84, 7870) | new LinearEquation2d(86, 37, 6450) || new Pair(38.0, 86.0) | ""
     }
 
     def "calculate y for linear function"() {
@@ -66,10 +66,10 @@ class AlgebraSpecification extends Specification {
         result == expectedResult
 
         where:
-        m   | y0 | x  | expectedResult | comment
-        2   | 3  | 5  | 13             | ""
-        -4  | 7  | -2 | 15             | ""
-        0.5 | -1 | 4  | 1              | ""
+        m   | y0 | x  || expectedResult | comment
+        2   | 3  | 5  || 13             | ""
+        -4  | 7  | -2 || 15             | ""
+        0.5 | -1 | 4  || 1              | ""
     }
 
     def "calculate slope and y-intercept for linear function"() {
@@ -85,10 +85,10 @@ class AlgebraSpecification extends Specification {
         yIntercept == expectedIntercept
 
         where:
-        m   | y0 | expectedSlope | expectedIntercept | comment
-        2   | 3  | 2             | 3                 | ""
-        -4  | 7  | -4            | 7                 | ""
-        0.5 | -1 | 0.5           | -1                | ""
+        m   | y0 || expectedSlope | expectedIntercept | comment
+        2   | 3  || 2             | 3                 | ""
+        -4  | 7  || -4            | 7                 | ""
+        0.5 | -1 || 0.5           | -1                | ""
     }
 
 

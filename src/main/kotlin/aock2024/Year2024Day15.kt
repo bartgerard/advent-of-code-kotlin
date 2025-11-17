@@ -22,13 +22,13 @@ data class Year2024Day15(
 
     fun partOne() = warehouse
         .also { warehouse -> directions.forEach { warehouse.move(Vector2d.forDirection(it)) } }
-        .also { println(it) }
+        //.also { println(it) }
         .gps()
 
     fun partTwo() = warehouse
         .expand()
         .also { warehouse -> directions.forEach { warehouse.move(Vector2d.forDirection(it)) } }
-        .also { println(it) }
+        //.also { println(it) }
         .gps()
 }
 

@@ -82,9 +82,3 @@ data class Instruction(
         }
     }
 }
-
-
-fun main() {
-    println(65535)
-    println(Short.MAX_VALUE * 2)
-}

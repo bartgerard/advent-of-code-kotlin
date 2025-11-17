@@ -37,7 +37,7 @@ class Year2025Quest08Specification extends Specification {
 
     def "partThree"() {
         when:
-        final long result = new Year2025Quest08(input).partThree()
+        final long result = new Year2025Quest08(input).partThree(nails)
 
         then:
         result == expectedResult
@@ -46,7 +46,7 @@ class Year2025Quest08Specification extends Specification {
         input                                   | nails || expectedResult | comment
         "1,5,2,6,8,4,1,7,3,6"                   | 8     || 7              | ""
 
-        readFile("eck/2025/quest8/input_3.txt") | 256   || 0              | ""
+        readFile("eck/2025/quest8/input_3.txt") | 256   || 2797           | ""
     }
 
 }
