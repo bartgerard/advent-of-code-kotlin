@@ -1,5 +1,8 @@
 package shared
 
+import kotlin.math.max
+import kotlin.math.min
+
 fun Collection<Long>.toRanges(): List<LongRange> {
     if (this.isEmpty()) {
         return emptyList()
@@ -150,10 +153,12 @@ fun LongRange.without(subtrahends: Collection<LongRange>): List<LongRange> {
         .toList()
 }
 
-fun Collection<LongRange>.without(subtrahends: Collection<LongRange>): List<LongRange> = this.merge().flatMap { it.without(subtrahends) }
+fun Collection<LongRange>.without(subtrahends: Collection<LongRange>): List<LongRange> =
+    this.merge().flatMap { it.without(subtrahends) }
 
-fun IntRange.length() = this.last - this.first + 1
-fun LongRange.length() = this.last - this.first + 1
+fun IntRange.length(): Int = last - first + 1
+fun LongRange.length(): Long = last - first + 1
+fun LongProgression.length(): Long = max(first, last) - min(first, last) + 1
 
 fun IntRange.toLongRange() = first.toLong()..last.toLong()
 
