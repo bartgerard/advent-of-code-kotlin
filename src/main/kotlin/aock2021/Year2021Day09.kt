@@ -15,7 +15,8 @@ data class Year2021Day09(
 
     fun partTwo() = lowPoints()
         .map { point ->
-            point.allDirectAndIndirectNeighbours { neighbour -> grid.contains(neighbour) && grid.at(neighbour) < 9 }.toSet()
+            point.allDirectAndIndirectNeighbours { neighbour -> grid.contains(neighbour) && grid.at(neighbour) < 9 }
+                .toSet()
         }
         .distinct()
         .map { it.size }

@@ -145,7 +145,8 @@ data class Area2d(
             val areas = mutableSetOf<List<Point2d>>()
 
             while (remaining.isNotEmpty()) {
-                val region2 = remaining.first().allDirectAndIndirectNeighbours(ORTHOGONAL_ADJACENT) { remaining.contains(it) && remaining.remove(it) }
+                val region2 = remaining.first()
+                    .allDirectAndIndirectNeighbours(ORTHOGONAL_ADJACENT) { remaining.contains(it) && remaining.remove(it) }
                 remaining.removeAll(region2)
                 areas += region2
             }
@@ -158,11 +159,15 @@ data class Area2d(
     val perimeter get() = sides().sum()
 
     fun sides(): List<Int> {
-        val borders: Map<Point2d, MutableSet<Direction>> = points.associateWith { point -> Direction.ORTHOGONAL.filter { !points.contains(point + it) }.toMutableSet() }
+        val borders: Map<Point2d, MutableSet<Direction>> = points.associateWith { point ->
+            Direction.ORTHOGONAL.filter { !points.contains(point + it) }.toMutableSet()
+        }
 
         return points.flatMap { point ->
             borders[point]!!.toList().map { direction ->
-                val visited = point.allDirectAndIndirectNeighbours(ORTHOGONAL_ADJACENT) { points.contains(it) && borders[it]!!.contains(direction) }
+                val visited = point.allDirectAndIndirectNeighbours(ORTHOGONAL_ADJACENT) {
+                    points.contains(it) && borders[it]!!.contains(direction)
+                }
                 visited.forEach { borders[it]!!.remove(direction) }
                 visited.size
             }
@@ -273,7 +278,24 @@ data class Point2d(
             val nextPoint = nextPoints.removeFirst()
             visited += nextPoint
             nextPoints += directions.map { nextPoint + it }
-                .filter { !visited.contains(it) && predicate(it) }
+                .filter { !visited.contains(it) && !nextPoints.contains(it) && predicate(it) }
+        }
+
+        return visited
+    }
+
+    fun allDirectAndIndirectNeighbours(
+        directions: List<Vector2d> = ORTHOGONAL_ADJACENT,
+        predicate: (Point2d, Point2d) -> Boolean
+    ): List<Point2d> {
+        val nextPoints = mutableListOf(this)
+        val visited = mutableListOf<Point2d>()
+
+        while (nextPoints.isNotEmpty()) {
+            val nextPoint = nextPoints.removeFirst()
+            visited += nextPoint
+            nextPoints += directions.map { nextPoint + it }
+                .filter { !visited.contains(it) && !nextPoints.contains(it) && predicate(nextPoint, it) }
         }
 
         return visited

@@ -7,7 +7,7 @@ import templates.Year202xQuest1x
 import static shared.InputsKt.readFile
 
 @Ignore("template")
-class Year2025Quest0xSpecification extends Specification {
+class Year2025Quest1xSpecification extends Specification {
 
     def "partOne"() {
         when:
