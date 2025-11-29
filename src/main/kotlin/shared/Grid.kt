@@ -46,7 +46,9 @@ data class Dimension(
 
     fun allOuterPointsInDirection(direction: Direction): List<Point2d> = when (direction) {
         NORTH_EAST -> (0..<width).map { Point2d(it, 0) } + (1..<height).map { Point2d(width - 1, it) }
-        SOUTH_EAST -> (0..<width).map { Point2d(it, height - 1) } + (0..<height - 1).reversed().map { Point2d(width - 1, it) }
+        SOUTH_EAST -> (0..<width).map { Point2d(it, height - 1) } + (0..<height - 1).reversed()
+            .map { Point2d(width - 1, it) }
+
         SOUTH_WEST -> (0..<height).map { Point2d(0, it) } + (1..<width).map { Point2d(it, height - 1) }
         NORTH_WEST -> (1..<height).reversed().map { Point2d(0, it) } + (0..<width).map { Point2d(it, 0) }
         else -> outerPointsInDirection(direction)
@@ -119,6 +121,9 @@ interface Grid<T> {
 
     fun points(): Sequence<Point2d> = dimension().points()
     fun values(): Set<T> = points().map { at(it) }.toSet()
+
+    fun matches(other: Grid<T>, offset: Point2d): Boolean = other.points()
+        .all { point -> contains(offset + point) && at(offset + point) == other.at(point) }
 }
 
 interface MutableGrid<T> : Grid<T> {
@@ -207,7 +212,8 @@ data class BingoGrid(
     val grid: IntGrid,
     val marked: MutableList<Point2d> = mutableListOf()
 ) : Grid<Int> {
-    constructor(input: String) : this(IntGrid(input.sanitize().lines().map { it.toIntegers().toMutableList() }.toMutableList()))
+    constructor(input: String) : this(IntGrid(input.sanitize().lines().map { it.toIntegers().toMutableList() }
+        .toMutableList()))
 
     override fun grid(): List<List<Int>> = grid.grid()
 
@@ -225,14 +231,18 @@ data class BingoVerifier(
     val winningCombinations: Set<Set<Point2d>>
 ) {
     companion object {
-        fun forDimension(dimension: Dimension, includeDiagonal: Boolean = false): BingoVerifier = BingoVerifier(buildSet {
-            addAll(dimension.pointsInDirection(EAST).map { it.toSet() })
-            addAll(dimension.pointsInDirection(SOUTH).map { it.toSet() })
-            if (includeDiagonal) {
-                add(dimension.pointsInDirection(Point2d.ZERO, Vector2d.forDirection(SOUTH_EAST)).toSet())
-                add(dimension.pointsInDirection(Point2d(0, dimension.height - 1), Vector2d.forDirection(NORTH_EAST)).toSet())
-            }
-        })
+        fun forDimension(dimension: Dimension, includeDiagonal: Boolean = false): BingoVerifier =
+            BingoVerifier(buildSet {
+                addAll(dimension.pointsInDirection(EAST).map { it.toSet() })
+                addAll(dimension.pointsInDirection(SOUTH).map { it.toSet() })
+                if (includeDiagonal) {
+                    add(dimension.pointsInDirection(Point2d.ZERO, Vector2d.forDirection(SOUTH_EAST)).toSet())
+                    add(
+                        dimension.pointsInDirection(Point2d(0, dimension.height - 1), Vector2d.forDirection(NORTH_EAST))
+                            .toSet()
+                    )
+                }
+            })
     }
 
     fun containsBingo(grid: BingoGrid): Boolean = winningCombinations.any { grid.marked.containsAll(it) }

@@ -93,4 +93,25 @@ class GridSpecification extends Specification {
         2     | 2      | Direction.NORTH_WEST || [[[0, 1]], [[1, 1], [0, 0]], [[1, 0]]] | ""
     }
 
+
+    def "matching grids with offset"() {
+        given:
+        def grid1 = new CharGrid(grid1AsText)
+        def grid2 = new CharGrid(grid2AsText)
+        def offset = new Point2d(offsetAsList)
+
+        when:
+        final result = grid1.matches(grid2, offset)
+
+        then:
+        result == expectedResult
+
+        where:
+        grid1AsText              | grid2AsText | offsetAsList || expectedResult | comment
+        "...\n.#.\n..."          | "#"         | [0, 0]       || false          | ""
+        "...\n.#.\n..."          | "#"         | [1, 1]       || true           | ""
+        "....\n.##.\n.##.\n...." | "##\n##"    | [1, 1]       || true           | ""
+        "....\n.##.\n.##.\n...." | "##\n##"    | [2, 2]       || false          | ""
+    }
+
 }
