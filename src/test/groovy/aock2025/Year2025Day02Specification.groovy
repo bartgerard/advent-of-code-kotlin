@@ -15,10 +15,10 @@ class Year2025Day02Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                          | expectedResult | comment
+        readFile(2025, 2, "example_1") | 1227775554     | ""
 
-        readFile(2025, 2) | 0              | ""
+        readFile(2025, 2)              | 40214376723    | ""
     }
 
     def "partTwo"() {
@@ -29,10 +29,10 @@ class Year2025Day02Specification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                          | expectedResult | comment
+        readFile(2025, 2, "example_1") | 4174379265     | ""
 
-        readFile(2025, 2) | 0              | ""
+        readFile(2025, 2)              | 50793864718    | ""
     }
 
 }

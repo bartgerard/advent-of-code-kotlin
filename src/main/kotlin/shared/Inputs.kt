@@ -55,6 +55,13 @@ fun String.toDoubles() = NUMBER_PATTERN.findAll(this)
     .map { it.value.toDouble() }
     .toList()
 
+val RANGE_PATTERN = "(\\d+)-(\\d+)".toRegex()
+
+fun String.toLongRanges() = RANGE_PATTERN.findAll(this)
+    .map { it.destructured }
+    .map { (start, end) -> start.toLong()..end.toLong() }
+    .toList()
+
 fun List<Long>.toBox() = Box(this[0], this[1], this[2])
 
 fun String.toRectangle() = toIntegers().let { (x1, y1, x2, y2) -> Rectangle2d.of(Point2d(x1, y1), Point2d(x2, y2)) }
