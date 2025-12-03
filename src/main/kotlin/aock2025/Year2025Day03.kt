@@ -3,23 +3,40 @@ package aock2025
 import shared.sanitize
 
 data class Year2025Day03(
-    private val input: List<List<Int>>
+    private val banks: List<BatteryBank>
 ) {
-    constructor(input: String) : this(input.sanitize().lines().map { it.map { c -> c.digitToInt() } })
+    constructor(input: String) : this(input.sanitize().lines().map { BatteryBank.parse(it) })
 
-    fun partOne() = input.sumOf { maxJoltage(it, 2).toLong() }
+    fun partOne() = banks.sumOf { bank -> bank.maxJoltage(2) }
+    fun partTwo() = banks.sumOf { bank -> bank.maxJoltage(12) }
+}
 
-    fun partTwo() = input.sumOf { maxJoltage(it, 12).toLong() }
+data class BatteryBank(
+    private val batteries: List<Int>
+) {
+    companion object {
+        fun parse(bankAsString: String) = BatteryBank(bankAsString.map { it.digitToInt() })
 
-    private fun maxJoltage(numbers: List<Int>, length: Int): String {
-        val max = numbers.subList(0, numbers.size - length + 1).max()
+        private fun maxJoltage(
+            batteries: List<Int>,
+            turnOnCount: Int
+        ): String {
+            val selectedBattery = batteries.subList(0, batteries.size - turnOnCount + 1).max()
 
-        if (length == 1) {
-            return max.toString()
+            if (turnOnCount == 1) {
+                return selectedBattery.toString()
+            }
+
+            val selectedBatteryIndex = batteries.indexOfFirst { it == selectedBattery }
+            val remainingSelectableBatteries = batteries.subList(selectedBatteryIndex + 1, batteries.size)
+
+            return selectedBattery.toString() + maxJoltage(
+                remainingSelectableBatteries,
+                turnOnCount - 1
+            )
         }
-
-        val indexOfFirstMax = numbers.indexOfFirst { it == max }
-
-        return max.toString() + maxJoltage(numbers.subList(indexOfFirstMax + 1, numbers.size), length - 1)
     }
+
+    fun maxJoltage(turnOnCount: Int) = maxJoltage(batteries, turnOnCount).toLong()
+
 }
