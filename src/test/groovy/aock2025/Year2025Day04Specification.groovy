@@ -32,7 +32,7 @@ class Year2025Day04Specification extends Specification {
         input                          | expectedResult | comment
         readFile(2025, 4, "example_1") | 43             | ""
 
-        readFile(2025, 4)              | 0              | ""
+        readFile(2025, 4)              | 9609           | ""
     }
 
 }
