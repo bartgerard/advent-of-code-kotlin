@@ -177,6 +177,58 @@ class RangesSpecification extends Specification {
         [range(3..6), range(0..3)] || []             | ""
     }
 
+    def "merge"() {
+        when:
+        final merge = RangesKt.merge(ranges)
+
+        then:
+        merge == expectedResult
+
+        where:
+        ranges                     || expectedResult             | comment
+        []                         || []                         | ""
+        // range1: |
+        // result: |
+        [range(0..0)]              || [range(0..0)]              | ""
+
+        [range(0..0), range(0..1)] || [range(0..1)]              | ""
+
+        // range1: |-----|
+        // range2:    |-----|
+        // result: |--------|
+        [range(0..4), range(2..6)] || [range(0..6)]              | ""
+
+        // range1: |--------|
+        // range2:    |--|
+        // result: |--------|
+        [range(0..6), range(2..4)] || [range(0..6)]              | ""
+
+        // range1:    |--|
+        // range2: |--------|
+        // result: |--------|
+        [range(2..4), range(0..6)] || [range(0..6)]              | ""
+
+        // range1: |--|
+        // range2:       |--|
+        // result: |---||---|
+        [range(0..2), range(4..6)] || [range(0..2), range(4..6)] | ""
+
+        // range1:       |--|
+        // range2: |--|
+        // result: |---||---|
+        [range(4..6), range(0..2)] || [range(0..2), range(4..6)] | ""
+
+        // range1: |---|
+        // range2:     |----|
+        // result: |--------|
+        [range(0..3), range(3..6)] || [range(0..6)]              | ""
+
+        // range1:     |----|
+        // range2: |---|
+        // result: |--------|
+        [range(3..6), range(0..3)] || [range(0..6)]              | ""
+    }
+
     def "range without range"() {
         when:
         final remaining = RangesKt.without(range, subtrahend)
