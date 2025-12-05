@@ -19,8 +19,7 @@ fun Collection<Long>.toRanges(): List<LongRange> {
         add(sorted.size)
     }
 
-    return (0..<borderIndices.size)
-        .zipWithNext { i, j -> sorted[borderIndices[i]]..sorted[borderIndices[j] - 1] }
+    return borderIndices.zipWithNext { i, j -> sorted[i]..sorted[j - 1] }
 }
 
 fun allIntersections(ranges: Collection<LongRange>): List<LongRange> {
@@ -38,8 +37,7 @@ fun allIntersections(ranges: Collection<LongRange>): List<LongRange> {
         return listOf(keyValues[0]..keyValues[0])
     }
 
-    return (0..<keyValues.size)
-        .zipWithNext { i, j -> keyValues[i]..<keyValues[j] }
+    return keyValues.zipWithNext { i, j -> i..<j }
 }
 
 fun Collection<LongRange>.usedIntersections(): List<LongRange> = allIntersections(this)
@@ -48,7 +46,7 @@ fun Collection<LongRange>.usedIntersections(): List<LongRange> = allIntersection
 fun Collection<LongRange>.gaps(): List<LongRange> {
     val sortedIntersections = this.usedIntersections()
 
-    if (sortedIntersections.isEmpty() || sortedIntersections.size == 1) {
+    if (sortedIntersections.size <= 1) {
         return emptyList()
     }
 
@@ -73,8 +71,7 @@ fun Collection<LongRange>.merge(): List<LongRange> {
         add(sortedIntersections.size)
     }
 
-    return (0..<borderIndices.size)
-        .zipWithNext { i, j -> sortedIntersections[borderIndices[i]].first..sortedIntersections[borderIndices[j] - 1].last }
+    return borderIndices.zipWithNext { i, j -> sortedIntersections[i].first..sortedIntersections[j - 1].last }
 }
 
 fun MutableList<LongRange>.mergeOne(newRange: LongRange) {

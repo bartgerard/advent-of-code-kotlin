@@ -1,32 +1,29 @@
 package aock2025
 
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static shared.InputsKt.readFile
 
-@Ignore("template")
-class Year2025Day1xSpecification extends Specification {
+class Year2025Day06Specification extends Specification {
 
     def "partOne"() {
         when:
-        final long result = new Year2025Day1x(input).partOne()
+        final long result = new Year2025Day06(input).partOne()
 
         then:
         result == expectedResult
 
         where:
         input                          | expectedResult | comment
-        ""                             | 0              | ""
-        readFile(2025, 0, "example_1") | 0              | ""
+        readFile(2025, 6, "example_1") | 0              | ""
 
-        readFile(2025, 0)              | 0              | ""
+        readFile(2025, 6)              | 0              | ""
     }
 
     def "partTwo"() {
         when:
-        final long result = new Year2025Day1x(input).partTwo()
+        final long result = new Year2025Day06(input).partTwo()
 
         then:
         result == expectedResult
@@ -35,7 +32,7 @@ class Year2025Day1xSpecification extends Specification {
         input             | expectedResult | comment
         ""                | 0              | ""
 
-        readFile(2025, 0) | 0              | ""
+        readFile(2025, 6) | 0              | ""
     }
 
 }
