@@ -21,16 +21,16 @@ data class Year2025Day01(
         .count { it == 0 }
 
     fun partTwo(): Long = input.fold(START to 0L) { (dialPosition, zeroCount), clicks ->
-        val fullCrossings = ((dialPosition + clicks) / DIAL_NUMBERS).absoluteValue
+        val fullRotations = ((dialPosition + clicks) / DIAL_NUMBERS).absoluteValue
         val zeroCrossing = if (dialPosition != 0 && clicks <= -dialPosition) 1L else 0L
 
-        dialPosition.rotate(clicks) to zeroCount + fullCrossings + zeroCrossing
+        dialPosition.rotate(clicks) to zeroCount + fullRotations + zeroCrossing
     }
         .second
 
     private fun Int.rotate(clicks: Int) = (this + clicks).mod(DIAL_NUMBERS)
 
-    fun partTwoSlow(): Long {
+    fun partTwoV1(): Long {
         var dialPosition = START
         var zeroCount = 0L
 

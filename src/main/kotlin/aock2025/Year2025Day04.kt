@@ -17,17 +17,17 @@ data class Year2025Day04(
     fun partOne(): Int = findMovableRolls().count()
 
     fun partTwo(): Long {
-        var total = 0L
+        var movedCount = 0L
 
         while (true) {
             val movableRolls = findMovableRolls()
 
             if (movableRolls.count() == 0) {
-                return total
+                return movedCount
             }
 
             movableRolls.forEach { moveRoll(it) }
-            total += movableRolls.count()
+            movedCount += movableRolls.count()
         }
     }
 
