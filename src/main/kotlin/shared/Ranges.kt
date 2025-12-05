@@ -28,11 +28,10 @@ fun allIntersections(ranges: Collection<LongRange>): List<LongRange> {
         return emptyList()
     }
 
-    val keyValues = buildList {
+    val keyValues = buildSet {
         addAll(ranges.map { it.first })
         addAll(ranges.map { it.last + 1 })
     }
-        .distinct()
         .sorted()
 
     if (keyValues.size == 1) {
@@ -61,10 +60,8 @@ fun Collection<LongRange>.gaps(): List<LongRange> {
 fun Collection<LongRange>.merge(): List<LongRange> {
     val sortedIntersections = this.usedIntersections()
 
-    if (sortedIntersections.isEmpty()) {
-        return emptyList()
-    } else if (sortedIntersections.size == 1) {
-        return listOf(sortedIntersections.first())
+    if (sortedIntersections.size <= 1) {
+        return sortedIntersections
     }
 
     val nonConsecutiveIndices = (1..<sortedIntersections.size)
