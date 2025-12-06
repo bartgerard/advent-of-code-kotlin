@@ -15,7 +15,7 @@ fun List<String>.splitByVerticalDelimiter(delimiter: Char): List<List<String>> {
     require(all { it.length == first().length }) { "use List<String>.makeSameLength()" }
 
     val minLength = this.minOf { it.length }
-    val delimiterIndices = (0..<minLength).filter { i -> this.all { it[i] == delimiter } }
+    val delimiterIndices = (0..<minLength).filter { index -> this.all { it[index] == delimiter } }
 
     return map { it.splitInColumns(delimiterIndices) }
         .transpose()
