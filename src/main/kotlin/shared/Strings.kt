@@ -6,14 +6,10 @@ fun String.zipWithRemainder(): Sequence<Pair<Char, String>> = this
     .mapIndexed { index, character -> character to this.substring(index + 1) }
     .asSequence()
 
-fun String.splitInColumns(
-    delimiterIndices: List<Int>
-): List<String> = buildList {
-    add(-1)
-    addAll(delimiterIndices)
-    add(length)
+fun List<String>.makeSameLength(): List<String> {
+    val maxLength = maxOf { it.length }
+    return map { it.padEnd(maxLength, ' ') }
 }
-    .zipWithNext { i, j -> this.substring(i + 1, j) }
 
 fun List<String>.splitByVerticalDelimiter(delimiter: Char): List<List<String>> {
     require(all { it.length == first().length }) { "use List<String>.makeSameLength()" }
@@ -25,7 +21,11 @@ fun List<String>.splitByVerticalDelimiter(delimiter: Char): List<List<String>> {
         .transpose()
 }
 
-fun List<String>.makeSameLength(): List<String> {
-    val maxLength = maxOf { it.length }
-    return map { it.padEnd(maxLength, ' ') }
+fun String.splitInColumns(
+    delimiterIndices: List<Int>
+): List<String> = buildList {
+    add(-1)
+    addAll(delimiterIndices)
+    add(length)
 }
+    .zipWithNext { i, j -> this.substring(i + 1, j) }

@@ -9,7 +9,8 @@ data class Year2025Day06(
     private val problems: List<Pair<Char, List<String>>>
 ) {
     constructor(input: String) : this(
-        input.sanitize().lines()
+        input.sanitize()
+            .lines()
             .makeSameLength()
             .splitByVerticalDelimiter(' ')
             .map { block -> block.last().first() to block.dropLast(1) }
