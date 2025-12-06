@@ -22,10 +22,10 @@ fun <T> List<T>.withoutIndex(index: Int) = this.filterIndexed { i, _ -> i != ind
 //fun List<Long>.intervals() = (1..<this.size).map { this[it] - this[it - 1] }
 fun List<Long>.intervals() = this.zipWithNext { a, b -> b - a }
 
-fun <T> List<T>.cyclic() = CyclicList<T>(this)
+fun <T> List<T>.cyclic() = CyclicList(this)
 
 data class CyclicList<T>(val list: List<T>) : List<T> by list {
-    override operator fun get(index: Int): T = list[index % list.size]
+    override operator fun get(index: Int): T = list[index.mod(list.size)]
 }
 
 fun <T> List<T>.repeatForever(): Sequence<T> = generateSequence { this }.flatten()
@@ -145,7 +145,8 @@ fun <T : Comparable<T>> Iterable<T>.takeWhileIncreasing() = takeWhileIncreasingB
 
 fun <T> Iterable<T>.takeWhileIncreasingBy(comparator: Comparator<T>) = takeWhileIncreasingBy(comparator) { it }
 
-fun <T, K : Comparable<K>> Iterable<T>.takeWhileIncreasingBy(selector: (T) -> K) = takeWhileIncreasingBy(naturalOrder(), selector)
+fun <T, K : Comparable<K>> Iterable<T>.takeWhileIncreasingBy(selector: (T) -> K) =
+    takeWhileIncreasingBy(naturalOrder(), selector)
 
 fun <T, K> Iterable<T>.takeWhileIncreasingBy(
     comparator: Comparator<K>,
@@ -172,7 +173,8 @@ fun <T : Comparable<T>> Iterable<T>.takeOnlyIncreasing() = takeOnlyIncreasingBy(
 
 fun <T> Iterable<T>.takeOnlyIncreasingBy(comparator: Comparator<T>) = takeOnlyIncreasingBy(comparator) { it }
 
-fun <T, K : Comparable<K>> Iterable<T>.takeOnlyIncreasingBy(selector: (T) -> K) = takeOnlyIncreasingBy(naturalOrder(), selector)
+fun <T, K : Comparable<K>> Iterable<T>.takeOnlyIncreasingBy(selector: (T) -> K) =
+    takeOnlyIncreasingBy(naturalOrder(), selector)
 
 fun <T, K> Iterable<T>.takeOnlyIncreasingBy(
     comparator: Comparator<K>,
@@ -195,7 +197,8 @@ fun <T, K> Iterable<T>.takeOnlyIncreasingBy(
 
 fun <T : Comparable<T>> Iterable<T>.takeVisibleFromHeight(height: T) = takeVisibleFromHeightBy(height, naturalOrder())
 
-fun <T> Iterable<T>.takeVisibleFromHeightBy(height: T, comparator: Comparator<T>) = takeVisibleFromHeightBy(height, comparator) { it }
+fun <T> Iterable<T>.takeVisibleFromHeightBy(height: T, comparator: Comparator<T>) =
+    takeVisibleFromHeightBy(height, comparator) { it }
 
 fun <T, K : Comparable<K>> Iterable<T>.takeVisibleFromHeightBy(
     height: K,
@@ -248,7 +251,7 @@ fun Iterable<Long>.median(): Long = this.sorted().let {
 
 fun <T> List<T>.middle(): T = this[size / 2]
 
-fun <T> List<T>.hasDoubles(): Boolean {
+fun <T> List<T>.containsDuplicates(): Boolean {
     val seen = mutableSetOf<T>()
     return any { !seen.add(it) }
 }

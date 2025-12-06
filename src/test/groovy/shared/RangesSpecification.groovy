@@ -83,6 +83,7 @@ class RangesSpecification extends Specification {
         where:
         ranges                     || expectedResult                          | comment
         []                         || []                                      | ""
+
         // range1: |
         // result: |
         [range(0..0)]              || [range(0..0)]                           | ""
@@ -135,6 +136,7 @@ class RangesSpecification extends Specification {
         where:
         ranges                     || expectedResult | comment
         []                         || []             | ""
+
         // range1: |
         // result: |
         [range(0..0)]              || []             | ""
@@ -179,18 +181,22 @@ class RangesSpecification extends Specification {
 
     def "merge"() {
         when:
-        final merge = RangesKt.merge(ranges)
+        final result = RangesKt.merge(ranges)
 
         then:
-        merge == expectedResult
+        result == expectedResult
 
         where:
         ranges                     || expectedResult             | comment
         []                         || []                         | ""
+
         // range1: |
         // result: |
         [range(0..0)]              || [range(0..0)]              | ""
 
+        // range1: |
+        // range2: |-|
+        // result: |-|
         [range(0..0), range(0..1)] || [range(0..1)]              | ""
 
         // range1: |-----|
@@ -210,12 +216,12 @@ class RangesSpecification extends Specification {
 
         // range1: |--|
         // range2:       |--|
-        // result: |---||---|
+        // result: |--|  |--|
         [range(0..2), range(4..6)] || [range(0..2), range(4..6)] | ""
 
         // range1:       |--|
         // range2: |--|
-        // result: |---||---|
+        // result: |--|  |--|
         [range(4..6), range(0..2)] || [range(0..2), range(4..6)] | ""
 
         // range1: |---|
@@ -227,6 +233,62 @@ class RangesSpecification extends Specification {
         // range2: |---|
         // result: |--------|
         [range(3..6), range(0..3)] || [range(0..6)]              | ""
+    }
+
+    def "merge one"() {
+        when:
+        final result = RangesKt.mergeOne(ranges as Collection, range)
+
+        then:
+        result == expectedResult
+
+        where:
+        ranges                     | range       || expectedResult             | comment
+        []                         | range(0..0) || [range(0..0)]              | ""
+
+        // range1: |
+        // range : |
+        [range(0..0)]              | range(0..0) || [range(0..0)]              | ""
+
+        // range1: |
+        // range2: |-|
+        // range : |
+        [range(0..0), range(0..1)] | range(0..0) || [range(0..1)]              | ""
+
+        // range1: |-----|
+        // range2:    |-----|
+        // range : |
+        [range(0..4), range(2..6)] | range(0..0) || [range(0..4), range(2..6)] | "only overlap with the new range is taken into account"
+
+        // range1: |--------|
+        // range2:    |--|
+        // range : |
+        [range(0..6), range(2..4)] | range(0..0) || [range(0..6), range(2..4)] | "only overlap with the new range is taken into account"
+
+        // range1:    |--|
+        // range2: |--------|
+        // range : |
+        [range(2..4), range(0..6)] | range(0..0) || [range(0..6), range(2..4)] | "only overlap with the new range is taken into account"
+
+        // range1: |--|
+        // range2:       |--|
+        // range : |
+        [range(0..2), range(4..6)] | range(0..0) || [range(0..2), range(4..6)] | ""
+
+        // range1:       |--|
+        // range2: |--|
+        // range : |
+        [range(4..6), range(0..2)] | range(0..0) || [range(0..2), range(4..6)] | ""
+
+        // range1: |---|
+        // range2:     |----|
+        // range : |
+        [range(0..3), range(3..6)] | range(0..0) || [range(0..3), range(3..6)] | "only overlap with the new range is taken into account"
+
+        // range1:     |----|
+        // range2: |---|
+        // range : |
+        [range(3..6), range(0..3)] | range(0..0) || [range(0..3), range(3..6)] | "only overlap with the new range is taken into account"
     }
 
     def "range without range"() {

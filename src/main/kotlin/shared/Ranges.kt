@@ -76,9 +76,10 @@ fun Collection<LongRange>.merge(): List<LongRange> {
 
 fun MutableList<LongRange>.mergeOne(newRange: LongRange) {
     val overlappingRanges = buildList {
-        addAll(this@mergeOne.filter { (it.first - 1) in newRange || (it.last + 1) in newRange })
+        addAll(this@mergeOne.filter { it.overlaps(newRange) })
         add(newRange)
     }
+
     removeAll(overlappingRanges)
     add(overlappingRanges.minOf { it.first }..overlappingRanges.maxOf { it.last })
 
@@ -87,7 +88,7 @@ fun MutableList<LongRange>.mergeOne(newRange: LongRange) {
 
 fun Collection<LongRange>.mergeOne(newRange: LongRange): List<LongRange> {
     val overlappingRanges = buildList {
-        addAll(this@mergeOne.filter { (it.first - 1) in newRange || (it.last + 1) in newRange })
+        addAll(this@mergeOne.filter { it.overlaps(newRange) })
         add(newRange)
     }
 

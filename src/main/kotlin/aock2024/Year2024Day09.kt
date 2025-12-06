@@ -63,7 +63,7 @@ data class Disk(
             freeSpaces.firstOrNull()
         }
 
-        if (selectedSpace == null || file.range.last < selectedSpace.start) {
+        if (selectedSpace == null || file.range.last < selectedSpace.first) {
             formattedFiles += file
             return
         } else {
@@ -77,11 +77,11 @@ data class Disk(
         val difference = fileLength - freeSpaceLength
 
         when {
-            difference > 0 -> files += File(file.fileId, file.range.start..<(file.range.start + difference))
-            difference < 0 -> freeSpaces.addFirst((selectedSpace.start + min)..selectedSpace.last)
+            difference > 0 -> files += File(file.fileId, file.range.first..<(file.range.first + difference))
+            difference < 0 -> freeSpaces.addFirst((selectedSpace.first + min)..selectedSpace.last)
         }
 
-        formattedFiles += File(file.fileId, selectedSpace.start..<(selectedSpace.start + min))
+        formattedFiles += File(file.fileId, selectedSpace.first..<(selectedSpace.first + min))
         freeSpaces.mergeOne((file.range.last - min + 1)..file.range.last)
     }
 
