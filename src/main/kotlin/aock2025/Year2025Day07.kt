@@ -1,12 +1,94 @@
 package aock2025
 
-import shared.sanitize
+import shared.CharGrid
+import shared.Point2d
+import shared.Vector2d
 
 data class Year2025Day07(
-    private val input: List<String>
+    private val grid: CharGrid,
 ) {
-    constructor(input: String) : this(input.sanitize().lines())
+    companion object {
+        const val START = 'S'
+        const val SPLITTER = '^'
+    }
 
-    fun partOne() = 0L
-    fun partTwo() = 0L
+    constructor(input: String) : this(CharGrid(input))
+
+    fun partOne(): Int {
+        val start = grid.findAll(START).first()
+        val splitters = mutableSetOf<Point2d>()
+        findAllSplitters(start, splitters)
+        return splitters.size
+    }
+
+    fun partTwo(): Long = grid.findAll(START).sumOf { start ->
+        countTimelines(start)
+    }
+
+    private fun findAllSplitters(
+        beamOrigin: Point2d,
+        splitters: MutableSet<Point2d>,
+    ) {
+        findNextSplitter(beamOrigin)
+            ?.let { splitter ->
+                if (splitter !in splitters) {
+                    splitters += splitter
+                    splitBeam(splitter)
+                        .forEach { beamOrigin -> findAllSplitters(beamOrigin, splitters) }
+                }
+            }
+    }
+
+    private fun countTimelines(
+        beamOrigin: Point2d,
+        memory: MutableMap<Point2d, Long> = mutableMapOf(),
+    ): Long = memory.getOrPut(beamOrigin) {
+        findNextSplitter(beamOrigin)
+            ?.let { splitter ->
+                splitBeam(splitter)
+                    .sumOf { timeline -> countTimelines(timeline, memory) }
+            }
+            ?: 1L
+    }
+
+    private fun findNextSplitter(beamOrigin: Point2d): Point2d? = grid.dimension()
+        .pointsInDirection(beamOrigin, Vector2d.SOUTH)
+        .takeWhile { grid.contains(it) }
+        .filter { grid.at(it) == SPLITTER }
+        .firstOrNull()
+
+    private fun splitBeam(point: Point2d): Sequence<Point2d> = sequenceOf(
+        point + Vector2d.EAST,
+        point + Vector2d.WEST
+    )
+
+    /*
+    fun partOneV1(): Long {
+        val start = grid.findAll(START).first()
+
+        var beamColumns = setOf(start.x)
+
+        var beamCounts = 0L
+
+        for (row in (start.y + 1)..<grid.dimension().height) {
+            val nextBeamColumns = beamColumns.toMutableSet()
+
+            for (column in beamColumns) {
+                if (grid.at(row, column) == SPLITTER) {
+                    beamCounts += 1
+                    nextBeamColumns -= column
+
+                    val newBeamColumns = setOf(column - 1, column + 1)
+
+                    nextBeamColumns += newBeamColumns
+                }
+            }
+
+            beamColumns = nextBeamColumns
+        }
+
+        return beamCounts
+    }
+     */
+
 }
