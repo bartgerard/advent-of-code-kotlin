@@ -6,6 +6,8 @@ import shared.product
 import shared.sanitize
 import shared.toDoubles
 
+private typealias Connection = Pair<Point3d, Point3d>
+
 data class Year2025Day08(
     private val points: Set<Point3d>
 ) {
@@ -15,24 +17,14 @@ data class Year2025Day08(
             .toSet()
     )
 
-    // BoundedBox
-
     fun partOne(connections: Int): Int {
-        val circuits = Circuits(points.map { Circuit(it) }.toMutableSet())
+        val playground = Playground()
 
-        val a = points.distinctPairs()
-            .sortedBy { it.first.length(it.second) }
-            .toMutableList()
+        connectionsSortedByDistance()
+            .take(connections)
+            .forEach { playground.merge(it) }
 
-        // (162,817,812) (425,690,689) (431,825,988)
-        // (906,360,560) (805,96,715)
-
-        repeat(connections) {
-            val b = a.removeFirst()
-            circuits.merge(b.first, b.second)
-        }
-
-        return circuits.circuits
+        return playground.circuits
             .map { it.size() }
             .sortedDescending()
             .take(3)
@@ -40,52 +32,55 @@ data class Year2025Day08(
     }
 
     fun partTwo(): Int {
-        val circuits = Circuits(points.map { Circuit(it) }.toMutableSet())
+        val playground = Playground()
 
-        val a = points.distinctPairs()
-            .sortedBy { it.first.length(it.second) }
-            .toMutableList()
+        connectionsSortedByDistance()
+            .forEach { connection ->
+                playground.merge(connection)
 
-        while (true) {
-            val b = a.removeFirst()
-            circuits.merge(b.first, b.second)
-
-            if (circuits.circuits.all { it.size() > 1 }) {
-                return (b.first.x * b.second.x).toInt()
+                if (playground.size() == points.size) {
+                    return (connection.first.x * connection.second.x).toInt()
+                }
             }
-        }
+
+        error("should not reach here")
     }
+
+    private fun connectionsSortedByDistance(): Sequence<Pair<Point3d, Point3d>> = points.distinctPairs()
+        .sortedBy { it.first.euclideanDistanceTo(it.second) }
 }
 
-data class Circuits(
+private data class Playground(
     val circuits: MutableSet<Circuit> = mutableSetOf(),
 ) {
-    fun merge(p1: Point3d, p2: Point3d): Boolean {
-        val impactedCircuits = circuits.filter { it.points.contains(p1) || it.points.contains(p2) }
+    fun merge(connection: Connection) {
+        val impactedCircuits = circuits
+            .filter { circuit -> circuit.contains(connection.first) || circuit.contains(connection.second) }
+            .toSet()
 
-        if (impactedCircuits.isEmpty()) {
-            circuits += Circuit(mutableSetOf(p1, p2))
-        } else if (impactedCircuits.size == 1) {
-            val isNew = impactedCircuits.first().points.containsAll(setOf(p1, p2))
-            impactedCircuits.first().points.addAll(setOf(p1, p2))
-            return isNew
-        } else {
-            val combinedCircuit = Circuit(impactedCircuits.flatMap { it.points }.toMutableSet())
-            circuits.removeAll(impactedCircuits.toSet())
-            circuits += combinedCircuit
-        }
-
-        return true
+        circuits.removeAll(impactedCircuits)
+        circuits += Circuit.merge(impactedCircuits).add(connection)
     }
 
-    fun size() = circuits.sumOf { it.points.size }
-
+    fun size(): Int = circuits.sumOf { it.size() }
 }
 
-data class Circuit(
-    val points: MutableSet<Point3d>,
+private data class Circuit(
+    val junctionBoxes: MutableSet<Point3d>,
 ) {
-    constructor(vararg points: Point3d) : this(points.toMutableSet())
+    companion object {
+        fun merge(circuits: Collection<Circuit>): Circuit {
+            return Circuit(circuits.flatMap { it.junctionBoxes }.toMutableSet())
+        }
+    }
 
-    fun size() = points.size
+    fun add(connection: Connection): Circuit {
+        junctionBoxes.add(connection.first)
+        junctionBoxes.add(connection.second)
+        return this
+    }
+
+    fun contains(point: Point3d): Boolean = junctionBoxes.contains(point)
+
+    fun size(): Int = junctionBoxes.size
 }

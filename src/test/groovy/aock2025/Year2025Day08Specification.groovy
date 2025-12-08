@@ -18,7 +18,7 @@ class Year2025Day08Specification extends Specification {
         input                          | connections | expectedResult | comment
         readFile(2025, 8, "example_1") | 10          | 40             | ""
 
-        readFile(2025, 8)              | 1000        | 0              | ">54684"
+        readFile(2025, 8)              | 1000        | 80446          | ""
     }
 
     def "partTwo"() {
