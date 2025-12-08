@@ -17,15 +17,15 @@ data class Year2025Day07(
     fun partOne(): Int {
         val start = grid.findAll(START).first()
         val splitters = mutableSetOf<Point2d>()
-        findAllSplitters(start, splitters)
+        findUsedSplitters(start, splitters)
         return splitters.size
     }
 
-    fun partTwo(): Long = grid.findAll(START).sumOf { start ->
-        countTimelines(start)
+    fun partTwo(): Long = grid.findAll(START).sumOf { beamOrigin ->
+        countTimelines(beamOrigin)
     }
 
-    private fun findAllSplitters(
+    private fun findUsedSplitters(
         beamOrigin: Point2d,
         splitters: MutableSet<Point2d>,
     ) {
@@ -34,7 +34,7 @@ data class Year2025Day07(
                 if (splitter !in splitters) {
                     splitters += splitter
                     splitBeam(splitter)
-                        .forEach { beamOrigin -> findAllSplitters(beamOrigin, splitters) }
+                        .forEach { beamOrigin -> findUsedSplitters(beamOrigin, splitters) }
                 }
             }
     }
