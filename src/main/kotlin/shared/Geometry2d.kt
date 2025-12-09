@@ -227,7 +227,7 @@ data class Point2d(
                     .takeWhile { it.all { remaining.contains(it) } }
                     .toList()
 
-                remaining -= rows.flatMap { it }.toSet()
+                remaining -= rows.flatten().toSet()
                 regions += Rectangle2d(point.x..<(point.x + columns.size), point.y..<(point.y + rows.size))
             }
 
@@ -412,4 +412,42 @@ data class Angle(
     operator fun minus(other: Angle) = Angle(radians - other.radians)
     operator fun times(factor: Double) = Angle(radians * factor)
     operator fun div(divisor: Double) = Angle(radians / divisor)
+}
+
+data class Point2dLong(val x: Long, val y: Long) {
+    operator fun plus(v: Vector2d) = Point2dLong(x + v.x, y + v.y)
+
+    fun neighbours(
+        directions: List<Vector2d> = ORTHOGONAL_ADJACENT
+    ) = directions.map { this + it }
+}
+
+data class Rectangle2dLong(
+    val x: LongRange,
+    val y: LongRange
+) {
+    companion object {
+        fun of(p1: Point2dLong, p2: Point2dLong) = Rectangle2dLong(
+            min(p1.x, p2.x)..max(p1.x, p2.x),
+            min(p1.y, p2.y)..max(p1.y, p2.y)
+        )
+    }
+
+    fun width() = x.length()
+    fun height() = y.length()
+
+    val area = x.length() * y.length()
+    fun contains(p: Point2dLong) = p.x in x && p.y in y
+
+    fun corners() = buildSet {
+        add(Point2dLong(x.first, y.first))
+        add(Point2dLong(x.first, y.last))
+        add(Point2dLong(x.last, y.first))
+        add(Point2dLong(x.last, y.last))
+    }
+
+    fun overlaps(other: Rectangle2dLong): Boolean = x.overlaps(other.x) && y.overlaps(other.y)
+
+    fun innerRectangle(): Rectangle2dLong = Rectangle2dLong(x.innerRange(), y.innerRange())
+
 }

@@ -155,6 +155,9 @@ fun IntRange.length(): Int = last - first + 1
 fun LongRange.length(): Long = last - first + 1
 fun LongProgression.length(): Long = max(first, last) - min(first, last) + 1
 
+fun IntRange.innerRange(): IntRange = first + 1..<last
+fun LongRange.innerRange(): LongRange = first + 1..<last
+
 fun IntRange.toLongRange() = first.toLong()..last.toLong()
 
 fun main() {
