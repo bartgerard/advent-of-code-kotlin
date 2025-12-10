@@ -1,10 +1,17 @@
 package aock2025
 
+import com.microsoft.z3.Context
+import com.microsoft.z3.IntExpr
+import com.microsoft.z3.IntNum
+import com.microsoft.z3.Status
 import shared.Dijkstra
 import shared.Solution
+import shared.SystemOfLinearEquations
+import shared.gcd
 import shared.sanitize
 import shared.toIntegers
 import shared.toLongs
+import shared.transpose
 
 data class Year2025Day10(
     private val factories: List<Factory>
@@ -46,17 +53,77 @@ data class Factory(
     }
 
     fun findFewestButtonsPressesForJoltageRequirements(): Long {
+        return Context().use { ctx ->
+            val unknowns = buttons.indices.map { "x$it" }
+
+            val variables: Map<String, IntExpr> = buildMap {
+                putAll(unknowns.associateWith { ctx.mkIntConst(it) })
+            }
+
+            val optimizer = ctx.mkOptimize()
+
+            unknowns.map { variables[it] }.forEach {
+                optimizer.Add(ctx.mkGe(it, ctx.mkInt(0)))
+            }
+
+            val equations = joltageRequirements.requirements.mapIndexed { i, requirement ->
+                val coefficients: Array<IntExpr> = buttons.withIndex()
+                    .filter { (_, button) -> button.toggles.contains(i) }
+                    .map { (index, _) -> variables["x$index"]!! }
+                    .toTypedArray()
+
+                ctx.mkEq(
+                    ctx.mkAdd(*coefficients),
+                    ctx.mkInt(requirement)
+                )
+            }
+
+            equations.forEach { optimizer.Add(it) }
+
+            val sum = ctx.mkAdd(*unknowns.map { variables[it] }.toTypedArray())
+            optimizer.MkMinimize(sum)
+
+            when (optimizer.Check()) {
+                Status.SATISFIABLE -> {
+                    unknowns
+                        .map { optimizer.model.eval(variables[it], false) as IntNum }
+                        .sumOf { it.int64 }
+                }
+
+                else -> error("No solution found!")
+            }
+        }
+    }
+
+    fun findFewestButtonsPressesForJoltageRequirementsV2(): Long {
+        val size = joltageRequirements.requirements.size
+
+        val equations = buttons.map { button -> button.toEquations(size) }
+            .transpose()
+
+        val solution = SystemOfLinearEquations.solve(
+            equations,
+            joltageRequirements.requirements
+        )
+
+        return 0L
+    }
+
+    fun findFewestButtonsPressesForJoltageRequirementsV1(): Long {
+        val gcd = joltageRequirements.requirements.gcd()
+
         val shortestPath: Solution<List<Long>> = Dijkstra.findShortestPath(
             joltageRequirements.initial(),
             { it == joltageRequirements.requirements },
             { _, current ->
                 buttons.map { button -> current.apply(button) }
-                    .filter { JoltageRequirements.isBelowMax(it, joltageRequirements.requirements) }
+                    .filter { JoltageRequirements.isBelowOrEqualToMax(it, joltageRequirements.requirements) }
             }
         )
 
         return shortestPath.cost()
     }
+
 }
 
 data class Button(
@@ -66,6 +133,9 @@ data class Button(
         fun parse(buttonsAsStrings: List<String>): List<Button> = buttonsAsStrings
             .map { Button(it.toIntegers().toSet()) }
     }
+
+    fun toEquations(length: Int) = (0..<length)
+        .map { index -> if (index in toggles) 1 else 0 }
 }
 
 data class IndicatorLights(
@@ -102,7 +172,7 @@ data class JoltageRequirements(
     val requirements: List<Long>
 ) {
     companion object {
-        fun isBelowMax(
+        fun isBelowOrEqualToMax(
             currentRequirements: List<Long>,
             maxRequirements: List<Long>
         ): Boolean {

@@ -45,8 +45,8 @@ fun solveLinearWithJama() {
 }
 
 fun main() {
-    //solveLinearWithCommonsMath()
-    //solveLinearWithJama()
+    solveLinearWithCommonsMath()
+    solveLinearWithJama()
     runBlocking {
         test()
     }

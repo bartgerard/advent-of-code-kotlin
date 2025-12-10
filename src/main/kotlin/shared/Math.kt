@@ -69,6 +69,8 @@ tailrec fun gcd(x: Int, y: Int): Int = when {
     }
 }
 
+fun Iterable<Long>.gcd(): Long = reduce { acc, value -> gcd(acc, value) }
+
 fun sum(range: IntRange) = sum(range.min().toLong()..range.max().toLong())
 
 fun sum(range: LongRange): Long = (range.min() + range.max()) * range.length() / 2
