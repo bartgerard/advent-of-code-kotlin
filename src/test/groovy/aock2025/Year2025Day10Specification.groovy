@@ -16,10 +16,9 @@ class Year2025Day10Specification extends Specification {
 
         where:
         input                           | expectedResult | comment
-        ""                              | 0              | ""
-        readFile(2025, 10, "example_1") | 0              | ""
+        readFile(2025, 10, "example_1") | 7              | ""
 
-        readFile(2025, 10)              | 0              | ""
+        readFile(2025, 10)              | 469            | ""
     }
 
     def "partTwo"() {
