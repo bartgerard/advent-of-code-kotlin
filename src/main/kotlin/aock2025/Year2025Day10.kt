@@ -52,46 +52,48 @@ data class Factory(
         return shortestPath.cost()
     }
 
-    fun findFewestButtonsPressesForJoltageRequirements(): Long {
-        return Context().use { ctx ->
-            val unknowns = buttons.indices.map { "x$it" }
+    /**
+     * Integer Programming
+     * https://en.wikipedia.org/wiki/Integer_programming
+     */
+    fun findFewestButtonsPressesForJoltageRequirements(): Long = Context().use { ctx ->
+        val unknowns = buttons.indices.map { "x$it" }
 
-            val variables: Map<String, IntExpr> = buildMap {
-                putAll(unknowns.associateWith { ctx.mkIntConst(it) })
+        val variables: Map<String, IntExpr> = buildMap {
+            putAll(unknowns.associateWith { ctx.mkIntConst(it) })
+        }
+
+        val optimizer = ctx.mkOptimize()
+
+        unknowns.map { variables[it] }.forEach {
+            optimizer.Add(ctx.mkGe(it, ctx.mkInt(0)))
+        }
+
+        val equations = joltageRequirements.requirements.mapIndexed { i, requirement ->
+            val coefficients: Array<IntExpr> = buttons.withIndex()
+                .filter { (_, button) -> button.toggles.contains(i) }
+                .map { (index, _) -> variables["x$index"]!! }
+                .toTypedArray()
+
+            ctx.mkEq(
+                ctx.mkAdd(*coefficients),
+                ctx.mkInt(requirement)
+            )
+        }
+
+        equations.forEach { optimizer.Add(it) }
+
+        val sum = ctx.mkAdd(*unknowns.map { variables[it] }.toTypedArray())
+        optimizer.MkMinimize(sum)
+
+        when (optimizer.Check()) {
+            Status.SATISFIABLE -> {
+                unknowns
+                    .map { optimizer.model.eval(variables[it], false) as IntNum }
+                    .sumOf { it.int64 }
             }
 
-            val optimizer = ctx.mkOptimize()
-
-            unknowns.map { variables[it] }.forEach {
-                optimizer.Add(ctx.mkGe(it, ctx.mkInt(0)))
-            }
-
-            val equations = joltageRequirements.requirements.mapIndexed { i, requirement ->
-                val coefficients: Array<IntExpr> = buttons.withIndex()
-                    .filter { (_, button) -> button.toggles.contains(i) }
-                    .map { (index, _) -> variables["x$index"]!! }
-                    .toTypedArray()
-
-                ctx.mkEq(
-                    ctx.mkAdd(*coefficients),
-                    ctx.mkInt(requirement)
-                )
-            }
-
-            equations.forEach { optimizer.Add(it) }
-
-            val sum = ctx.mkAdd(*unknowns.map { variables[it] }.toTypedArray())
-            optimizer.MkMinimize(sum)
-
-            when (optimizer.Check()) {
-                Status.SATISFIABLE -> {
-                    unknowns
-                        .map { optimizer.model.eval(variables[it], false) as IntNum }
-                        .sumOf { it.int64 }
-                }
-
-                else -> error("No solution found!")
-            }
+            else -> error("No solution found!")
         }
     }
 
