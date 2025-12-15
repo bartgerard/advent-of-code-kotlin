@@ -1,13 +1,13 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Dimension
-import shared.columns
+import shared.geometry2d.Dimension2d
+import shared.grid.CharGrid
+import shared.grid.columns
 import shared.sanitize
 import shared.splitByEmptyLine
 
 data class Year2024Day25(
-    private val dimension: Dimension,
+    private val dimension: Dimension2d,
     private val locks: List<List<Int>>,
     private val keys: List<List<Int>>
 ) {
@@ -18,7 +18,7 @@ data class Year2024Day25(
         grids.partition { grid -> grid.firstRow().all { it == '#' } }
     )
 
-    constructor(dimension: Dimension, grids: Pair<List<CharGrid>, List<CharGrid>>) : this(
+    constructor(dimension: Dimension2d, grids: Pair<List<CharGrid>, List<CharGrid>>) : this(
         dimension,
         grids.first.map { lock -> lock.columns().map { column -> column.count { it == '#' } - 1 } },
         grids.second.map { lock -> lock.columns().map { column -> column.count { it == '#' } - 1 } }

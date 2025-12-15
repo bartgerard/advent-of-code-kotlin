@@ -1,8 +1,8 @@
 package aock2025
 
-import shared.CharGrid
-import shared.Point2d
-import shared.Vector2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
 
 data class Year2025Day04(
     private val grid: CharGrid
@@ -34,10 +34,10 @@ data class Year2025Day04(
     private fun findMovableRolls() = grid.findAll { it == ROLLS_OF_PAPER }
         .filter { roll -> isMovableRoll(roll) }
 
-    private fun isMovableRoll(roll: Point2d): Boolean = roll.neighbours(Vector2d.SURROUNDING)
+    private fun isMovableRoll(roll: Point2dInt): Boolean = roll.neighbours(Vector2dInt.SURROUNDING)
         .count { grid.contains(it) && grid.at(it) == ROLLS_OF_PAPER } < 4
 
-    private fun moveRoll(roll: Point2d) {
+    private fun moveRoll(roll: Point2dInt) {
         grid.set(roll, ACCESSED)
     }
 }

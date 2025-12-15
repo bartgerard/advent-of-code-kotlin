@@ -1,7 +1,7 @@
 package aock2023
 
-import shared.ContractableGraph
-import shared.Edge
+import shared.algorithm.karger.ContractableGraph
+import shared.algorithm.karger.Edge
 import shared.productOf
 import shared.sanitize
 

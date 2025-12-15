@@ -1,8 +1,8 @@
 package aock2025
 
-import shared.CharGrid
-import shared.Point2d
-import shared.Vector2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
 
 data class Year2025Day07(
     private val grid: CharGrid,
@@ -16,7 +16,7 @@ data class Year2025Day07(
 
     fun partOne(): Int {
         val start = grid.findAll(START).first()
-        val splitters = mutableSetOf<Point2d>()
+        val splitters = mutableSetOf<Point2dInt>()
         findUsedSplitters(start, splitters)
         return splitters.size
     }
@@ -26,8 +26,8 @@ data class Year2025Day07(
     }
 
     private fun findUsedSplitters(
-        beamOrigin: Point2d,
-        splitters: MutableSet<Point2d>,
+        beamOrigin: Point2dInt,
+        splitters: MutableSet<Point2dInt>,
     ) {
         findNextSplitter(beamOrigin)
             ?.let { splitter ->
@@ -40,8 +40,8 @@ data class Year2025Day07(
     }
 
     private fun countTimelines(
-        beamOrigin: Point2d,
-        memory: MutableMap<Point2d, Long> = mutableMapOf(),
+        beamOrigin: Point2dInt,
+        memory: MutableMap<Point2dInt, Long> = mutableMapOf(),
     ): Long = memory.getOrPut(beamOrigin) {
         findNextSplitter(beamOrigin)
             ?.let { splitter ->
@@ -51,15 +51,15 @@ data class Year2025Day07(
             ?: 1L
     }
 
-    private fun findNextSplitter(beamOrigin: Point2d): Point2d? = grid.dimension()
-        .pointsInDirection(beamOrigin, Vector2d.SOUTH)
+    private fun findNextSplitter(beamOrigin: Point2dInt): Point2dInt? = grid.dimension()
+        .pointsInDirection(beamOrigin, Vector2dInt.SOUTH)
         .takeWhile { grid.contains(it) }
         .filter { grid.at(it) == SPLITTER }
         .firstOrNull()
 
-    private fun splitBeam(point: Point2d): Sequence<Point2d> = sequenceOf(
-        point + Vector2d.EAST,
-        point + Vector2d.WEST
+    private fun splitBeam(point: Point2dInt): Sequence<Point2dInt> = sequenceOf(
+        point + Vector2dInt.EAST,
+        point + Vector2dInt.WEST
     )
 
     /*

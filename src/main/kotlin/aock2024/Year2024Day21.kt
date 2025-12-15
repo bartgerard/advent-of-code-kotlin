@@ -1,10 +1,10 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Vector2d
 import shared.allShortest
 import shared.combinations
 import shared.generate
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
 import shared.sanitize
 import shared.toIntegers
 import kotlin.math.absoluteValue
@@ -53,7 +53,7 @@ enum class Keypad(
 
     companion object {
         val CACHE = mutableMapOf<Pair<Pair<Char, Char>, Int>, Long>()
-        fun toInstructions(v: Vector2d): String = if (v.x != 0) {
+        fun toInstructions(v: Vector2dInt): String = if (v.x != 0) {
             (if (v.x > 0) ">" else "<").repeat(v.x.absoluteValue)
         } else if ((v.y != 0)) {
             (if (v.y > 0) "v" else "^").repeat(v.y.absoluteValue)

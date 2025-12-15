@@ -1,7 +1,7 @@
 package aock2019
 
 import aock2019.common.LongCodeExecution
-import shared.Point2d
+import shared.geometry2d.Point2dInt
 import shared.sanitize
 import shared.toLongs
 
@@ -13,7 +13,7 @@ data class Year2019Day13(
     fun partOne(): Int {
         val execution = LongCodeExecution(program.toMutableList()).run()
         return execution.output.chunked(3)
-            .associate { Point2d(it[0].toInt(), it[1].toInt()) to it[2] }
+            .associate { Point2dInt(it[0].toInt(), it[1].toInt()) to it[2] }
             .values
             .count { it == 2L }
     }

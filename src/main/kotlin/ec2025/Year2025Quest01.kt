@@ -1,20 +1,20 @@
 package ec2025
 
-import shared.Direction
-import shared.Vector2d
 import shared.floorMod
+import shared.geometry2d.Vector2dInt
 import shared.sanitize
+import shared.spatial.Direction
 import shared.splitByEmptyLine
 
 data class Year2025Quest01(
     private val names: List<String>,
-    private val instructions: List<Vector2d>
+    private val instructions: List<Vector2dInt>
 ) {
     constructor(input: String) : this(input.sanitize().splitByEmptyLine())
     constructor(input: List<String>) : this(
         input[0].split(","),
         input[1].split(",")
-            .map { Vector2d.forDirection(Direction.parse(it[0])) * it.substring(1).toInt() }
+            .map { Vector2dInt.forDirection(Direction.parse(it[0])) * it.substring(1).toInt() }
     )
 
     fun partOne(): String {

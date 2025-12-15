@@ -32,25 +32,29 @@ A<sub>y</sub> · (P<sub>x</sub> - B<sub>x</sub> · b) = A<sub>x</sub> · (P<sub>
 
 a = (P<sub>x</sub> - B<sub>x</sub> · b) / A<sub>x</sub>
 
-A<sub>y</sub> · P<sub>x</sub> - A<sub>y</sub> · B<sub>x</sub> · b = A<sub>x</sub> · P<sub>y</sub> - A<sub>x</sub> · B<sub>y</sub> · b
+A<sub>y</sub> · P<sub>x</sub> - A<sub>y</sub> · B<sub>x</sub> · b = A<sub>x</sub> · P<sub>y</sub> - A<sub>x</sub> ·
+B<sub>y</sub> · b
 
 ---
 
 a = (P<sub>x</sub> - B<sub>x</sub> · b) / A<sub>x</sub>
 
-A<sub>x</sub> · B<sub>y</sub> · b - A<sub>y</sub> · B<sub>x</sub> · b = A<sub>x</sub> · P<sub>y</sub> - A<sub>y</sub> · P<sub>x</sub>
+A<sub>x</sub> · B<sub>y</sub> · b - A<sub>y</sub> · B<sub>x</sub> · b = A<sub>x</sub> · P<sub>y</sub> - A<sub>y</sub> ·
+P<sub>x</sub>
 
 ---
 
 a = (P<sub>x</sub> - B<sub>x</sub> · b) / A<sub>x</sub>
 
-b · (A<sub>x</sub> · B<sub>y</sub> - A<sub>y</sub> · B<sub>x</sub>) = A<sub>x</sub> · P<sub>y</sub> - A<sub>y</sub> · P<sub>x</sub>
+b · (A<sub>x</sub> · B<sub>y</sub> - A<sub>y</sub> · B<sub>x</sub>) = A<sub>x</sub> · P<sub>y</sub> - A<sub>y</sub> ·
+P<sub>x</sub>
 
 ---
 
 a = (P<sub>x</sub> - B<sub>x</sub> · b) / A<sub>x</sub>
 
-b = (A<sub>x</sub> · P<sub>y</sub> - A<sub>y</sub> · P<sub>x</sub>) / (A<sub>x</sub> · B<sub>y</sub> - A<sub>y</sub> · B<sub>x</sub>)
+b = (A<sub>x</sub> · P<sub>y</sub> - A<sub>y</sub> · P<sub>x</sub>) / (A<sub>x</sub> · B<sub>y</sub> - A<sub>y</sub> ·
+B<sub>x</sub>)
 
 ---
 

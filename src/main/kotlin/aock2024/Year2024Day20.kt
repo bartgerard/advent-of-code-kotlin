@@ -1,7 +1,7 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Dijkstra
+import shared.algorithm.dijkstra.Dijkstra
+import shared.grid.CharGrid
 
 data class Year2024Day20(
     private val grid: CharGrid

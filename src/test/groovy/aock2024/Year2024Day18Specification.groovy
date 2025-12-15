@@ -1,6 +1,6 @@
 package aock2024
 
-import shared.Point2d
+import shared.geometry2d.Point2dInt
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -16,10 +16,10 @@ class Year2024Day18Specification extends Specification {
         result == expectedResult
 
         where:
-        input                           | start             | destination         | time | expectedResult | comment
-        readFile(2024, 18, "example_1") | new Point2d(0, 0) | new Point2d(6, 6)   | 12   | 22             | ""
+        input                           | start                | destination            | time | expectedResult | comment
+        readFile(2024, 18, "example_1") | new Point2dInt(0, 0) | new Point2dInt(6, 6)   | 12   | 22             | ""
 
-        readFile(2024, 18)              | new Point2d(0, 0) | new Point2d(70, 70) | 1024 | 356            | ""
+        readFile(2024, 18)              | new Point2dInt(0, 0) | new Point2dInt(70, 70) | 1024 | 356            | ""
     }
 
     @Ignore("slow")
@@ -31,10 +31,10 @@ class Year2024Day18Specification extends Specification {
         result == expectedResult
 
         where:
-        input                           | start             | destination         | expectedResult | comment
-        readFile(2024, 18, "example_1") | new Point2d(0, 0) | new Point2d(6, 6)   | "6,1"          | ""
+        input                           | start                | destination            | expectedResult | comment
+        readFile(2024, 18, "example_1") | new Point2dInt(0, 0) | new Point2dInt(6, 6)   | "6,1"          | ""
 
-        readFile(2024, 18)              | new Point2d(0, 0) | new Point2d(70, 70) | "22,33"        | ""
+        readFile(2024, 18)              | new Point2dInt(0, 0) | new Point2dInt(70, 70) | "22,33"        | ""
     }
 
 }

@@ -23,7 +23,12 @@ data class Year2022Day13(
             .map { packets -> packets.lines().map { PacketData.parse(it) } }
     )
 
-    fun partOne() = packetPairs.mapIndexed { index, packetPair -> index to PacketData.COMPARATOR.compare(packetPair.first(), packetPair.last()) }
+    fun partOne() = packetPairs.mapIndexed { index, packetPair ->
+        index to PacketData.COMPARATOR.compare(
+            packetPair.first(),
+            packetPair.last()
+        )
+    }
         .filter { it.second <= 0 }
         .sumOf { it.first + 1 }
 

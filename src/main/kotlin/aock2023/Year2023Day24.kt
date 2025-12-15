@@ -3,12 +3,12 @@ package aock2023
 import com.microsoft.z3.Context
 import com.microsoft.z3.IntNum
 import com.microsoft.z3.Status
-import shared.Axis
-import shared.Box3d
-import shared.Point3d
-import shared.Ray3d
-import shared.Vector3d
+import shared.geometry3d.Box3d
+import shared.geometry3d.Point3d
+import shared.geometry3d.Ray3d
+import shared.geometry3d.Vector3d
 import shared.sanitize
+import shared.spatial.Axis
 import shared.toDoubles
 import kotlin.math.roundToLong
 
@@ -75,7 +75,8 @@ data class Year2023Day24(
 
      */
 
-    fun partTwo(): Long = findInitialPosition(rays.subList(0, 3)).let { it.x.roundToLong() + it.y.roundToLong() + it.z.roundToLong() }
+    fun partTwo(): Long =
+        findInitialPosition(rays.subList(0, 3)).let { it.x.roundToLong() + it.y.roundToLong() + it.z.roundToLong() }
 
     private fun findInitialPosition(rays: List<Ray3d>): Point3d {
         val (ray0, ray1, ray2) = rays.subList(0, 3)
@@ -117,7 +118,10 @@ data class Year2023Day24(
                 Axis.THREE_DIMENSIONAL.map { axis ->
                     ctx.mkEq(
                         ctx.mkAdd(variables["pr$axis"], ctx.mkMul(variables["vr$axis"], variables["t$i"])),
-                        ctx.mkAdd(ctx.mkInt(ray.point.on(axis).roundToLong()), ctx.mkMul(ctx.mkInt(ray.direction.on(axis).roundToLong()), variables["t$i"]))
+                        ctx.mkAdd(
+                            ctx.mkInt(ray.point.on(axis).roundToLong()),
+                            ctx.mkMul(ctx.mkInt(ray.direction.on(axis).roundToLong()), variables["t$i"])
+                        )
                     )
                 }
             }

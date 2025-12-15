@@ -1,7 +1,7 @@
 package aock2021
 
-import shared.IntGrid
-import shared.Point2d
+import shared.geometry2d.Point2dInt
+import shared.grid.IntGrid
 import shared.product
 
 data class Year2021Day09(
@@ -24,7 +24,7 @@ data class Year2021Day09(
         .take(3)
         .product()
 
-    private fun lowPoints(): Sequence<Point2d> = grid.points()
+    private fun lowPoints(): Sequence<Point2dInt> = grid.points()
         .filter { point ->
             point.neighbours()
                 .filter { grid.contains(it) }

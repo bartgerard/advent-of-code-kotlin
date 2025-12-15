@@ -1,7 +1,7 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Point2d
+import shared.geometry2d.Point2dInt
+import shared.grid.CharGrid
 
 data class Year2024Day10(
     private val grid: CharGrid
@@ -18,9 +18,9 @@ data class Year2024Day10(
 
     fun trailheads() = grid.findAll(TRAIL[0])
 
-    fun findDestinationsStartingAt(point: Point2d): Set<Point2d> {
+    fun findDestinationsStartingAt(point: Point2dInt): Set<Point2dInt> {
         val previousPoints = mutableSetOf(point)
-        val nextPoints = mutableSetOf<Point2d>()
+        val nextPoints = mutableSetOf<Point2dInt>()
 
         for (nextHeight in TRAIL.subList(1, TRAIL.size)) {
             for (previousPoint in previousPoints) {
@@ -34,13 +34,13 @@ data class Year2024Day10(
         return previousPoints
     }
 
-    fun scoreForTrailStartingAt(point: Point2d, trailTail: List<Char>): Long = if (trailTail.size == 1) {
+    fun scoreForTrailStartingAt(point: Point2dInt, trailTail: List<Char>): Long = if (trailTail.size == 1) {
         nextPoints(point, trailTail[0]).count().toLong()
     } else {
         nextPoints(point, trailTail[0]).sumOf { scoreForTrailStartingAt(it, trailTail.subList(1, trailTail.size)) }
     }
 
-    private fun nextPoints(previousPoint: Point2d, nextHeight: Char) = previousPoint.neighbours()
+    private fun nextPoints(previousPoint: Point2dInt, nextHeight: Char) = previousPoint.neighbours()
         .filter { grid.contains(it) }
         .filter { grid.at(it) == nextHeight }
 

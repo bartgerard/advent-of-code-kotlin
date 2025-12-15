@@ -1,6 +1,7 @@
 package shared
 
 import org.apache.commons.lang3.Validate.isTrue
+import shared.range.length
 import java.util.Collections.unmodifiableMap
 import kotlin.math.absoluteValue
 import kotlin.math.pow

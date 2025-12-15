@@ -22,7 +22,8 @@ data class Year2019Day07(
     }
         .max()
 
-    fun amplify(permutation: Int, input: Long): Long = LongCodeExecution(program, listOf(permutation.toLong(), input)).run().output.first()
+    fun amplify(permutation: Int, input: Long): Long =
+        LongCodeExecution(program, listOf(permutation.toLong(), input)).run().output.first()
 
     fun runPermutation(permutation: List<Long>, input: Long): Long {
         val queues = (0..4).map { i -> LinkedBlockingQueue(listOf(permutation[i])) }

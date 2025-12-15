@@ -1,7 +1,7 @@
 package aock2022
 
-import shared.Outcome
-import shared.RoShamBo
+import shared.game.Outcome
+import shared.game.RoShamBo
 import shared.sanitize
 
 data class Year2022Day02(

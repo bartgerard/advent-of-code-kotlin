@@ -1,8 +1,8 @@
 package aock2015
 
-import shared.Direction
-import shared.Point2d
+import shared.geometry2d.Point2dInt
 import shared.groupByIndexRemainder
+import shared.spatial.Direction
 import java.util.Collections.unmodifiableSet
 
 data class Year2015Day03(
@@ -14,11 +14,11 @@ data class Year2015Day03(
             .toList()
     )
 
-    fun atLeastOnePresent(): Set<Point2d> {
-        var point = Point2d.ZERO
+    fun atLeastOnePresent(): Set<Point2dInt> {
+        var point = Point2dInt.ZERO
 
-        val points = mutableSetOf<Point2d>()
-        points.add(Point2d.ZERO)
+        val points = mutableSetOf<Point2dInt>()
+        points.add(Point2dInt.ZERO)
 
         for (direction in directions) {
             point += direction
@@ -31,7 +31,7 @@ data class Year2015Day03(
     private fun splitWork(workers: Int): List<Year2015Day03> = this.directions.groupByIndexRemainder(workers)
         .map { Year2015Day03(it) }
 
-    fun atLeastOnePresentWithHelp(workers: Int): Set<Point2d> = splitWork(workers)
+    fun atLeastOnePresentWithHelp(workers: Int): Set<Point2dInt> = splitWork(workers)
         .asSequence()
         .map { it.atLeastOnePresent() }
         .flatMap { it }

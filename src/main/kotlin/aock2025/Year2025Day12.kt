@@ -1,7 +1,7 @@
 package aock2025
 
-import shared.CharGrid
-import shared.Dimension
+import shared.geometry2d.Dimension2d
+import shared.grid.CharGrid
 import shared.sanitize
 import shared.splitByEmptyLine
 import shared.toIntegers
@@ -46,7 +46,7 @@ data class PresentShape(
 }
 
 data class Region(
-    val dimension: Dimension,
+    val dimension: Dimension2d,
     val requirements: List<Int>,
 ) {
 
@@ -54,7 +54,7 @@ data class Region(
         fun parse(input: String): Region {
             val (region, requirements) = input.split(':')
             return Region(
-                Dimension.parse(region),
+                Dimension2d.parse(region),
                 requirements.toIntegers()
             )
         }

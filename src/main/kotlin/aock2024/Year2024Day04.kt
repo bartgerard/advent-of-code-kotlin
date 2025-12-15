@@ -1,11 +1,11 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Direction.NORTH_EAST
-import shared.Direction.NORTH_WEST
-import shared.Direction.SOUTH_EAST
-import shared.Direction.SOUTH_WEST
-import shared.Vector2d
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
+import shared.spatial.Direction.NORTH_EAST
+import shared.spatial.Direction.NORTH_WEST
+import shared.spatial.Direction.SOUTH_EAST
+import shared.spatial.Direction.SOUTH_WEST
 
 data class Year2024Day04(
     private val grid: CharGrid
@@ -17,11 +17,11 @@ data class Year2024Day04(
 
     constructor(input: String) : this(CharGrid(input))
 
-    fun partOne() = grid.countOccurrences(WORD, Vector2d.SURROUNDING)
+    fun partOne() = grid.countOccurrences(WORD, Vector2dInt.SURROUNDING)
 
     fun partTwo() = grid.findAll('A')
         .count { point ->
-            Vector2d.DIAGONAL_ADJACENT.all { grid.contains(point + it) }
+            Vector2dInt.DIAGONAL_ADJACENT.all { grid.contains(point + it) }
                     && setOf(grid.at(point + NORTH_WEST), grid.at(point + SOUTH_EAST)).containsAll(M_AND_S)
                     && setOf(grid.at(point + NORTH_EAST), grid.at(point + SOUTH_WEST)).containsAll(M_AND_S)
         }

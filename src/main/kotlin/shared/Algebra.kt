@@ -1,5 +1,7 @@
 package shared
 
+import shared.geometry2d.LineSegment2dInt
+
 // a x + b y + c = 0
 data class LinearEquation2d(
     val a: Double,
@@ -40,7 +42,7 @@ data class LinearFunction2d(
     val y0: Double
 ) {
     companion object {
-        fun from(line: LineSegment2d): LinearFunction2d = LinearFunction2d(line.slope(), line.yIntercept())
+        fun from(line: LineSegment2dInt): LinearFunction2d = LinearFunction2d(line.slope(), line.yIntercept())
 
         fun intersect(f1: LinearFunction2d, f2: LinearFunction2d): Pair<Double, Double>? {
             val d = f2.m - f1.m

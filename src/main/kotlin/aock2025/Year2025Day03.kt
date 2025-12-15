@@ -21,8 +21,6 @@ data class BatteryBank(
             batteries: List<Int>,
             turnOnCount: Int
         ): String {
-            require(batteries.isNotEmpty())
-
             if (turnOnCount <= 0) {
                 return ""
             }

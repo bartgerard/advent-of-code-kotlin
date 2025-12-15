@@ -1,7 +1,7 @@
 package aock2022
 
-import shared.contains
-import shared.overlaps
+import shared.range.contains
+import shared.range.overlaps
 import shared.sanitize
 
 data class Year2022Day04(

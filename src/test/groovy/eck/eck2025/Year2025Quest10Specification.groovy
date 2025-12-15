@@ -43,12 +43,12 @@ class Year2025Quest10Specification extends Specification {
         result == expectedResult
 
         where:
-        input                                      || expectedResult  | comment
-        readFile("eck/2025/quest10/example_3.txt") || 15              | ""
-        readFile("eck/2025/quest10/example_4.txt") || 8               | ""
-        readFile("eck/2025/quest10/example_5.txt") || 44              | ""
-        readFile("eck/2025/quest10/example_6.txt") || 4406            | ""
-        readFile("eck/2025/quest10/example_7.txt") || 13033988838     | ""
+        input                                      || expectedResult | comment
+        readFile("eck/2025/quest10/example_3.txt") || 15             | ""
+        readFile("eck/2025/quest10/example_4.txt") || 8              | ""
+        readFile("eck/2025/quest10/example_5.txt") || 44             | ""
+        readFile("eck/2025/quest10/example_6.txt") || 4406           | ""
+        readFile("eck/2025/quest10/example_7.txt") || 13033988838    | ""
 
         //readFile("eck/2025/quest10/input_3.txt")   || 210342294859334 | ""
     }

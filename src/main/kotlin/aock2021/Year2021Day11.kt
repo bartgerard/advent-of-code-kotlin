@@ -1,8 +1,8 @@
 package aock2021
 
-import shared.IntGrid
-import shared.Point2d
-import shared.Vector2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.grid.IntGrid
 
 data class Year2021Day11(
     private val grid: IntGrid
@@ -17,16 +17,16 @@ data class Year2021Day11(
         .onEach { step() }
         .first { grid.findAll { it > 0 }.isEmpty() }
 
-    fun step(): Set<Point2d> {
+    fun step(): Set<Point2dInt> {
         grid + 1
-        val flashed = mutableSetOf<Point2d>()
+        val flashed = mutableSetOf<Point2dInt>()
         val flashes = grid.findAll { it > 9 }.toMutableList()
 
         while (flashes.isNotEmpty()) {
             val flash = flashes.removeFirst()
             flashed += flash
 
-            flash.neighbours(Vector2d.SURROUNDING)
+            flash.neighbours(Vector2dInt.SURROUNDING)
                 .filter { grid.contains(it) }
                 .forEach { neighbour ->
                     val newValue = grid.at(neighbour) + 1

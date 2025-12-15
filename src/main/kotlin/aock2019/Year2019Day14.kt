@@ -37,7 +37,8 @@ data class Year2019Day14(
 
         while (remaining.keys != setOf(ORE)) {
             // the first chemical that is not needed by any other reactions
-            val requiredChemical = remaining.keys.first { chemical -> unusedReactions.none { reaction -> reaction.inputs.any { it.chemical == chemical } } }
+            val requiredChemical =
+                remaining.keys.first { chemical -> unusedReactions.none { reaction -> reaction.inputs.any { it.chemical == chemical } } }
             val requiredQuantity = remaining.remove(requiredChemical)!!
 
             val reaction = unusedReactions.first { it.output.chemical == requiredChemical }

@@ -1,5 +1,8 @@
 package shared
 
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Rectangle2dInt
+import shared.geometry3d.Box
 import java.math.BigInteger
 import java.net.URI
 import java.net.http.HttpClient
@@ -64,7 +67,12 @@ fun String.toLongRanges() = RANGE_PATTERN.findAll(this)
 
 fun List<Long>.toBox() = Box(this[0], this[1], this[2])
 
-fun String.toRectangle() = toIntegers().let { (x1, y1, x2, y2) -> Rectangle2d.of(Point2d(x1, y1), Point2d(x2, y2)) }
+fun String.toRectangle() = toIntegers().let { (x1, y1, x2, y2) ->
+    Rectangle2dInt.of(
+        Point2dInt(x1, y1),
+        Point2dInt(x2, y2)
+    )
+}
 
 fun parseInt(s: String) = when (s) {
     "one" -> 1

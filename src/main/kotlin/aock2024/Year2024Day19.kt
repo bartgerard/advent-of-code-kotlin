@@ -8,17 +8,25 @@ data class Year2024Day19(
     private val designs: List<String>
 ) {
     companion object {
-        fun toRegex(towels: List<String>) = towels.joinToString(separator = ")|(", prefix = "^(?:(", postfix = "))+\$").toRegex()
+        fun toRegex(towels: List<String>) =
+            towels.joinToString(separator = ")|(", prefix = "^(?:(", postfix = "))+\$").toRegex()
 
-        fun countPossibilities(design: String, towels: List<String>, cache: MutableMap<String, Long>): Long = cache.getOrPut(design) {
-            if (design.isEmpty()) {
-                1L
-            } else {
-                towels.filter { design.startsWith(it) }
-                    .map { design.drop(it.length) }
-                    .sumOf { remainingDesign -> countPossibilities(remainingDesign, towels.filter { remainingDesign.contains(it) }, cache) }
+        fun countPossibilities(design: String, towels: List<String>, cache: MutableMap<String, Long>): Long =
+            cache.getOrPut(design) {
+                if (design.isEmpty()) {
+                    1L
+                } else {
+                    towels.filter { design.startsWith(it) }
+                        .map { design.drop(it.length) }
+                        .sumOf { remainingDesign ->
+                            countPossibilities(
+                                remainingDesign,
+                                towels.filter { remainingDesign.contains(it) },
+                                cache
+                            )
+                        }
+                }
             }
-        }
     }
 
     constructor(input: String) : this(input.sanitize().splitByEmptyLine())

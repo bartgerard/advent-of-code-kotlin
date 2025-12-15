@@ -1,6 +1,6 @@
 package aock2021
 
-import shared.BinaryNumber
+import shared.binary.BinaryNumber
 import shared.firstRepeated
 import shared.sanitize
 import java.util.Comparator.naturalOrder

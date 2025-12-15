@@ -1,7 +1,7 @@
 package aock2019
 
-import shared.CharGrid
-import shared.Dimension
+import shared.geometry2d.Dimension2d
+import shared.grid.CharGrid
 
 data class Year2019Day24(
     private val grid: CharGrid
@@ -9,7 +9,7 @@ data class Year2019Day24(
     companion object {
         const val BUG = '#'
         const val EMPTY = '.'
-        val DIMENSION = Dimension(5, 5)
+        val DIMENSION = Dimension2d(5, 5)
         val POINTS = DIMENSION.points()
             .associateWith { point -> point.neighbours().filter { DIMENSION.contains(it) } }
 

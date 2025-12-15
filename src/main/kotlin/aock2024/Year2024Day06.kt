@@ -1,13 +1,13 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Direction
-import shared.Point2d
+import shared.geometry2d.Point2dInt
+import shared.grid.CharGrid
+import shared.spatial.Direction
 
 
 data class Year2024Day06(
     private val grid: CharGrid,
-    private val guard: Point2d
+    private val guard: Point2dInt
 ) {
     companion object {
         private const val OBSTACLE = '#'
@@ -16,7 +16,7 @@ data class Year2024Day06(
 
         private fun nextDirection(
             grid: CharGrid,
-            currentPosition: Point2d,
+            currentPosition: Point2dInt,
             currentDirection: Direction
         ): Direction? {
             var newDirection = currentDirection
@@ -40,9 +40,9 @@ data class Year2024Day06(
 
         fun findPath(
             grid: CharGrid,
-            position: Point2d,
+            position: Point2dInt,
             direction: Direction
-        ): List<Point2d> {
+        ): List<Point2dInt> {
             var currentPosition = position
             var currentDirection = direction
             val path = mutableListOf(currentPosition)
@@ -63,7 +63,7 @@ data class Year2024Day06(
 
         fun containsLoop(
             grid: CharGrid,
-            position: Point2d,
+            position: Point2dInt,
             direction: Direction
         ): Boolean {
             var currentPosition = position

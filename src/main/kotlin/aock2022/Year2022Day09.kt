@@ -1,8 +1,8 @@
 package aock2022
 
-import shared.Direction
-import shared.Point2d
+import shared.geometry2d.Point2dInt
 import shared.sanitize
+import shared.spatial.Direction
 import kotlin.math.absoluteValue
 
 data class Year2022Day09(
@@ -33,11 +33,11 @@ data class Year2022Day09(
 }
 
 data class Rope(
-    val knots: MutableList<Point2d>,
+    val knots: MutableList<Point2dInt>,
 ) {
     constructor(length: Int) : this(
         (0..<length)
-            .map { Point2d.ZERO }
+            .map { Point2dInt.ZERO }
             .toMutableList()
     )
 
@@ -62,9 +62,9 @@ data class Rope(
     }
 
     private fun nextTail(
-        head: Point2d,
-        tail: Point2d
-    ): Point2d {
+        head: Point2dInt,
+        tail: Point2dInt
+    ): Point2dInt {
         val difference = head - tail
 
         return if (difference.x.absoluteValue > 1 || difference.y.absoluteValue > 1) {

@@ -1,11 +1,11 @@
 package aock2022
 
-import shared.Point2d
-import shared.length
+import shared.geometry2d.Point2dInt
+import shared.range.length
+import shared.range.toLongRange
+import shared.range.without
 import shared.sanitize
 import shared.toIntegers
-import shared.toLongRange
-import shared.without
 import kotlin.math.absoluteValue
 
 data class Year2022Day15(
@@ -16,8 +16,8 @@ data class Year2022Day15(
             .map { it.toIntegers() }
             .map {
                 Sample(
-                    Point2d(it[0], it[1]),
-                    Point2d(it[2], it[3])
+                    Point2dInt(it[0], it[1]),
+                    Point2dInt(it[2], it[3])
                 )
             }
     )
@@ -27,7 +27,7 @@ data class Year2022Day15(
         .findDistressSignal(max)!!
         .let { tuningFrequency(it) }
 
-    fun tuningFrequency(p: Point2d) = p.x * 4000000L + p.y
+    fun tuningFrequency(p: Point2dInt) = p.x * 4000000L + p.y
 }
 
 data class BeaconExclusionZone(
@@ -44,7 +44,7 @@ data class BeaconExclusionZone(
         return beaconLessSpots.sumOf { it.length() }
     }
 
-    fun findDistressSignal(max: Long): Point2d? {
+    fun findDistressSignal(max: Long): Point2dInt? {
         val maxRange = (0..max)
 
         return maxRange.asSequence()
@@ -55,7 +55,7 @@ data class BeaconExclusionZone(
                 if (beaconSpots.isEmpty()) {
                     null
                 } else {
-                    Point2d(beaconSpots.first().first.toInt(), y.toInt())
+                    Point2dInt(beaconSpots.first().first.toInt(), y.toInt())
                 }
             }
             .firstOrNull()
@@ -63,8 +63,8 @@ data class BeaconExclusionZone(
 }
 
 data class Sample(
-    val sensor: Point2d,
-    val beacon: Point2d
+    val sensor: Point2dInt,
+    val beacon: Point2dInt
 ) {
     fun impactOn(y: Long): LongRange? {
         val distance = sensor.manhattan(beacon)

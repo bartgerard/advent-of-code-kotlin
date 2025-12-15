@@ -1,8 +1,8 @@
 package aock2015
 
-import shared.Dimension
-import shared.IntensityGrid
-import shared.ToggleGrid
+import shared.geometry2d.Dimension2d
+import shared.grid.IntensityGrid
+import shared.grid.ToggleGrid
 import shared.sanitize
 import shared.toRectangle
 import kotlin.math.max
@@ -11,7 +11,7 @@ data class Year2015Day06(
     private val instructions: List<String>
 ) {
     companion object {
-        val DIMENSION = Dimension(1000, 1000)
+        val DIMENSION = Dimension2d(1000, 1000)
     }
 
     constructor(input: String) : this(input.sanitize().lines())

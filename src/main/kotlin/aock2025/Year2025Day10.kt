@@ -4,10 +4,9 @@ import com.microsoft.z3.Context
 import com.microsoft.z3.IntExpr
 import com.microsoft.z3.IntNum
 import com.microsoft.z3.Status
-import shared.Dijkstra
-import shared.Solution
 import shared.SystemOfLinearEquations
-import shared.gcd
+import shared.algorithm.dijkstra.Dijkstra
+import shared.algorithm.dijkstra.Solution
 import shared.sanitize
 import shared.toIntegers
 import shared.toLongs
@@ -112,8 +111,6 @@ data class Factory(
     }
 
     fun findFewestButtonsPressesForJoltageRequirementsV1(): Long {
-        val gcd = joltageRequirements.requirements.gcd()
-
         val shortestPath: Solution<List<Long>> = Dijkstra.findShortestPath(
             joltageRequirements.initial(),
             { it == joltageRequirements.requirements },

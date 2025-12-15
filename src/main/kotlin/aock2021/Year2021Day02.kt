@@ -1,18 +1,18 @@
 package aock2021
 
-import shared.Point2d
-import shared.Vector2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
 import shared.sanitize
 import kotlin.math.absoluteValue
 
 data class Year2021Day02(
-    private val input: List<Vector2d>
+    private val input: List<Vector2dInt>
 ) {
     companion object {
         fun toVector(direction: String, distance: Int) = when (direction) {
-            "forward" -> Vector2d(distance, 0)
-            "up" -> Vector2d(0, -distance)
-            "down" -> Vector2d(0, distance)
+            "forward" -> Vector2dInt(distance, 0)
+            "up" -> Vector2dInt(0, -distance)
+            "down" -> Vector2dInt(0, distance)
             else -> error("invalid direction $direction")
         }
     }
@@ -25,13 +25,13 @@ data class Year2021Day02(
     )
 
     fun partOne() = input
-        .fold(Point2d.ZERO) { point, vector -> point + vector }
+        .fold(Point2dInt.ZERO) { point, vector -> point + vector }
         .let { (x, y) -> x.absoluteValue * y.absoluteValue }
 
     fun partTwo() = input
-        .fold(Point2d.ZERO to 0) { (point, aim), vector ->
+        .fold(Point2dInt.ZERO to 0) { (point, aim), vector ->
             when {
-                vector.y == 0 -> point + Vector2d(vector.x, vector.x * aim) to aim
+                vector.y == 0 -> point + Vector2dInt(vector.x, vector.x * aim) to aim
                 else -> point to (aim + vector.y)
             }
         }

@@ -1,21 +1,21 @@
 package aock2021
 
-import shared.LineSegment2d
-import shared.Point2d
 import shared.distinctPairs
+import shared.geometry2d.LineSegment2dInt
+import shared.geometry2d.Point2dInt
 import shared.sanitize
 import shared.toIntegers
 
 data class Year2021Day05(
-    private val lines: List<LineSegment2d>
+    private val lines: List<LineSegment2dInt>
 ) {
     constructor(input: String) : this(
         input.sanitize().lines()
             .map { it.toIntegers() }
             .map {
-                LineSegment2d(
-                    Point2d(it[0], it[1]),
-                    Point2d(it[2], it[3]),
+                LineSegment2dInt(
+                    Point2dInt(it[0], it[1]),
+                    Point2dInt(it[2], it[3]),
                 )
             }
     )

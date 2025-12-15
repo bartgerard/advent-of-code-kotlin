@@ -1,26 +1,26 @@
 package aock2022
 
-import shared.CharGrid
-import shared.Dimension
-import shared.OffsetCharGrid
-import shared.Point2d
-import shared.Rectangle2d
-import shared.Vector2d
-import shared.fill
+import shared.geometry2d.Dimension2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Rectangle2dInt
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
+import shared.grid.OffsetCharGrid
+import shared.grid.fill
 import shared.sanitize
 import shared.toIntegers
 import kotlin.math.max
 import kotlin.math.min
 
 data class Year2022Day14(
-    private val lines: List<Rectangle2d>
+    private val lines: List<Rectangle2dInt>
 ) {
     constructor(input: String) : this(
         input.sanitize().lines()
             .flatMap { line ->
                 line.toIntegers().chunked(2)
-                    .map { Point2d(it) }
-                    .zipWithNext { p1, p2 -> Rectangle2d.of(p1, p2) }
+                    .map { Point2dInt(it) }
+                    .zipWithNext { p1, p2 -> Rectangle2dInt.of(p1, p2) }
             }
     )
 
@@ -40,22 +40,22 @@ data class RegolithReservoir(
 
         val SUPPORTING_FOUNDATION = setOf(ROCK, SAND)
 
-        val SAND_SOURCE = Point2d(500, 0)
-        val GRAVITY = Vector2d.SOUTH
+        val SAND_SOURCE = Point2dInt(500, 0)
+        val GRAVITY = Vector2dInt.SOUTH
 
         val FALL_DIRECTIONS = listOf(
-            Vector2d.SOUTH_WEST,
-            Vector2d.SOUTH_EAST,
-            Vector2d.ZERO
+            Vector2dInt.SOUTH_WEST,
+            Vector2dInt.SOUTH_EAST,
+            Vector2dInt.ZERO
         )
         val BELOW_DIRECTIONS = listOf(
-            Vector2d.SOUTH_WEST,
-            Vector2d.SOUTH,
-            Vector2d.SOUTH_EAST
+            Vector2dInt.SOUTH_WEST,
+            Vector2dInt.SOUTH,
+            Vector2dInt.SOUTH_EAST
         )
 
         fun of(
-            lines: List<Rectangle2d>,
+            lines: List<Rectangle2dInt>,
             simulateInfiniteFloor: Boolean = false
         ): RegolithReservoir {
             val minX = lines.minOf { it.x.min() }
@@ -72,16 +72,16 @@ data class RegolithReservoir(
                     SAND_SOURCE.x + floorY,
                     lines.maxOf { it.x.max() + floorY - it.y.min() }
                 )
-                val simulatedInfiniteFloor = Rectangle2d.of(
-                    Point2d(floorMinX, floorY),
-                    Point2d(floorMaxX, floorY)
+                val simulatedInfiniteFloor = Rectangle2dInt.of(
+                    Point2dInt(floorMinX, floorY),
+                    Point2dInt(floorMaxX, floorY)
                 )
                 return of(lines + simulatedInfiniteFloor)
             }
 
-            val offset = Vector2d(minX, 0)
+            val offset = Vector2dInt(minX, 0)
 
-            val dimension = Dimension(maxX - minX + 1, maxY + 1)
+            val dimension = Dimension2d(maxX - minX + 1, maxY + 1)
             val grid = CharGrid(dimension, AIR)
             val offsetCharGrid = OffsetCharGrid(grid, offset)
 
@@ -94,9 +94,10 @@ data class RegolithReservoir(
 
     fun countUnitsOfSand() = countUnitsOfSandWhile { true }
 
-    fun countUnitsOfSandUntilSourceBlocked() = countUnitsOfSandWhile { !isSandSourceBlocked() } + 1 /* include source itself */
+    fun countUnitsOfSandUntilSourceBlocked() =
+        countUnitsOfSandWhile { !isSandSourceBlocked() } + 1 /* include source itself */
 
-    fun countUnitsOfSandWhile(endCondition: (Point2d) -> Boolean): Int {
+    fun countUnitsOfSandWhile(endCondition: (Point2dInt) -> Boolean): Int {
         val sediments = generateSequence {
             dropSand(SAND_SOURCE)
                 ?.also { grid.set(it, SAND) }
@@ -110,7 +111,7 @@ data class RegolithReservoir(
         return sediments.count()
     }
 
-    fun dropSand(source: Point2d): Point2d? = (source..GRAVITY)
+    fun dropSand(source: Point2dInt): Point2dInt? = (source..GRAVITY)
         .takeWhile { grid.contains(it) && grid.at(it) !in SUPPORTING_FOUNDATION }
         .lastOrNull()
         ?.let { findRestingSpot(it) }
@@ -122,12 +123,12 @@ data class RegolithReservoir(
             }
         }
 
-    fun findRestingSpot(point: Point2d) = FALL_DIRECTIONS
+    fun findRestingSpot(point: Point2dInt) = FALL_DIRECTIONS
         .map { point + it }
         .takeWhile { grid.contains(it) }
         .firstOrNull { grid.at(it) !in SUPPORTING_FOUNDATION }
 
-    fun isFinalRestingSpot(point: Point2d) = BELOW_DIRECTIONS
+    fun isFinalRestingSpot(point: Point2dInt) = BELOW_DIRECTIONS
         .map { point + it }
         .all { grid.contains(it) && grid.at(it) in SUPPORTING_FOUNDATION }
 

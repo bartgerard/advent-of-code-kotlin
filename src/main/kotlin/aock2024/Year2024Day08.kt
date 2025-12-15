@@ -1,7 +1,7 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Point2d
+import shared.geometry2d.Point2dInt
+import shared.grid.CharGrid
 
 data class Year2024Day08(
     private val grid: CharGrid
@@ -13,7 +13,7 @@ data class Year2024Day08(
     fun partTwo() = findAntiNodes(grid.frequenciesExcluding(setOf('.')), 0..Int.MAX_VALUE).count()
 
     private fun findAntiNodes(
-        frequencies: Map<Char, List<Point2d>>,
+        frequencies: Map<Char, List<Point2dInt>>,
         broadcastingRange: IntRange
     ) = frequencies.flatMap { (_, antennas) ->
         antennas.flatMap { antenna1 ->

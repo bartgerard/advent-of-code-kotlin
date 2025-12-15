@@ -1,6 +1,6 @@
 package aock2015
 
-import shared.Box
+import shared.geometry3d.Box
 import shared.sanitize
 import shared.toBox
 import shared.toLongs

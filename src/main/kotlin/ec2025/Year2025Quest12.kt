@@ -1,18 +1,18 @@
 package ec2025
 
-import shared.IntGrid
-import shared.Point2d
+import shared.geometry2d.Point2dInt
+import shared.grid.IntGrid
 
 data class Year2025Quest12(
     private val grid: IntGrid
 ) {
     constructor(input: String) : this(IntGrid(input))
 
-    fun partOne() = ignitableBarrelsStartingFrom(Point2d.ZERO)
+    fun partOne() = ignitableBarrelsStartingFrom(Point2dInt.ZERO)
         .size
 
     fun partTwo() = sequenceOf(
-        Point2d.ZERO,
+        Point2dInt.ZERO,
         grid.dimension().bottomRight()
     )
         .flatMap { ignitableBarrelsStartingFrom(it) }
@@ -20,8 +20,8 @@ data class Year2025Quest12(
         .size
 
     fun partThree(): Long {
-        val alreadyIgnited = mutableSetOf<Point2d>()
-        val ignitableBarrelsByStart = mutableSetOf<Set<Point2d>>()
+        val alreadyIgnited = mutableSetOf<Point2dInt>()
+        val ignitableBarrelsByStart = mutableSetOf<Set<Point2dInt>>()
 
         grid.points()
             .sortedByDescending { grid.at(it) }
@@ -32,7 +32,7 @@ data class Year2025Quest12(
                 alreadyIgnited += cluster
             }
 
-        val ignitedBarrels = mutableSetOf<Point2d>()
+        val ignitedBarrels = mutableSetOf<Point2dInt>()
 
         repeat(3) {
             ignitedBarrels += ignitableBarrelsByStart
@@ -43,7 +43,7 @@ data class Year2025Quest12(
         return ignitedBarrels.size.toLong()
     }
 
-    private fun ignitableBarrelsStartingFrom(start: Point2d): List<Point2d> =
+    private fun ignitableBarrelsStartingFrom(start: Point2dInt): List<Point2dInt> =
         start.allDirectAndIndirectNeighbours { previous, next ->
             grid.contains(next) && grid.at(previous) >= grid.at(next)
         }

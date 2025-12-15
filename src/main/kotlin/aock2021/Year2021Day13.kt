@@ -1,20 +1,20 @@
 package aock2021
 
-import shared.Axis
-import shared.CharGrid
-import shared.Dimension
-import shared.Point2d
+import shared.geometry2d.Dimension2d
+import shared.geometry2d.Point2dInt
+import shared.grid.CharGrid
 import shared.sanitize
+import shared.spatial.Axis
 import shared.splitByEmptyLine
 import shared.toIntegers
 
 data class Year2021Day13(
-    private val dots: List<Point2d>,
+    private val dots: List<Point2dInt>,
     private val instructions: List<Instruction>
 ) {
     constructor(input: String) : this(input.sanitize().splitByEmptyLine())
     constructor(input: List<String>) : this(
-        input[0].lines().map { Point2d(it.toIntegers()) },
+        input[0].lines().map { Point2dInt(it.toIntegers()) },
         input[1].lines()
             .map { line ->
                 line.removePrefix("fold along ")
@@ -27,7 +27,7 @@ data class Year2021Day13(
 
     fun partTwo(): Long {
         val remainingDots = instructions.fold(dots.toSet()) { dots, instruction -> dots.foldAlong(instruction) }
-        val dimension = Dimension(
+        val dimension = Dimension2d(
             remainingDots.maxOf { it.x } + 1,
             remainingDots.maxOf { it.y } + 1
         )
@@ -44,8 +44,8 @@ data class Instruction(
     val line: Int
 )
 
-private fun Collection<Point2d>.foldAlong(instruction: Instruction): Set<Point2d> {
-    val newSet = mutableSetOf<Point2d>()
+private fun Collection<Point2dInt>.foldAlong(instruction: Instruction): Set<Point2dInt> {
+    val newSet = mutableSetOf<Point2dInt>()
     for (point in this) {
         val coordinate = when (instruction.axis) {
             Axis.X -> point.x
@@ -53,8 +53,8 @@ private fun Collection<Point2d>.foldAlong(instruction: Instruction): Set<Point2d
         }
         if (coordinate > instruction.line) {
             val newPoint = when (instruction.axis) {
-                Axis.X -> Point2d(2 * instruction.line - point.x, point.y)
-                else -> Point2d(point.x, 2 * instruction.line - point.y)
+                Axis.X -> Point2dInt(2 * instruction.line - point.x, point.y)
+                else -> Point2dInt(point.x, 2 * instruction.line - point.y)
             }
             newSet.add(newPoint)
         } else {

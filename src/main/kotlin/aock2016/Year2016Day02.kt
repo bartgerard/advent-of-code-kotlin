@@ -1,9 +1,9 @@
 package aock2016
 
-import shared.CharGrid
-import shared.Direction
-import shared.Point2d
+import shared.geometry2d.Point2dInt
+import shared.grid.CharGrid
 import shared.sanitize
+import shared.spatial.Direction
 
 data class Year2016Day02(
     private val input: List<List<Direction>>
@@ -28,7 +28,7 @@ data class Year2016Day02(
     )
 
     private fun traverseKeyPad(
-        start: Point2d,
+        start: Point2dInt,
         keypad: CharGrid
     ): String = input.scan(start) { point, directions ->
         directions.fold(point) { oldPoint, direction ->

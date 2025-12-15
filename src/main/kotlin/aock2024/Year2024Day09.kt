@@ -1,9 +1,9 @@
 package aock2024
 
 import shared.groupByIndexRemainder
-import shared.length
-import shared.merge
-import shared.mergeOne
+import shared.range.length
+import shared.range.merge
+import shared.range.mergeOne
 import shared.sanitize
 import shared.sum
 import kotlin.math.min

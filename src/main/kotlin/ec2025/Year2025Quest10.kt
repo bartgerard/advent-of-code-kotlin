@@ -1,9 +1,9 @@
 package ec2025
 
-import shared.CharGrid
-import shared.Dimension
-import shared.Point2d
-import shared.Vector2d
+import shared.geometry2d.Dimension2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
 
 data class Year2025Quest10(
     private val board: DragonChessBoard,
@@ -19,11 +19,11 @@ data class Year2025Quest10(
     constructor(grid: CharGrid) : this(
         DragonChessBoard(
             grid.dimension(),
-            grid.findAll(HIDEOUT).toSet<Point2d>()
+            grid.findAll(HIDEOUT).toSet<Point2dInt>()
         ),
         InitialState(
-            grid.findAll(DRAGON).single<Point2d>(),
-            grid.findAll(SHEEP).toSet<Point2d>()
+            grid.findAll(DRAGON).single<Point2dInt>(),
+            grid.findAll(SHEEP).toSet<Point2dInt>()
         )
     )
 
@@ -54,32 +54,32 @@ data class Year2025Quest10(
 }
 
 data class DragonChessBoard(
-    val dimension: Dimension,
-    val hideouts: Set<Point2d>
+    val dimension: Dimension2d,
+    val hideouts: Set<Point2dInt>
 ) {
-    fun dragonPositions(dragon: Point2d) = generateSequence(setOf(dragon)) { moveDragon(it) }
+    fun dragonPositions(dragon: Point2dInt) = generateSequence(setOf(dragon)) { moveDragon(it) }
 
-    fun moveDragon(previous: Set<Point2d>): Set<Point2d> = previous.flatMap { moveDragon(it) }.toSet()
+    fun moveDragon(previous: Set<Point2dInt>): Set<Point2dInt> = previous.flatMap { moveDragon(it) }.toSet()
 
-    fun moveDragon(previous: Point2d) = previous
-        .neighbours(Vector2d.KNIGHT_MOVES)
+    fun moveDragon(previous: Point2dInt) = previous
+        .neighbours(Vector2dInt.KNIGHT_MOVES)
         .filter { dimension.contains(it) }
         .toSet()
 
-    fun moveSheep(previous: Set<Point2d>): Set<Point2d> = previous
-        .map { it + Vector2d.SOUTH }
+    fun moveSheep(previous: Set<Point2dInt>): Set<Point2dInt> = previous
+        .map { it + Vector2dInt.SOUTH }
         .filter { dimension.contains(it) }
         .toSet()
 }
 
 data class InitialState(
-    val dragon: Point2d,
-    val sheep: Set<Point2d>
+    val dragon: Point2dInt,
+    val sheep: Set<Point2dInt>
 )
 
 data class GameStateV2(
-    val dragon: Set<Point2d>,
-    val sheep: Set<Point2d>,
+    val dragon: Set<Point2dInt>,
+    val sheep: Set<Point2dInt>,
     val eaten: Int = 0
 )
 
@@ -114,8 +114,8 @@ data class DragonChessV2(
 }
 
 data class GameStateV3(
-    val dragon: Point2d,
-    val sheep: Set<Point2d>,
+    val dragon: Point2dInt,
+    val sheep: Set<Point2dInt>,
     val turn: Turn = Turn.SHEEP,
     val eatenCount: Int = 0
 )
@@ -163,7 +163,7 @@ data class DragonChessV3(
     }
 
     private fun getPossibleSheepMoves(state: GameStateV3): List<GameStateV3> = state.sheep
-        .map { it to it + Vector2d.SOUTH }
+        .map { it to it + Vector2dInt.SOUTH }
         .filter { (_, newPosition) ->
             when {
                 !board.dimension.contains(newPosition) -> true
@@ -173,7 +173,8 @@ data class DragonChessV3(
             }
         }
         .map { (oldPosition, newPosition) ->
-            val newSheep = state.sheep - oldPosition + if (board.dimension.contains(newPosition)) setOf(newPosition) else emptySet()
+            val newSheep =
+                state.sheep - oldPosition + if (board.dimension.contains(newPosition)) setOf(newPosition) else emptySet()
             eatSheep(GameStateV3(state.dragon, newSheep, Turn.DRAGON, state.eatenCount))
         }
 

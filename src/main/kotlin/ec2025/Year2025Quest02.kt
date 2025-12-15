@@ -22,10 +22,11 @@ data class Year2025Quest02(
             return step3
         }
 
-        private fun shouldBeEngraved(coordinate: ComplexNumber): Boolean = generateSequence(ComplexNumber.ZERO) { cycle2(it, coordinate) }
-            .drop(1)
-            .take(100)
-            .all { (real, imaginary) -> real in -1000000..1000000 && imaginary in -1000000..1000000 }
+        private fun shouldBeEngraved(coordinate: ComplexNumber): Boolean =
+            generateSequence(ComplexNumber.ZERO) { cycle2(it, coordinate) }
+                .drop(1)
+                .take(100)
+                .all { (real, imaginary) -> real in -1000000..1000000 && imaginary in -1000000..1000000 }
     }
 
     constructor(input: String) : this(

@@ -1,12 +1,12 @@
 package aock2016
 
-import shared.Direction
-import shared.OrientedPoint
-import shared.Point2d
-import shared.Turn
-import shared.Vector2d
 import shared.firstRepeated
+import shared.geometry2d.OrientedPoint
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
 import shared.sanitize
+import shared.spatial.Direction
+import shared.spatial.Turn
 
 data class Year2016Day01(
     private val input: List<Pair<Turn, Int>>
@@ -20,17 +20,17 @@ data class Year2016Day01(
 
     fun partTwo() = allSteps().firstRepeated()?.let { blocksAway(it) } ?: 0
 
-    private fun blocksAway(point: Point2d): Int = Point2d.ZERO.manhattan(point)
+    private fun blocksAway(point: Point2dInt): Int = Point2dInt.ZERO.manhattan(point)
 
     private fun steps() = input.scan(OrientedPoint(direction = Direction.NORTH)) { (point, direction), (turn, blocks) ->
         val newDirection = direction.rotate(turn)
-        val newPoint = point + Vector2d.forDirection(newDirection) * blocks
+        val newPoint = point + Vector2dInt.forDirection(newDirection) * blocks
         OrientedPoint(newPoint, newDirection)
     }
         .map { it.point }
 
     private fun allSteps() = sequence {
-        var point = Point2d.ZERO
+        var point = Point2dInt.ZERO
         var direction = Direction.NORTH
 
         input.forEach { (turn, blocks) ->

@@ -1,10 +1,10 @@
 package aock2019
 
-import shared.Axis
-import shared.Point3d
-import shared.Vector3d
+import shared.geometry3d.Point3d
+import shared.geometry3d.Vector3d
 import shared.lcm
 import shared.sanitize
+import shared.spatial.Axis
 import shared.toDoubles
 import kotlin.math.abs
 

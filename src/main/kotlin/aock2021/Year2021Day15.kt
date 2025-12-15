@@ -1,15 +1,15 @@
 package aock2021
 
-import shared.Dijkstra
-import shared.Dimension
-import shared.IntGrid
-import shared.Point2d
+import shared.algorithm.dijkstra.Dijkstra
+import shared.geometry2d.Dimension2d
+import shared.geometry2d.Point2dInt
+import shared.grid.IntGrid
 
 data class Year2021Day15(
     private val grid: IntGrid
 ) {
     companion object {
-        val START = Point2d.ZERO
+        val START = Point2dInt.ZERO
     }
 
     constructor(input: String) : this(IntGrid(input))
@@ -42,8 +42,8 @@ data class Year2021Day15(
     }
 
     private fun risk(
-        neighbor: Point2d,
-        dimension: Dimension
+        neighbor: Point2dInt,
+        dimension: Dimension2d
     ): Long {
         val tileX = neighbor.x / dimension.width
         val tileY = neighbor.y / dimension.height

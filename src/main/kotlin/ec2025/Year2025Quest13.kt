@@ -1,6 +1,6 @@
 package ec2025
 
-import shared.length
+import shared.range.length
 import shared.sanitize
 import shared.toLongs
 

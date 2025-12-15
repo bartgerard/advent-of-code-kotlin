@@ -9,7 +9,8 @@ data class Year2015Day13(
     private val rules: List<HappinessRule>
 ) {
     companion object {
-        val regex = "(?<name1>[^ ]+) would (?<sign>gain|lose) (?<happiness>\\d+) happiness units by sitting next to (?<name2>[^ ]+).".toRegex()
+        val regex =
+            "(?<name1>[^ ]+) would (?<sign>gain|lose) (?<happiness>\\d+) happiness units by sitting next to (?<name2>[^ ]+).".toRegex()
     }
 
     constructor(input: String) : this(
@@ -46,5 +47,6 @@ data class HappinessRule(
     val name2: String,
     val happiness: Int
 ) {
-    fun isApplicable(pair: Pair<String, String>) = (name1 == pair.first && name2 == pair.second) || (name2 == pair.first && name1 == pair.second)
+    fun isApplicable(pair: Pair<String, String>) =
+        (name1 == pair.first && name2 == pair.second) || (name2 == pair.first && name1 == pair.second)
 }

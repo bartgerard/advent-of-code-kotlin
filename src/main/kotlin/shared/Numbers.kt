@@ -1,5 +1,9 @@
 package shared
 
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.spatial.Direction
+import shared.spatial.Turn
 import kotlin.math.absoluteValue
 
 class Spiral {
@@ -8,12 +12,12 @@ class Spiral {
         fun generatePoints(
             startDirection: Direction = Direction.EAST,
             turn: Turn = Turn.LEFT
-        ): Sequence<Point2d> = sequence {
-            var point = Point2d.ZERO
+        ): Sequence<Point2dInt> = sequence {
+            var point = Point2dInt.ZERO
             yield(point)
 
             val orderOfDirections = generateSequence(startDirection) { it.rotate(turn) }
-                .map { Vector2d.forDirection(it) }
+                .map { Vector2dInt.forDirection(it) }
                 .take(5)
                 .toList()
 

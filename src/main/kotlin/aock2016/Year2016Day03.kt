@@ -19,5 +19,6 @@ data class Year2016Day03(
         .flatMap { lines -> (0..<3).map { i -> lines.map { line -> line[i] } } }
         .let { countValidTriangles(it) }
 
-    private fun countValidTriangles(triangles: List<List<Int>>): Int = triangles.count { it.permutations().all { (a, b, c) -> isValidTriangle(a, b, c) } }
+    private fun countValidTriangles(triangles: List<List<Int>>): Int =
+        triangles.count { it.permutations().all { (a, b, c) -> isValidTriangle(a, b, c) } }
 }

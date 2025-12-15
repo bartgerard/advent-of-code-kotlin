@@ -1,9 +1,9 @@
 package aock2022
 
-import shared.CharGrid
-import shared.Direction
-import shared.Vector2d
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
 import shared.product
+import shared.spatial.Direction
 import shared.takeOnlyIncreasingBy
 import shared.takeVisibleFromHeightBy
 
@@ -21,7 +21,7 @@ data class Year2022Day08(
         .size
 
     fun partTwo(): Int {
-        val directions = Direction.CARDINAL_DIRECTIONS.map { Vector2d.forDirection(it) }
+        val directions = Direction.CARDINAL_DIRECTIONS.map { Vector2dInt.forDirection(it) }
         val dimension = grid.dimension()
         return dimension.points()
             .maxOf { point ->

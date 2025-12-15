@@ -1,7 +1,7 @@
 package aock2025
 
-import shared.length
-import shared.merge
+import shared.range.length
+import shared.range.merge
 import shared.sanitize
 import shared.splitByEmptyLine
 import shared.toLongRanges

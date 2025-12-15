@@ -1,10 +1,10 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Dijkstra
-import shared.Direction
-import shared.Point2d
-import shared.Solutions
+import shared.algorithm.dijkstra.Dijkstra
+import shared.algorithm.dijkstra.Solutions
+import shared.geometry2d.Point2dInt
+import shared.grid.CharGrid
+import shared.spatial.Direction
 
 data class Year2024Day16(
     private val grid: CharGrid
@@ -23,12 +23,12 @@ data class Year2024Day16(
         //.also { display(it) }
         .size
 
-    private fun display(points: Set<Point2d>) {
+    private fun display(points: Set<Point2dInt>) {
         points.forEach { grid.set(it, 'O') }
         println(grid)
     }
 
-    private fun shortestPath(): Solutions<Pair<Point2d, Direction>> {
+    private fun shortestPath(): Solutions<Pair<Point2dInt, Direction>> {
         val start = grid.findAll(START).first()
         val end = grid.findAll(END).first()
 
@@ -48,10 +48,11 @@ data class Year2024Day16(
         return shortestPath
     }
 
-    fun costFunction(current: Pair<Point2d, Direction>, next: Pair<Point2d, Direction>): Long? = if (current.first == next.first) {
-        1000L
-    } else {
-        1
-    }
+    fun costFunction(current: Pair<Point2dInt, Direction>, next: Pair<Point2dInt, Direction>): Long? =
+        if (current.first == next.first) {
+            1000L
+        } else {
+            1
+        }
 
 }

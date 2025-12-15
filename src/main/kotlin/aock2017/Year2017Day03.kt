@@ -1,9 +1,9 @@
 package aock2017
 
-import shared.Point2d
 import shared.Spiral
-import shared.Vector2d
-import shared.length
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.range.length
 import shared.sanitize
 import kotlin.math.absoluteValue
 
@@ -21,9 +21,7 @@ data class Year2017Day03(
 
         val ring = Ring.findRingFor(value)
         val sideLength = ring.sideLength()
-        val side = ring.sides()
-            .filter { value in it }
-            .first()
+        val side = ring.sides().first { value in it }
         val middleOfSide = side.last - sideLength / 2
         val distanceToMiddleOfSide = (value - middleOfSide).absoluteValue
 
@@ -31,12 +29,12 @@ data class Year2017Day03(
     }
 
     fun partTwo(): Long {
-        val valueByPoint = mutableMapOf(Point2d.ZERO to 1L)
+        val valueByPoint = mutableMapOf(Point2dInt.ZERO to 1L)
 
         return Spiral.generatePoints()
             .drop(1)
             .map { point ->
-                (point to point.neighbours(Vector2d.SURROUNDING)
+                (point to point.neighbours(Vector2dInt.SURROUNDING)
                     .sumOf { neighbour -> valueByPoint[neighbour] ?: 0L })
             }
             .onEach { valueByPoint += it }

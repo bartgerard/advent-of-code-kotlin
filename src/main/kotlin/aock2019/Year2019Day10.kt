@@ -1,12 +1,12 @@
 package aock2019
 
-import shared.CharGrid
-import shared.Point2d
-import shared.Vector2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
 
 data class Year2019Day10(
     private val input: CharGrid,
-    private val asteroids: List<Point2d>
+    private val asteroids: List<Point2dInt>
 ) {
     constructor(input: String) : this(CharGrid(input))
     constructor(grid: CharGrid) : this(grid, grid.findAll('#'))
@@ -18,20 +18,20 @@ data class Year2019Day10(
         .first()
         .let { it.x * 100 + it.y }
 
-    private fun getStationLocation(): Point2d = asteroids.maxBy { countVisibleAsteroidsFrom(it) }
+    private fun getStationLocation(): Point2dInt = asteroids.maxBy { countVisibleAsteroidsFrom(it) }
 
-    fun countVisibleAsteroidsFrom(point: Point2d): Int = asteroidsByAngle(point).size
+    fun countVisibleAsteroidsFrom(point: Point2dInt): Int = asteroidsByAngle(point).size
 
-    private fun asteroidsByAngle(point: Point2d): Map<Double, List<Point2d>> = asteroids
+    private fun asteroidsByAngle(point: Point2dInt): Map<Double, List<Point2dInt>> = asteroids
         .filter { it != point }
         .groupBy {
             with(it - point) {
-                Vector2d.NORTH.signedAnleTo(this).toDegrees360()
+                Vector2dInt.NORTH.signedAnleTo(this).toDegrees360()
                 //side() to slope()
             }
         }
 
-    private fun vaporizationOrder(point: Point2d): Sequence<Point2d> = sequence {
+    private fun vaporizationOrder(point: Point2dInt): Sequence<Point2dInt> = sequence {
         val asteroidsByAngle = asteroidsByAngle(point)
         val angles = asteroidsByAngle.keys.sorted()
         val maxAsteroidsForAngle = asteroidsByAngle.values.maxOf { it.size }

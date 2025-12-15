@@ -1,11 +1,11 @@
 package aock2024
 
-import shared.CharGrid
-import shared.Dimension
-import shared.Direction
-import shared.Point2d
-import shared.Vector2d
+import shared.geometry2d.Dimension2d
+import shared.geometry2d.Point2dInt
+import shared.geometry2d.Vector2dInt
+import shared.grid.CharGrid
 import shared.sanitize
+import shared.spatial.Direction
 import shared.splitByEmptyLine
 import java.util.*
 
@@ -21,22 +21,22 @@ data class Year2024Day15(
     )
 
     fun partOne() = warehouse
-        .also { warehouse -> directions.forEach { warehouse.move(Vector2d.forDirection(it)) } }
+        .also { warehouse -> directions.forEach { warehouse.move(Vector2dInt.forDirection(it)) } }
         //.also { println(it) }
         .gps()
 
     fun partTwo() = warehouse
         .expand()
-        .also { warehouse -> directions.forEach { warehouse.move(Vector2d.forDirection(it)) } }
+        .also { warehouse -> directions.forEach { warehouse.move(Vector2dInt.forDirection(it)) } }
         //.also { println(it) }
         .gps()
 }
 
 data class Warehouse(
-    val dimension: Dimension,
-    val walls: Set<Point2d>,
+    val dimension: Dimension2d,
+    val walls: Set<Point2dInt>,
     val boxes: List<Box>,
-    var robot: Point2d
+    var robot: Point2dInt
 ) {
     companion object {
         const val EMPTY = '.'
@@ -56,23 +56,23 @@ data class Warehouse(
             return Warehouse(grid.dimension(), walls, boxes, robot)
         }
 
-        fun expand(p: Point2d) = sequenceOf(
-            Point2d(p.x * 2, p.y),
-            Point2d(p.x * 2 + 1, p.y)
+        fun expand(p: Point2dInt) = sequenceOf(
+            Point2dInt(p.x * 2, p.y),
+            Point2dInt(p.x * 2 + 1, p.y)
         )
     }
 
     fun expand(): Warehouse {
-        val expandedDimension = Dimension(dimension.width * 2, dimension.height)
+        val expandedDimension = Dimension2d(dimension.width * 2, dimension.height)
         val expandedWalls = walls.flatMap { expand(it) }.toSet()
         val bigBoxes = boxes.map { box -> Box(box.points.flatMap { expand(it) }.toMutableList()) }
         val expandedRobot = expand(robot).first()
         return Warehouse(expandedDimension, expandedWalls, bigBoxes, expandedRobot)
     }
 
-    private fun findBox(p: Point2d) = boxes.firstOrNull { it.contains(p) }
+    private fun findBox(p: Point2dInt) = boxes.firstOrNull { it.contains(p) }
 
-    private fun canMove(box: Box, d: Vector2d): Boolean {
+    private fun canMove(box: Box, d: Vector2dInt): Boolean {
         val points = box.movement(d)
 
         if (!Collections.disjoint(points, walls)) {
@@ -85,7 +85,7 @@ data class Warehouse(
             .all { canMove(it, d) }
     }
 
-    private fun impactedBoxes(box: Box, d: Vector2d): List<Box> = buildList {
+    private fun impactedBoxes(box: Box, d: Vector2dInt): List<Box> = buildList {
         add(box)
         addAll(
             box.movement(d)
@@ -96,7 +96,7 @@ data class Warehouse(
         )
     }
 
-    fun move(d: Vector2d) {
+    fun move(d: Vector2dInt) {
         val newPoint = robot + d
 
         if (walls.contains(newPoint)) {
@@ -139,17 +139,17 @@ data class Warehouse(
 }
 
 data class Box(
-    var points: List<Point2d>
+    var points: List<Point2dInt>
 ) {
-    constructor(p: Point2d) : this(mutableListOf(p))
+    constructor(p: Point2dInt) : this(mutableListOf(p))
 
-    fun contains(p: Point2d) = points.contains(p)
+    fun contains(p: Point2dInt) = points.contains(p)
 
-    fun move(d: Vector2d) {
+    fun move(d: Vector2dInt) {
         points = movement(d)
     }
 
-    fun movement(d: Vector2d) = points.map { it + d }
+    fun movement(d: Vector2dInt) = points.map { it + d }
 
     fun gps() = 100L * points.first().y + points.first().x
 }

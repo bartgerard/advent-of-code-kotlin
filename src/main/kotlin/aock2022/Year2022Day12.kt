@@ -1,13 +1,13 @@
 package aock2022
 
-import shared.CharGrid
-import shared.Dijkstra
-import shared.Point2d
+import shared.algorithm.dijkstra.Dijkstra
+import shared.geometry2d.Point2dInt
+import shared.grid.CharGrid
 
 data class Year2022Day12(
     private val grid: CharGrid,
-    private val start: Point2d,
-    private val end: Point2d
+    private val start: Point2dInt,
+    private val end: Point2dInt
 ) {
     companion object {
         fun elevation(char: Char) = when (char) {

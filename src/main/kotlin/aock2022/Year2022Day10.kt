@@ -29,7 +29,7 @@ data class Year2022Day10(
 class CPU {
     companion object {
         fun display(spritePositions: List<Long>): String = spritePositions
-            .mapIndexed { index, position -> if (position in index-1..index + 1) "#" else "." }
+            .mapIndexed { index, position -> if (position in index - 1..index + 1) "#" else "." }
             .joinToString("")
     }
 
