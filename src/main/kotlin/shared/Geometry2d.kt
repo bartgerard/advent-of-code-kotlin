@@ -181,6 +181,14 @@ data class Rectangle2d(
     val y: IntRange
 ) {
     companion object {
+        fun parse(input: String): Rectangle2d {
+            val (x, y) = input.split('x')
+            return Rectangle2d(
+                0..<x.toInt(),
+                0..<y.toInt()
+            )
+        }
+
         fun of(p1: Point2d, p2: Point2d) = Rectangle2d(
             min(p1.x, p2.x)..max(p1.x, p2.x),
             min(p1.y, p2.y)..max(p1.y, p2.y)

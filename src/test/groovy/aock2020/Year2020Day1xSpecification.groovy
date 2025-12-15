@@ -16,10 +16,11 @@ class Year2020Day1xSpecification extends Specification {
         result == expectedResult
 
         where:
-        input             | expectedResult | comment
-        ""                | 0              | ""
+        input                          | expectedResult | comment
+        ""                             | 0              | ""
+        readFile(2020, 0, "example_1") | 0              | ""
 
-        readFile(2020, 0) | 0              | ""
+        readFile(2020, 0)              | 0              | ""
     }
 
     def "partTwo"() {

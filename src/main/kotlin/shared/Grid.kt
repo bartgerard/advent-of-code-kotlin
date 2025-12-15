@@ -13,6 +13,13 @@ data class Dimension(
     val width: Int,
     val height: Int
 ) {
+    companion object {
+        fun parse(value: String) = value.toIntegers()
+            .let { (width, height) -> Dimension(width, height) }
+    }
+
+    fun area() = width * height
+
     fun rowIndices() = 0 until height
     fun columnIndices() = 0 until width
 
