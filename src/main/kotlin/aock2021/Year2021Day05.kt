@@ -23,9 +23,13 @@ data class Year2021Day05(
     fun partOne() = lines
         .filter { (p1, p2) -> p1.x == p2.x || p1.y == p2.y }
         .distinctPairs()
-        .flatMap { (l1, l2) -> l1.intersectDiscrete(l2) } // TODO missing overlapping points
+        .flatMap { (l1, l2) -> l1.intersectDiscrete(l2) }
         .toSet()
         .size
 
-    fun partTwo() = 0L
+    fun partTwo() = lines
+        .distinctPairs()
+        .flatMap { (l1, l2) -> l1.intersectDiscrete(l2) }
+        .toSet()
+        .size
 }

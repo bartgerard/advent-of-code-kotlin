@@ -18,7 +18,7 @@ class Year2021Day05Specification extends Specification {
         input                          || expectedResult | comment
         readFile(2021, 5, "example_1") || 5              | ""
 
-        readFile(2021, 5)              || -1             | ""
+        readFile(2021, 5)              || 7414           | ""
     }
 
     def "partTwo"() {
@@ -30,9 +30,9 @@ class Year2021Day05Specification extends Specification {
 
         where:
         input                          || expectedResult | comment
-        readFile(2021, 5, "example_1") || -1             | ""
+        readFile(2021, 5, "example_1") || 12             | ""
 
-        readFile(2021, 5)              || -1             | ""
+        readFile(2021, 5)              || 19676          | ""
     }
 
 }
