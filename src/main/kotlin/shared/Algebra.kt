@@ -17,8 +17,8 @@ data class LinearEquation2d(
                 return null
             }
 
-            val x = (eq2.b * eq1.c - eq1.b * eq2.c) / determinant
-            val y = (eq1.a * eq2.c - eq2.a * eq1.c) / determinant
+            val x = (eq1.b * eq2.c - eq2.b * eq1.c) / determinant
+            val y = (eq2.a * eq1.c - eq1.a * eq2.c) / determinant
 
             return x to y
         }
@@ -58,13 +58,14 @@ data class LinearFunction2d(
 
     constructor(m: Number, y0: Number) : this(m.toDouble(), y0.toDouble())
 
-    // y = (c - a x) / b
+    // y = m x + y0
     fun at(x: Double) = m * x + y0
 
     val slope get() = m
     val intercept get() = y0
 
-    fun toGeneralForm() = LinearEquation2d(m, 1.0, -y0)
+    // m x - y + y0 = 0
+    fun toGeneralForm() = LinearEquation2d(m, -1.0, y0)
 
     infix fun intersect(f: LinearFunction2d) = intersect(this, f)
 }
