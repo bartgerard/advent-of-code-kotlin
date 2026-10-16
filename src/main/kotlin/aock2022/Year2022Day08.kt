@@ -1,7 +1,7 @@
 package aock2022
 
 import shared.geometry2d.Vector2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.product
 import shared.spatial.Direction
 import shared.takeOnlyIncreasingBy

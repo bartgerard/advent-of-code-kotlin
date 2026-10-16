@@ -3,7 +3,7 @@ package aock2024
 import shared.algorithm.dijkstra.Dijkstra
 import shared.algorithm.dijkstra.Solutions
 import shared.geometry2d.Point2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.spatial.Direction
 
 data class Year2024Day16(

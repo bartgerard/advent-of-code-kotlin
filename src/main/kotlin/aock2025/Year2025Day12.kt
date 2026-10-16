@@ -1,7 +1,7 @@
 package aock2025
 
 import shared.geometry2d.Dimension2d
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.sanitize
 import shared.splitByEmptyLine
 import shared.toIntegers

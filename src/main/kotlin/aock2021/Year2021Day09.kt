@@ -1,7 +1,7 @@
 package aock2021
 
 import shared.geometry2d.Point2dInt
-import shared.grid.IntGrid
+import shared.grid2d.IntGrid
 import shared.product
 
 data class Year2021Day09(

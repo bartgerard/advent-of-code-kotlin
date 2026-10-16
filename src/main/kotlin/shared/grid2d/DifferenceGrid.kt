@@ -1,4 +1,4 @@
-package shared.grid
+package shared.grid2d
 
 data class DifferenceGrid(
     val grid: List<MutableList<Long>>

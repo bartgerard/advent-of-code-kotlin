@@ -2,7 +2,7 @@ package aock2020
 
 import shared.geometry2d.Point2dInt
 import shared.geometry2d.Vector2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 
 data class Year2020Day03(
     private val grid: CharGrid

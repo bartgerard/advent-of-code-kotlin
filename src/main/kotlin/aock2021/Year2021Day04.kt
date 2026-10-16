@@ -1,7 +1,7 @@
 package aock2021
 
-import shared.grid.BingoGrid
-import shared.grid.BingoVerifier
+import shared.grid2d.BingoGrid
+import shared.grid2d.BingoVerifier
 import shared.sanitize
 import shared.splitByEmptyLine
 import shared.toIntegers

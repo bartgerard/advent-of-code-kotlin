@@ -1,7 +1,7 @@
 package ec2025
 
 import shared.geometry2d.Point2dInt
-import shared.grid.IntGrid
+import shared.grid2d.IntGrid
 
 data class Year2025Quest12(
     private val grid: IntGrid

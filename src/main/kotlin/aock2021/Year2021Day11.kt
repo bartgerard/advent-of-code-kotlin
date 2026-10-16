@@ -2,7 +2,7 @@ package aock2021
 
 import shared.geometry2d.Point2dInt
 import shared.geometry2d.Vector2dInt
-import shared.grid.IntGrid
+import shared.grid2d.IntGrid
 
 data class Year2021Day11(
     private val grid: IntGrid

@@ -1,4 +1,4 @@
-package shared.grid
+package shared.grid2d
 
 import shared.Predicate
 import shared.geometry2d.Dimension2d

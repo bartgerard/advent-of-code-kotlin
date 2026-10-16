@@ -1,4 +1,4 @@
-package shared.grid
+package shared.grid2d
 
 import shared.geometry2d.Dimension2d
 import shared.geometry2d.Point2dInt

@@ -3,7 +3,7 @@ package aock2024
 import shared.geometry2d.Dimension2d
 import shared.geometry2d.Point2dInt
 import shared.geometry2d.Vector2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.sanitize
 import shared.spatial.Direction
 import shared.splitByEmptyLine

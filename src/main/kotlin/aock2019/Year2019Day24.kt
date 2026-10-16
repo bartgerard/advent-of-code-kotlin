@@ -1,7 +1,7 @@
 package aock2019
 
 import shared.geometry2d.Dimension2d
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 
 data class Year2019Day24(
     private val grid: CharGrid

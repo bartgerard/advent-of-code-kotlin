@@ -1,7 +1,7 @@
 package aock2024
 
 import shared.geometry2d.Vector2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.spatial.Direction.NORTH_EAST
 import shared.spatial.Direction.NORTH_WEST
 import shared.spatial.Direction.SOUTH_EAST

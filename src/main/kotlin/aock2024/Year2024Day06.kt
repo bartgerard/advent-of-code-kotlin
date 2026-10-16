@@ -1,7 +1,7 @@
 package aock2024
 
 import shared.geometry2d.Point2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.spatial.Direction
 
 

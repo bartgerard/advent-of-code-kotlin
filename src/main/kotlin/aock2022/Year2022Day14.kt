@@ -4,9 +4,9 @@ import shared.geometry2d.Dimension2d
 import shared.geometry2d.Point2dInt
 import shared.geometry2d.Rectangle2dInt
 import shared.geometry2d.Vector2dInt
-import shared.grid.CharGrid
-import shared.grid.OffsetCharGrid
-import shared.grid.fill
+import shared.grid2d.CharGrid
+import shared.grid2d.OffsetCharGrid
+import shared.grid2d.fill
 import shared.sanitize
 import shared.toIntegers
 import kotlin.math.max

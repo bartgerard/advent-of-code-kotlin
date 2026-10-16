@@ -1,8 +1,8 @@
 package aock2015
 
 import shared.geometry2d.Dimension2d
-import shared.grid.IntensityGrid
-import shared.grid.ToggleGrid
+import shared.grid2d.IntensityGrid
+import shared.grid2d.ToggleGrid
 import shared.sanitize
 import shared.toRectangle
 import kotlin.math.max

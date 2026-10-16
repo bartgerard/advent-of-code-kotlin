@@ -3,7 +3,7 @@ package ec2025
 import shared.geometry2d.Dimension2d
 import shared.geometry2d.Point2dInt
 import shared.geometry2d.Vector2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 
 data class Year2025Quest10(
     private val board: DragonChessBoard,

@@ -3,7 +3,7 @@ package aock2021
 import shared.algorithm.dijkstra.Dijkstra
 import shared.geometry2d.Dimension2d
 import shared.geometry2d.Point2dInt
-import shared.grid.IntGrid
+import shared.grid2d.IntGrid
 
 data class Year2021Day15(
     private val grid: IntGrid

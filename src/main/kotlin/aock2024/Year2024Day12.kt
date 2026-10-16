@@ -1,7 +1,7 @@
 package aock2024
 
 import shared.geometry2d.Area2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.sanitize
 
 data class Year2024Day12(

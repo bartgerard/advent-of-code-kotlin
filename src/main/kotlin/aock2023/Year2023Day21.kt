@@ -3,7 +3,7 @@ package aock2023
 import org.apache.commons.lang3.Validate.isTrue
 import org.apache.commons.math3.util.ArithmeticUtils.pow
 import shared.geometry2d.Point2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 
 data class Year2023Day21(
     private val grid: CharGrid

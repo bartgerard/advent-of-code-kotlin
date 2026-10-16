@@ -2,7 +2,7 @@ package aock2022
 
 import shared.algorithm.dijkstra.Dijkstra
 import shared.geometry2d.Point2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 
 data class Year2022Day12(
     private val grid: CharGrid,

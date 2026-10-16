@@ -4,7 +4,7 @@ import shared.allShortest
 import shared.combinations
 import shared.generate
 import shared.geometry2d.Vector2dInt
-import shared.grid.CharGrid
+import shared.grid2d.CharGrid
 import shared.sanitize
 import shared.toIntegers
 import kotlin.math.absoluteValue
